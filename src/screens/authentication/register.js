@@ -8,7 +8,7 @@ import style from 'styles/signin';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 import { REGISTER_MUTATION } from '../../graphql/mutation';
-
+import { setUser } from '../../utils/util';
 const EMAIL = 'Email';
 const PASSWORD = 'Password';
 const CONFIRM_PASSWORD = 'Confirm Password';
@@ -32,10 +32,12 @@ export default class Register extends Component {
         confirm_password
       } = this.state;
 
+      let is_parent = true;
       if (password == confirm_password) {
-        const data = await targetMutation({ variables: { email, password } });
+        const data = await targetMutation({ variables: { email, password, is_parent } });
         console.log(data);
-        this.props.navigation.navigate('signin');
+        setUser(data.data.user_C);
+        this.props.navigation.navigate('teamProfile');
       } else {
         this.setState({
           error: true,

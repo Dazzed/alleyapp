@@ -73,5 +73,9 @@ module.exports = StyleSheet.create({
   },
   touchHighlight: {
     marginLeft: 5
+  },
+  error: {
+    color: 'red',
+    fontWeight: 'bold'
   }
 });

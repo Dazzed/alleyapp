@@ -8,7 +8,7 @@ import style from 'styles/signin';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 import { LOGIN_MUTATION } from '../../graphql/mutation';
-
+import { setToken, setUser, getUser } from '../../utils/util';
 const EMAIL = 'Email';
 const PASSWORD = 'Password';
 
@@ -32,6 +32,9 @@ export default class SignIn extends Component {
       const data = await targetMutation({ variables: { email, password } });
       // this.props.navigation.navigate('dashboard')
       console.log(data);
+      setToken(data.data.user_Login.token);
+      setUser(data.data.user_Login.user.id);
+      
       let { screenProps: { signIn } } = this.props;
       signIn();
     } catch (e) {

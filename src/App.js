@@ -8,6 +8,10 @@ import Register from 'auth/register';
 import ForgotPassword from 'auth/forgotPassword';
 import Tos from 'auth/tos';
 import PrivacyPolicy from 'auth/privacyPolicy';
+import TeamProfileRegister from 'auth/teamProfile';
+import DadProfileRegister from 'auth/dadProfile';
+import DaughterProfileRegister from 'auth/daughterProfile';
+
 
 import SocialFeed from 'screens/socialFeed';
 import Help from 'screens/help';
@@ -161,6 +165,9 @@ export default class Main extends Component {
       {
         signin: { screen: SignIn },
         register: { screen: Register },
+        teamProfile: { screen: TeamProfileRegister },
+        dadProfile: { screen: DadProfileRegister },
+        daughterProfile: { screen: DaughterProfileRegister },
         forgotPassword: { screen: ForgotPassword },
         privacyPolicy: { screen: PrivacyPolicy },
         tos: { screen: Tos }

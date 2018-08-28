@@ -9,7 +9,7 @@ module.exports = StyleSheet.create({
     padding: 10,
     flex: 1,
     backgroundColor: Color.white,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   back: {
     justifyContent: 'flex-start',

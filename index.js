@@ -9,7 +9,7 @@ import App from './src/App';
 console.ignoredYellowBox = ['Remote debugger'];
 
 const client = new ApolloClient({
-  uri: 'https://mz2r9bn14h.execute-api.us-east-1.amazonaws.com/production/'
+  uri: 'https://hhzcnb1ek2.execute-api.us-east-1.amazonaws.com/production/'
 });
 
 // client
