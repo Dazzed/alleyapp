@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight, Text } from 'react-native';
+import { View, Image, TouchableHighlight, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from "react-apollo";
 
 import Color from 'constants/colors';
@@ -50,7 +50,9 @@ export default class SignIn extends Component {
     return (
       <Mutation mutation={LOGIN_MUTATION}>
         {(user_Login) => (
-          <View style={style.container}>
+          <KeyboardAvoidingView
+            behavior="padding" style={style.container}>
+            <ScrollView contentContainerStyle={style.container}>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
                 <Image
@@ -102,7 +104,8 @@ export default class SignIn extends Component {
               <Text style={style.footerText}>By creating an account you agree to our{'\n'} <Text style={style.tos} onPress={() => this.props.navigation.navigate('tos')}>Terms of Service</Text> and <Text onPress={() => this.props.navigation.navigate('privacyPolicy')} style={style.tos}>Privacy Policy</Text>
               </Text>
             </View>
-          </View>
+          </ScrollView>
+          </KeyboardAvoidingView>
         )}
       </Mutation>
     );

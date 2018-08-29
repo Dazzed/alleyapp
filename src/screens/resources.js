@@ -16,10 +16,6 @@ export default class Resources extends Component {
     return (
       <View style={style.container}>
         <View style={style.subContainer}>
-          <View style={style.back}>
-            <Icon onPress={() => this.props.navigation.goBack()}
-              name='arrow-back' />
-          </View>
           <View style={style.welcomeContainer}>
             <Text style={style.subTitle}>Resources</Text>
           </View>

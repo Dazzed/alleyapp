@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Image, TouchableHighlight, AsyncStorage } from 'react-native';
 import { Mutation } from "react-apollo";
-
+import PhotoUpload from 'react-native-photo-upload';
+import axios from 'axios';
 import Color from 'constants/colors';
 import style from 'styles/profile';
 
@@ -18,7 +19,8 @@ export default class TeamProfile extends Component {
     this.state = {
       title: '',
       error: false,
-      errorMessage: ''
+      errorMessage: '',
+      teamPictureUrl: ''
     };
   }
 
@@ -37,12 +39,13 @@ export default class TeamProfile extends Component {
   createTeam = async targetMutation => {
     try {
       const {
-        title
+        title,
+        teamPictureUrl
       } = this.state;
       let member = [];
       member.push(await AsyncStorage.getItem('USER'));
 
-      const data = await targetMutation({ variables: { title, member } });
+      const data = await targetMutation({ variables: { title, member, teamPictureUrl } });
       console.log(data);
       AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
       this.props.navigation.navigate('dadProfile')
@@ -55,6 +58,15 @@ export default class TeamProfile extends Component {
     }
   }
 
+  loadPicture = async avatar => {
+    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
+      base64String: avatar
+    });
+    console.log(data);
+    this.setState({
+      teamPictureUrl: data.data.Location
+    });
+  }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
     title: 'Team Profile',
@@ -72,8 +84,30 @@ export default class TeamProfile extends Component {
         {(team_C) => (
           <View style={style.container}>
             <View style={style.subContainer}>
-              <View style={style.formContainer}>
-                <Text h2>Create a new team</Text>
+              <Text h2>Create a new team</Text>
+              <View style={style.photoContainer}>
+                <PhotoUpload containerStyle={{ height: 150 }}
+                  onPhotoSelect={avatar => {
+                    if (avatar) {
+                      this.loadPicture(avatar)
+                    }
+                  }}
+                >
+                  <Image
+                    style={{
+                      paddingVertical: 30,
+                      width: 150,
+                      height: 150,
+                      borderRadius: 75
+                    }}
+                    resizeMode='cover'
+                    source={{
+                      uri: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                    }}
+                  />
+                </PhotoUpload>
+              </View>
+              <View style={style.spaceFormContainer}>                
                 <FormLabel raised labelStyle={style.formLabel}>{TEAM_NAME}</FormLabel>
                 <FormInput raised
                   onChangeText={value => {

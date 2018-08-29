@@ -14,12 +14,20 @@ import DaughterProfileRegister from 'auth/daughterProfile';
 
 
 import SocialFeed from 'screens/socialFeed';
+
 import Help from 'screens/help';
+import Faq from 'screens/faq';
+import FaqDetail from 'screens/faqDetail';
+import Resources from 'screens/resources';
+import ResourcesDetails from 'screens/resourcesDetails';
+
 import Dashboard from 'screens/dashboard';
+
 import TeamProfile from 'screens/teamProfile';
 import DadProfile from 'screens/dadProfile';
 import DadTeams from 'screens/dadTeams';
 import DaughterProfile from 'screens/daughterProfile';
+
 import Settings from 'screens/settings';
 
 
@@ -83,7 +91,11 @@ export default class Main extends Component {
         },
         secondTab: {
           screen: StackNavigator({
-            help: { screen: Help }
+            help: { screen: Help },
+            faq: {screen: Faq },
+            faqDetail: {screen: FaqDetail },
+            resources: { screen: Resources },
+            resourcesDetails: { screen: ResourcesDetails }
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
@@ -153,6 +165,7 @@ export default class Main extends Component {
         tabBarOptions: {
           inactiveTintColor: Color.darkBlue,
           activeTintColor: 'white',
+          showIcon: true,
           style: {
             height: 55,
             backgroundColor: Color.main

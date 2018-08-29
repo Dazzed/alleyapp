@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight, AsyncStorage } from 'react-native';
+import { View, Image, TouchableHighlight, AsyncStorage, KeyboardAvoidingView, ScrollView } from 'react-native';
+import PhotoUpload from 'react-native-photo-upload';
+import axios from 'axios';
+
 import { Mutation } from "react-apollo";
 import { DAUGHTER_CREATE_MUTATION, UPDATE_TEAM_MUTATION } from '../../graphql/mutation';
 
@@ -26,7 +29,10 @@ export default class DaughterProfile extends Component {
       phone: '',
       address: '',
       interests: '',
-      affiliations: ''
+      affiliations: '',
+      error: false,
+      errorMessage: '',
+      profilePictureUrl: ''
     };
   }
 
@@ -39,6 +45,16 @@ export default class DaughterProfile extends Component {
     }
   });
 
+  loadPicture = async avatar => {
+    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
+      base64String: avatar
+    });
+    console.log(data);
+    this.setState({
+      profilePictureUrl: data.data.Location
+    });
+  }
+
   createDaughter = async (targetMutation1, targetMutation2) => {
     try {
       const {
@@ -48,12 +64,13 @@ export default class DaughterProfile extends Component {
         address,
         interests,
         affiliations,
-        email
+        email,
+        profilePictureUrl
       } = this.state;
       console.log(this.state);
       let name = daughter_name;
       let dateOfBirth = dob;
-      const data = await targetMutation1({ variables: { phone, name, dateOfBirth, address, interests, affiliations, email } });
+      const data = await targetMutation1({ variables: { phone, name, dateOfBirth, address, interests, affiliations, email, profilePictureUrl } });
 
       console.log(data);
       let members =[];
@@ -80,64 +97,89 @@ export default class DaughterProfile extends Component {
         {(team_U) => (
           <Mutation mutation={DAUGHTER_CREATE_MUTATION}>
             {(user_C) => (
-              <View style={style.container}>
-                <View style={style.subContainer}>
-                  <View style={style.formContainer}>
+              <KeyboardAvoidingView
+                behavior="padding" style={style.container}>
+                <ScrollView>
+                  <View style={style.subContainer}>
                     <Text h2>Daughter's Profile</Text>
-                    <FormLabel raised labelStyle={style.formLabel}>{DAUGHTER_NAME}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ daughter_name: value });
-                      }}
+                    <View style={style.photoContainer}>
+                      <PhotoUpload containerStyle={{ height: 150 }}
+                        onPhotoSelect={avatar => {
+                          if (avatar) {
+                            this.loadPicture(avatar)
+                          }
+                        }}
+                      >
+                        <Image
+                          style={{
+                            paddingVertical: 30,
+                            width: 150,
+                            height: 150,
+                            borderRadius: 75
+                          }}
+                          resizeMode='cover'
+                          source={{
+                            uri: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                          }}
+                        />
+                      </PhotoUpload>
+                    </View>
+                    <View style={style.formContainer}>
+                      <FormLabel raised labelStyle={style.formLabel}>{DAUGHTER_NAME}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ daughter_name: value });
+                        }}
+                      />
+                      <FormLabel raised labelStyle={style.formLabel}>{DATE_OF_BIRTH}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ dob: value });
+                        }}
+                      />
+                      <FormLabel raised labelStyle={style.formLabel}>{EMAIL}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ email: value });
+                        }}
+                      />
+                      <FormLabel raised labelStyle={style.formLabel}>{PHONE}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ phone: value });
+                        }}
+                      />
+                      <FormLabel raised labelStyle={style.formLabel}>{ADDRESS}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ address: value });
+                        }}
+                      />
+                      <FormLabel raised labelStyle={style.formLabel}>{INTERESTS}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ interests: value });
+                        }}
+                      />
+                      <FormLabel raised labelStyle={style.formLabel}>{AFFILIATIONS}</FormLabel>
+                      <FormInput raised
+                        onChangeText={value => {
+                          this.setState({ affiliations: value });
+                        }}
+                      />
+                      {this.state.error ? <Text style={style.error}>{this.state.errorMessage}</Text> : ''}
+                    </View>
+                    <Button raised
+                      title={'Save'}
+                      borderRadius={5}
+                      backgroundColor={Color.blue}
+                      textStyle={{ fontWeight: 'bold' }}
+                      style={style.button}
+                      onPress={this.createDaughter.bind(this, user_C, team_U)}
                     />
-                    <FormLabel raised labelStyle={style.formLabel}>{DATE_OF_BIRTH}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ dob: value });
-                      }}
-                    />
-                    <FormLabel raised labelStyle={style.formLabel}>{EMAIL}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ email: value });
-                      }}
-                    />
-                    <FormLabel raised labelStyle={style.formLabel}>{PHONE}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ phone: value });
-                      }}
-                    />
-                    <FormLabel raised labelStyle={style.formLabel}>{ADDRESS}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ address: value });
-                      }}
-                    />
-                    <FormLabel raised labelStyle={style.formLabel}>{INTERESTS}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ interests: value });
-                      }}
-                    />
-                    <FormLabel raised labelStyle={style.formLabel}>{AFFILIATIONS}</FormLabel>
-                    <FormInput raised
-                      onChangeText={value => {
-                        this.setState({ affiliations: value });
-                      }}
-                    />
-                    {this.state.error ? <Text style={style.error}>{this.state.errorMessage}</Text> : ''}
                   </View>
-                  <Button raised
-                    title={'Save'}
-                    borderRadius={5}
-                    backgroundColor={Color.blue}
-                    textStyle={{ fontWeight: 'bold' }}
-                    style={style.button}
-                    onPress={this.createDaughter.bind(this, user_C, team_U)}
-                  />
-                </View>
-              </View>
+                </ScrollView>
+              </KeyboardAvoidingView>
             )}
           </Mutation>
         )}

@@ -7,11 +7,11 @@ const { width } = Dimensions.get('window');
 module.exports = StyleSheet.create({
   container: {
     padding: 10,
-    margin: 30,
     flex: 1,
     flexDirection: 'column',
     backgroundColor: Color.white,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   row: {
     flex: 1,
@@ -27,8 +27,20 @@ module.exports = StyleSheet.create({
   },
   box: {
     flex: 1,
-    height: 175,
+    height: '100%',
     backgroundColor: Color.darkBlue,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  box_text: {
+    color: Color.white,
+    textAlign: 'center'
+    
+  },
+  box_subtext: {
+    color: Color.white,
+    textAlign: 'center',
+    fontSize: 12
   },
   box1: {
     margin: 10,

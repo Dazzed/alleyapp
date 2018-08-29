@@ -11,6 +11,13 @@ module.exports = StyleSheet.create({
     backgroundColor: Color.white,
     justifyContent: 'space-between'
   },
+  photoContainer: {
+    padding: 10,
+    flex: 1,
+    backgroundColor: Color.white,
+    height: 160,
+    justifyContent: 'space-between'
+  },
   back: {
     justifyContent: 'flex-start',
     flexDirection: 'row',
@@ -55,8 +62,12 @@ module.exports = StyleSheet.create({
     lineHeight: 16,
     color: Color.darkBlue
   },
+  spaceFormContainer: {
+    margin: 10,
+    marginTop: 160
+  },
   formContainer: {
-    margin: 10
+    margin: 10,
   },
   formLabel: {
     color: Color.black

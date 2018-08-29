@@ -33,18 +33,19 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 
 
 export const TEAM_MUTATION = gql`
-  mutation TeamCreate($title: String!, $member: [ID!]) {
+  mutation TeamCreate($title: String!, $member: [ID!], $teamPictureUrl: String) {
     team_C( 
       input: {
         title: $title
         members: $member
+        teamPictureUrl: $teamPictureUrl
       }
     )
   }
 `;
 
 export const EDIT_USER_MUTATION = gql`
-  mutation UserUpdate($id: ID!, $phone: String!, $name: String!, $dateOfBirth: String!, $address: String!, $interests: String!, $affiliations:String!) {
+  mutation UserUpdate($id: ID!, $phone: String!, $name: String!, $dateOfBirth: String!, $address: String!, $interests: String!, $affiliations:String!, $profilePictureUrl: String) {
     user_U(
       id: $id 
       input: { 
@@ -54,13 +55,14 @@ export const EDIT_USER_MUTATION = gql`
         address: $address
         interests: $interests
         affiliations: $affiliations
+        profilePictureUrl: $profilePictureUrl
       }
     )
   }
 `;
 
 export const DAUGHTER_CREATE_MUTATION = gql`
-  mutation UserCreate( $phone: String, $name: String!, $dateOfBirth: String!, $address: String, $interests: String, $affiliations:String, $email: String) {
+  mutation UserCreate( $phone: String, $name: String!, $dateOfBirth: String!, $address: String, $interests: String, $affiliations:String, $email: String, $profilePictureUrl: String) {
     user_C( 
       input: {
         isParent: false,
@@ -71,6 +73,7 @@ export const DAUGHTER_CREATE_MUTATION = gql`
         address: $address
         interests: $interests
         affiliations: $affiliations
+        profilePictureUrl: $profilePictureUrl
       }
     )
   }
