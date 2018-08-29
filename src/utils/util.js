@@ -2,9 +2,10 @@ import { AsyncStorage } from 'react-native';
 
 const AUTH_TOKEN = 'AUTH_TOKEN';
 const USER = 'USER';
-
+const ACTIVE_TEAM = 'ACTIVE_TEAM';
 let token;
 let user;
+let activeTeam;
 
 export const getToken = async () => {
   if (token) {
@@ -18,6 +19,20 @@ export const getToken = async () => {
 export const setToken = (newToken) => {
   token = newToken;
   return AsyncStorage.setItem(AUTH_TOKEN, newToken);
+};
+
+export const getActiveTeam = async () => {
+  if (activeTeam) {
+    return Promise.resolve(activeTeam);
+  }
+
+  activeTeam = await AsyncStorage.getItem(ACTIVE_TEAM);
+  return activeTeam;
+};
+
+export const setActiveTeam = (newTeam) => {
+  activeTeam = newTeam;
+  return AsyncStorage.setItem(ACTIVE_TEAM, newTeam);
 };
 
 export const signOut = () => {

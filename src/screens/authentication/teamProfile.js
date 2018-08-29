@@ -39,10 +39,12 @@ export default class TeamProfile extends Component {
       const {
         title
       } = this.state;
-      let member = await AsyncStorage.getItem('USER');
+      let member = [];
+      member.push(await AsyncStorage.getItem('USER'));
 
       const data = await targetMutation({ variables: { title, member } });
       console.log(data);
+      AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
       this.props.navigation.navigate('dadProfile')
     } catch (e) {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
