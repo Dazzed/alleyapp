@@ -2,9 +2,11 @@ import { AsyncStorage } from 'react-native';
 
 const AUTH_TOKEN = 'AUTH_TOKEN';
 const USER = 'USER';
+const USER_INFO = 'USER_INFO';
 const ACTIVE_TEAM = 'ACTIVE_TEAM';
 let token;
 let user;
+let userInfo;
 let activeTeam;
 
 export const getToken = async () => {
@@ -45,6 +47,10 @@ export const signOut = () => {
 export const setUser = (newUser) => {
   user = newUser;
   return AsyncStorage.setItem(USER, newUser);
+}
+export const setUserInfo = (newUserInfo) => {
+  userInfo = newUserInfo;
+  return AsyncStorage.setItem(USER_INFO, newUserInfo);
 }
 export const getUser = async () => {
   if (user) {

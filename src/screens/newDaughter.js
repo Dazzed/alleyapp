@@ -4,7 +4,7 @@ import PhotoUpload from 'react-native-photo-upload';
 import axios from 'axios';
 
 import { Mutation } from "react-apollo";
-import { DAUGHTER_CREATE_MUTATION, UPDATE_TEAM_MUTATION } from '../../graphql/mutation';
+import { DAUGHTER_CREATE_MUTATION, UPDATE_TEAM_MUTATION } from '../graphql/mutation';
 
 import Color from 'constants/colors';
 import style from 'styles/profile';
@@ -19,7 +19,7 @@ const ADDRESS = 'Address';
 const INTERESTS = 'Interests';
 const AFFILIATIONS = 'Affiliations';
 
-export default class DaughterProfile extends Component {
+export default class NewDaughter extends Component {
   constructor() {
     super();
     this.state = {
@@ -74,15 +74,15 @@ export default class DaughterProfile extends Component {
       const data = await targetMutation1({ variables: { phone, name, dateOfBirth, address, interests, affiliations, email, profilePictureUrl } });
 
       console.log(data);
-      let members =[];
-      members.push( await AsyncStorage.getItem('USER'));
+      let members = [];
+      members.push(await AsyncStorage.getItem('USER'));
       let id = await AsyncStorage.getItem('ACTIVE_TEAM');
       console.log(id);
       members.push(data.data.user_C);
       console.log(64, members);
       const data2 = await targetMutation2({ variables: { id, members } });
       console.log(data2);
-      this.props.navigation.navigate('signin')
+      this.props.navigation.navigate('dadTeams')
     } catch (e) {
       console.log('Error in creating daughter', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({

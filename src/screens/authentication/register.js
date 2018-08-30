@@ -24,6 +24,10 @@ export default class Register extends Component {
       errorMessage: ''
     };
   }
+  static navigationOptions = {
+    header: null
+  };
+  
   register = async targetMutation => {
     try {
       const {
@@ -60,7 +64,7 @@ export default class Register extends Component {
         {(user_C) => (
           <KeyboardAvoidingView
             behavior="padding" style={style.container}>
-            <ScrollView contentContainerStyle={style.container}>
+            <ScrollView>
               <View style={style.subContainer}>
                 <View style={style.welcomeContainer}>
                   <Image

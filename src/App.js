@@ -27,6 +27,8 @@ import TeamProfile from 'screens/teamProfile';
 import DadProfile from 'screens/dadProfile';
 import DadTeams from 'screens/dadTeams';
 import DaughterProfile from 'screens/daughterProfile';
+import NewTeam from 'screens/newTeam';
+import NewDaughter from 'screens/newDaughter';
 
 import Settings from 'screens/settings';
 
@@ -127,10 +129,12 @@ export default class Main extends Component {
         },
         fouthTab: {
           screen: StackNavigator({
+            dadTeams: { screen: DadTeams },
             teamProfile: { screen: TeamProfile },
             dadProfile: { screen: DadProfile },
             daughterProfile: { screen: DaughterProfile },
-            dadTeams: { screen: DadTeams }
+            newTeam: { screen: NewTeam },
+            newDaughter: { screen: NewDaughter }
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
@@ -184,8 +188,7 @@ export default class Main extends Component {
         forgotPassword: { screen: ForgotPassword },
         privacyPolicy: { screen: PrivacyPolicy },
         tos: { screen: Tos }
-      },
-      { headerMode: 'none' }
+      }
     );
 
     if (this.state.isLoggedIn) {

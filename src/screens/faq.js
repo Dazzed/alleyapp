@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, TouchableHighlight } from 'react-native';
+import { GET_FAQ } from '../graphql/queries';
+
+import { Query } from "react-apollo";
 
 import Color from 'constants/colors';
-import style from 'styles/signin';
+import style from 'styles/profile';
 
 import { Text, Icon } from 'react-native-elements';
 
@@ -12,15 +15,45 @@ export default class Faq extends Component {
     super();
   }
 
+  static navigationOptions = ({ navigation: { navigate } }) => ({
+    title: 'FAQ',
+    headerMode: 'screen',
+    headerTintColor: Color.white,
+    headerStyle: {
+      backgroundColor: Color.main
+    }
+  });
+
+  showFaqDetail = faq_item => {
+    this.props.navigation.navigate('faqDetail', {
+      id: faq_item
+    })
+  }
+  
   render() {
     return (
       <View style={style.container}>
         <View style={style.subContainer}>
-          <View style={style.welcomeContainer}>
-            <Text style={style.subTitle}>FAQ</Text>
-          </View>
           <View style={style.formContainer}>
-            <Text style={style.tosText}>Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt explicabo</Text>
+            <Query query={GET_FAQ}>
+              {({ data: { faq_RA }, loading }) => {
+                if (loading || !faq_RA) {
+                  return <Text>Loading ...</Text>;
+                }
+                {return faq_RA.map(faq_item => {
+                    return (
+                      <View style={style.faq_item} key={faq_item.id}>
+                        <TouchableHighlight onPress={() => this.showFaqDetail(faq_item.id)}>
+                          <Text>
+                            {faq_item.question}
+                          </Text>
+                        </TouchableHighlight>
+                      </View>
+                    );
+                  })
+                }                  
+              }}
+            </Query>
           </View>
         </View>
       </View>

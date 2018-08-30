@@ -8,7 +8,7 @@ import style from 'styles/signin';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 import { LOGIN_MUTATION } from '../../graphql/mutation';
-import { setToken, setUser, getUser } from '../../utils/util';
+import { setToken, setUserInfo } from '../../utils/util';
 const EMAIL = 'Email';
 const PASSWORD = 'Password';
 
@@ -22,7 +22,10 @@ export default class SignIn extends Component {
       errorMessage: ''
     };
   }
-
+  static navigationOptions = {
+    header: null
+  };
+  
   signIn = async targetMutation => {
     try {
       const {
@@ -33,7 +36,7 @@ export default class SignIn extends Component {
       // this.props.navigation.navigate('dashboard')
       console.log(data);
       setToken(data.data.user_Login.token);
-      setUser(data.data.user_Login.user.id);
+      setUserInfo(JSON.stringify(data.data.user_Login.user));
       
       let { screenProps: { signIn } } = this.props;
       signIn();
@@ -52,7 +55,7 @@ export default class SignIn extends Component {
         {(user_Login) => (
           <KeyboardAvoidingView
             behavior="padding" style={style.container}>
-            <ScrollView contentContainerStyle={style.container}>
+            <ScrollView>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
                 <Image

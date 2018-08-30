@@ -88,5 +88,32 @@ module.exports = StyleSheet.create({
   error: {
     color: 'red',
     fontWeight: 'bold'
-  }
+  },
+  faq_item: {
+    padding: 10,
+    margin: 3,
+    backgroundColor: Color.gray
+  },
+  resource_item: {
+    padding: 10,
+    margin: 3,
+    backgroundColor: Color.gray
+  },
+  dadProfile: {
+    height: 100,
+    width: '50%',
+    marginLeft: '25%',
+    backgroundColor: Color.gray,
+    marginTop: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: "#aaa",
+    borderWidth: 1
+
+  },
+  flexGrid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 },
+  flexItem: { width: '50%', padding: 5, height: 125, justifyContent: 'center', alignItems: 'center' },
+  flexItemInner: { width: '100%', backgroundColor: Color.gray, padding: 10, justifyContent: 'center', alignItems: 'center'},
+  teamInfo: { fontWeight: 'bold', marginTop: 2 },
+  partnerName: {  marginTop: 2 },
 });

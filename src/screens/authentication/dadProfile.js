@@ -10,10 +10,10 @@ import style from 'styles/profile';
 import { FormLabel, FormInput, Button, Text } from 'react-native-elements';
 import { EDIT_USER_MUTATION } from '../../graphql/mutation';
 
-const DAD_NAME = 'Dad\'s Name';
-const DATE_OF_BIRTH = 'Date of Birth';
-const PHONE = 'Phone';
-const ADDRESS = 'Address';
+const DAD_NAME = 'Dad\'s Name*';
+const DATE_OF_BIRTH = 'Date of Birth*';
+const PHONE = 'Phone*';
+const ADDRESS = 'Address*';
 const INTERESTS = 'Interests';
 const AFFILIATIONS = 'Affiliations';
 
@@ -34,14 +34,15 @@ export default class DadProfile extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'Dad Profile',
+    title: 'DAD PROFILE',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
       backgroundColor: Color.main
-    }
+    },
+    headerLeft: null
   });
-
+  
   loadPicture = async avatar => {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
@@ -88,7 +89,6 @@ export default class DadProfile extends Component {
             behavior="padding" style={style.container}>
             <ScrollView>
               <View style={style.subContainer}>
-                <Text h2>Dad's Profile</Text>
                 <View style={style.photoContainer}>
                   <PhotoUpload containerStyle={{ height: 150 }}
                     onPhotoSelect={avatar => {

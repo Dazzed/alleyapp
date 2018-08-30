@@ -6,6 +6,7 @@ export const LOGIN_MUTATION = gql`
       user {
         name
         email
+        profilePictureUrl
         id
       }
       token
@@ -85,6 +86,19 @@ export const UPDATE_TEAM_MUTATION = gql`
       id: $id
       input: {
         members: $members
+      }
+    )
+  }
+`;
+
+export const UPDATE_TEAM_INFO_MUTATION = gql`
+  mutation TeamInfoUpdate($id: ID!, $title: String!, $members: [ID!], $teamPictureUrl: String!) {
+    team_U(
+      id: $id
+      input: {
+        title: $title,
+        members: $members,
+        teamPictureUrl: $teamPictureUrl
       }
     )
   }

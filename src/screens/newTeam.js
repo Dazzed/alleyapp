@@ -10,10 +10,10 @@ import { FormLabel, FormInput, Button, Text } from 'react-native-elements';
 
 const TEAM_NAME = 'Team Name';
 
-import { TEAM_MUTATION } from '../../graphql/mutation';
-import { getUser } from '../../utils/util';
+import { TEAM_MUTATION } from '../graphql/mutation';
+import { getUser } from '../utils/util';
 
-export default class TeamProfile extends Component {
+export default class NewTeam extends Component {
   constructor() {
     super();
     this.state = {
@@ -26,9 +26,9 @@ export default class TeamProfile extends Component {
 
   formatDate() {
     var d = new Date(),
-    month = '' + (d.getMonth() + 1),
-    day = '' + d.getDate(),
-    year = d.getFullYear();
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
 
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
@@ -48,7 +48,7 @@ export default class TeamProfile extends Component {
       const data = await targetMutation({ variables: { title, member, teamPictureUrl } });
       console.log(data);
       AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
-      this.props.navigation.navigate('dadProfile')
+      this.props.navigation.navigate('newDaughter')
     } catch (e) {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
@@ -74,8 +74,7 @@ export default class TeamProfile extends Component {
     headerTintColor: Color.white,
     headerStyle: {
       backgroundColor: Color.main
-    },
-    headerLeft: null
+    }
   });
 
 
@@ -107,7 +106,7 @@ export default class TeamProfile extends Component {
                   />
                 </PhotoUpload>
               </View>
-              <View style={style.spaceFormContainer}>                
+              <View style={style.spaceFormContainer}>
                 <FormLabel raised labelStyle={style.formLabel}>{TEAM_NAME}</FormLabel>
                 <FormInput raised
                   onChangeText={value => {
