@@ -63,3 +63,50 @@ export const GET_TEAMS = gql`
     teamByMember(memberId: $memberId)
   }
 `;
+
+
+
+export const GET_DASHBOARD_BY_TEAM = gql`
+  query GetDashboardByTeam($teamId: ID!) {
+    team_Dashboard(teamId: $teamId) {
+      pointsToDate
+      activeMission
+      missionDeadLine
+      currentMissionChallenges
+    }
+  }
+`;
+
+export const GET_CHALLENGE = gql `
+  query GetChallenge($id: ID!) {
+    challenge_R(id: $id) {
+      id
+      missionID
+      title
+      materials
+      pctDone
+      location
+      requests {
+        id
+        type
+        data
+        url
+        qty
+      }
+      description {
+        id
+        type
+        data
+        url
+        qty
+      }
+      ageLimit {
+        min
+        max
+      }
+      maxPts
+      estTime
+    }
+  }
+
+`;

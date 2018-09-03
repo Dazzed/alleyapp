@@ -62,7 +62,7 @@ export default class SignIn extends Component {
                   source={require('../../assets/images/alley-oop.png')}
                   style={style.logoName}
                 />
-                <Text style={style.subTitle}>Deepending inter-gernerational relationships through play</Text>
+                <Text style={style.subTitle}>Deepening inter-generational relationships through play</Text>
                 <Image
                   source={require('../../assets/images/alley-oop-logo.png')}
                   style={style.logoImg}

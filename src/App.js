@@ -22,6 +22,8 @@ import Resources from 'screens/resources';
 import ResourcesDetails from 'screens/resourcesDetails';
 
 import Dashboard from 'screens/dashboard';
+import Challenge from 'screens/challenge';
+import Instructions from 'screens/instructions';
 
 import TeamProfile from 'screens/teamProfile';
 import DadProfile from 'screens/dadProfile';
@@ -113,7 +115,10 @@ export default class Main extends Component {
         },
         thirdTab: {
           screen: StackNavigator({
-            dashboard: { screen: Dashboard }
+            dashboard: { screen: Dashboard },
+            challenge: { screen: Challenge },
+            instructions: { screen: Instructions }
+            
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {

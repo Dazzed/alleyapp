@@ -25,10 +25,16 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 10
   },
+  box: {
+    flex: 1,
+    height: '100%',
+    backgroundColor: Color.darkBlue,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   box_text: {
     color: Color.white,
-    textAlign: 'center'
-    
+    textAlign: 'center'  
   },
   box_subtext: {
     color: Color.white,
@@ -51,20 +57,4 @@ module.exports = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20
   },
-
-
-  flexContainer: {
-    padding: 0,
-    margin: 0,
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-
-
-flexItem: {
-  padding: 5,
-  width: '50%',
-  height: '100%'
-}
 });

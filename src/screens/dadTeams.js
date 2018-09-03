@@ -1,6 +1,6 @@
 import React, { Component,  } from 'react';
 import { View, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
-import { GET_TEAMS, GET_RESOURCE } from '../graphql/queries';
+import { GET_TEAMS } from '../graphql/queries';
 
 import { Query } from "react-apollo";
 

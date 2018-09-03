@@ -82,7 +82,7 @@ export default class DaughterProfile extends Component {
       console.log(this.state);
       let name = daughter_name;
       let dateOfBirth = dob;
-      let id = await AsyncStorage.getItem('USER');
+      let id = this.props.navigation.state.params.id;
 
       const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl } });
       console.log(data);
