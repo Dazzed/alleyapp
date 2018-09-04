@@ -30,7 +30,7 @@ export default class DaughterProfile extends Component {
     this.today = (month + '/' + date + '/' + year);
     this.state = {
       daughter_name: '',
-      dob: '',
+      dob: this.today,
       email: '',
       phone: '',
       address: '',

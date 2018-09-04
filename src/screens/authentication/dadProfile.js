@@ -24,7 +24,6 @@ export default class DadProfile extends Component {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
-
     
     this.today = (month + '/' + date + '/' + year);
     this.state = {
@@ -160,6 +159,7 @@ export default class DadProfile extends Component {
                   <FormLabel raised labelStyle={style.formLabel}>{PHONE}</FormLabel>
                   <FormInput raised
                     keyboardType="phone-pad"
+                    maxLength={10}
                     onChangeText={value => {
                       this.setState({ phone: value });
                     }}

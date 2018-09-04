@@ -30,7 +30,7 @@ export default class DaughterProfile extends Component {
     this.today = (month + '/' + date + '/' + year);
     this.state = {
       daughter_name: '',
-      dob: '',
+      dob: this.today,
       phone: '',
       address: '',
       interests: '',
@@ -143,7 +143,7 @@ export default class DaughterProfile extends Component {
                               }}
                               resizeMode='cover'
                               source={{
-                                uri: user_R.profilePictureUrl
+                                uri: (user_R.profilePictureUrl) ? user_R.profilePictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
                               }}
                             />
                           </PhotoUpload>

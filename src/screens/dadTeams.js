@@ -98,7 +98,7 @@ export default class DadTeams extends Component {
                                 borderRadius: 25
                               }}
                                 source={{
-                                  uri: team.teamPictureUrl
+                                  uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
                                 }} />
                               <Text style={[style.teamInfo]}>
                                 {team.title}
