@@ -87,7 +87,8 @@ module.exports = StyleSheet.create({
   },
   error: {
     color: 'red',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    margin: 20,
   },
   faq_item: {
     padding: 10,
@@ -114,6 +115,6 @@ module.exports = StyleSheet.create({
   flexGrid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 },
   flexItem: { width: '50%', padding: 5, height: 125, justifyContent: 'center', alignItems: 'center' },
   flexItemInner: { width: '100%', backgroundColor: Color.gray, padding: 10, justifyContent: 'center', alignItems: 'center'},
-  teamInfo: { fontWeight: 'bold', marginTop: 2 },
-  partnerName: {  marginTop: 2 },
+  teamInfo: { fontWeight: 'bold', marginTop: 2, textAlign: 'center' },
+  partnerName: {  marginTop: 2, textAlign: 'center' },
 });

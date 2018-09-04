@@ -76,6 +76,7 @@ module.exports = StyleSheet.create({
   },
   error: {
     color: 'red',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    margin: 20
   }
 });

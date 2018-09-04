@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Linking } from 'react-native';
+import { View, Linking, TouchableHighlight } from 'react-native';
 
 import Color from 'constants/colors';
 import styles from 'styles/help';
@@ -24,25 +24,33 @@ export default class Help extends Component {
   render() {
     return (
       <View style={styles.container}>
-          <View style={styles.row}>
-            <View style={[styles.box, styles.box1]}>
-              <Text h4 style={styles.box_text} onPress={() => {this.props.navigation.navigate('faq')}}>FAQ'S</Text>
+        <View style={styles.row}>
+          <TouchableHighlight style={[styles.box, styles.box1]} onPress={() => { this.props.navigation.navigate('faq') }}>
+            <View>
+              <Text h4 style={styles.box_text}>FAQ'S</Text>
             </View>
-            <View style={[styles.box, styles.box2]}>
-              <Text h4 style={styles.box_text} onPress={() => {this.props.navigation.navigate('resources')}}>RESOURCES</Text>
+          </TouchableHighlight>
+          <TouchableHighlight style={[styles.box, styles.box2]} onPress={() => { this.props.navigation.navigate('resources') }}>
+            <View>
+              <Text h4 style={styles.box_text}>RESOURCES</Text>
             </View>
-          </View>
-          <View style={styles.row2}>
-            <View style={[styles.box, styles.box1]}>
-              <Text h4 style={styles.box_text}>EMAIL{'\n'}SUPPORT</Text>
-            <Text style={styles.box_subtext} onPress={() => Linking.openURL('mailto:help@alleyoopduos.com')}>help@alleyoopduos.com</Text>
-            </View>
-            <View style={[styles.box, styles.box2]}>
-              <Text h4 style={styles.box_text}>PHONE{'\n'}SUPPORT</Text>
-              <Text style={styles.box_subtext} onPress={() => Linking.openURL('tel:888-888-8888')}>888-888-8888</Text>
-            </View>
-          </View>
+          </TouchableHighlight>
         </View>
+        <View style={styles.row2}>
+          <TouchableHighlight style={[styles.box, styles.box1]} onPress={() => Linking.openURL('mailto:help@alleyoopduos.com')}>
+            <View>
+              <Text h4 style={styles.box_text}>EMAIL{'\n'}SUPPORT</Text>
+              <Text style={styles.box_subtext}>help@alleyoopduos.com</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={[styles.box, styles.box2]} onPress={() => Linking.openURL('tel:888-888-8888')}>
+            <View>
+              <Text h4 style={styles.box_text}>PHONE{'\n'}SUPPORT</Text>
+              <Text style={styles.box_subtext}>888-888-8888</Text>
+            </View>
+          </TouchableHighlight> 
+        </View>
+      </View>
     );
   }
 }

@@ -48,7 +48,7 @@ export default class DadTeams extends Component {
     let user = await AsyncStorage.getItem('USER_INFO');
 
     let user_info = JSON.parse(user);
-    console.log(user_info);
+
     this.setState({
       member: user_info
     })
@@ -60,19 +60,19 @@ export default class DadTeams extends Component {
         <View style={style.subContainer}>
           <View style={style.formContainer}>
             {this.state.member ?
-              <View style={style.dadProfile}>
-                <Image style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25
-                }}
-                source={{
-                  uri: this.state.member.profilePictureUrl
-                }} /> 
-                <TouchableHighlight onPress={() => this.showDadInfo()}>
+              <TouchableHighlight style={style.dadProfile} onPress={() => this.showDadInfo()}>
+                <View>
+                  <Image style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25
+                  }}
+                  source={{
+                    uri: this.state.member.profilePictureUrl
+                  }} /> 
                   <Text style={style.partnerName}>{this.state.member.name}</Text>
-                </TouchableHighlight>
-              </View>
+                </View>
+              </TouchableHighlight>
               :
               <Text>Loading...</Text>
             }
@@ -90,27 +90,27 @@ export default class DadTeams extends Component {
                       })
                       return (
                         <View style={style.flexItem} key={team.id}>
-                          <View style={style.flexItemInner}>
-                            <Image style={{
-                              width: 50,
-                              height: 50,
-                              borderRadius: 25
-                            }}
-                              source={{
-                                uri: team.teamPictureUrl
-                              }} /> 
-                          <TouchableHighlight onPress={() => this.showTeamDetail(team)}>
-                            <Text style={[style.teamInfo]}>
-                              {team.title}
-                            </Text>
-                          </TouchableHighlight>
-                          {partners.map(partner => {
-                              return (
-                                <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
-                              ); 
-                            })
-                          }
+                          <TouchableHighlight style={style.flexItemInner} onPress={() => this.showTeamDetail(team)}>
+                            <View>
+                              <Image style={{
+                                width: 50,
+                                height: 50,
+                                borderRadius: 25
+                              }}
+                                source={{
+                                  uri: team.teamPictureUrl
+                                }} />
+                              <Text style={[style.teamInfo]}>
+                                {team.title}
+                              </Text>
+                              {partners.map(partner => {
+                                return (
+                                  <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
+                                ); 
+                              })
+                            }
                             </View>
+                          </TouchableHighlight>
                         </View>
                       );
                     })
@@ -121,20 +121,19 @@ export default class DadTeams extends Component {
               <View></View>
               }
               <View style={style.flexItem}>
-                <View style={style.flexItemInner}>
-                  <Image style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25
-                  }}
-                    source={require('../assets/images/add_team.png')} />
-                  <TouchableHighlight onPress={() => this.props.navigation.navigate('newTeam')}>
+                <TouchableHighlight style={style.flexItemInner} onPress={() => this.props.navigation.navigate('newTeam')}>
+                  <View style={style.flexItemInner}>
+                    <Image style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: 25
+                    }}
+                      source={require('../assets/images/add_team.png')} />
                     <Text style={[style.teamInfo]}>
                       Add New Team
                     </Text>
-                  </TouchableHighlight>
-                  <Text> </Text>
-                </View>
+                  </View>
+                </TouchableHighlight>
               </View>
             </View>
           </View>

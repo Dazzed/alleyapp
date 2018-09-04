@@ -102,7 +102,7 @@ export default class TeamProfile extends Component {
                     }}
                     resizeMode='cover'
                     source={{
-                      uri: this.props.navigation.state.params.teamPictureUrl
+                      uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
                     }}
                   />
                 </PhotoUpload>

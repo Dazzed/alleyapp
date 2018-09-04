@@ -3,6 +3,7 @@ import { View, Image, TouchableHighlight, AsyncStorage, KeyboardAvoidingView, Sc
 import { Mutation, Query } from "react-apollo";
 import PhotoUpload from 'react-native-photo-upload';
 import axios from 'axios';
+import DatePicker from 'react-native-datepicker'
 
 import Color from 'constants/colors';
 import style from 'styles/profile';
@@ -22,6 +23,11 @@ const AFFILIATIONS = 'Affiliations';
 export default class DaughterProfile extends Component {
   constructor() {
     super();
+    var date = new Date().getDate();
+    var month = new Date().getMonth() + 1;
+    var year = new Date().getFullYear();
+
+    this.today = (month + '/' + date + '/' + year);
     this.state = {
       daughter_name: '',
       dob: '',
@@ -151,14 +157,41 @@ export default class DaughterProfile extends Component {
                             value={user_R.name}
                           />
                           <FormLabel raised labelStyle={style.formLabel}>{DATE_OF_BIRTH}</FormLabel>
-                          <FormInput raised
-                            onChangeText={value => {
-                              this.setState({ dob: value });
+                          <DatePicker
+                            style={{ width: '100%' }}
+                            date={user_R.dateOfBirth}
+                            mode="date"
+                            showIcon={false}
+                            placeholder=""
+                            format="MM/DD/YYYY"
+                            minDate="01/01/1900"
+                            maxDate={this.today}
+                            confirmBtnText="Confirm"
+                            cancelBtnText="Cancel"
+                            customStyles={{
+                              dateInput: {
+                                borderWidth: 0,
+                                justifyContent: 'flex-start',
+                                alignItems: 'flex-start',
+                                paddingTop: 10,
+                                marginLeft: 20,
+                                marginRight: 20,
+                                borderWidth: 0,
+                                borderBottomWidth: 1,
+                                borderBottomColor: "#BBBBBB",
+                                width: '100%',
+                              },
+                              dateText: {
+                                fontSize: 14,
+                                color: '#888'
+                              }
                             }}
-                            value={user_R.dateOfBirth}
+                            onDateChange={(date) => { this.setState({ dob: date }) }}
                           />
                           <FormLabel raised labelStyle={style.formLabel}>{PHONE}</FormLabel>
                           <FormInput raised
+                            maxLength={10}
+                            keyboardType="phone-pad"
                             onChangeText={value => {
                               this.setState({ phone: value });
                             }}

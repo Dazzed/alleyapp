@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight } from 'react-native';
+import { View, Image, TouchableHighlight, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from "react-apollo";
 import { FORGOT_PASSWORD_MUTATION } from '../../graphql/mutation';
 
@@ -40,7 +40,9 @@ export default class ForgotPassword extends Component {
     return (
       <Mutation mutation={FORGOT_PASSWORD_MUTATION}>
         {(user_Forget_Password) => (
-          <View style={style.container}>
+          <KeyboardAvoidingView
+            behavior="padding" style={style.container}>
+            <ScrollView>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
                 <Image
@@ -73,7 +75,8 @@ export default class ForgotPassword extends Component {
               />
               <TouchableHighlight onPress={() => this.props.navigation.goBack()}><Text style={style.forgotPassword}>Already have an account? Log In</Text></TouchableHighlight>
             </View>
-          </View>
+            </ScrollView>
+          </KeyboardAvoidingView>
         )}
       </Mutation>
     );
