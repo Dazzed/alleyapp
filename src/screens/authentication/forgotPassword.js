@@ -31,7 +31,7 @@ export default class ForgotPassword extends Component {
       console.log('Error in forgotPassword', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
         error: true,
-        errorMessage: e.message
+        errorMessage: e.message.replace("GraphQL error: ", "")
       });
     }
   }

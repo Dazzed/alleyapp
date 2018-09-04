@@ -53,7 +53,7 @@ export default class TeamProfile extends Component {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
         error: true,
-        errorMessage: e.message
+        errorMessage: e.message.replace("GraphQL error: ", "")
       });
     }
   }

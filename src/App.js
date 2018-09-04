@@ -86,7 +86,7 @@ export default class Main extends Component {
               tabBarLabel: 'Social Feed',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="arrow-back"
+                  name="store"
                   color={!focused ? Color.darkBlue : 'white'}
                 />
               )
@@ -106,7 +106,7 @@ export default class Main extends Component {
               tabBarLabel: 'Help',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="arrow-back"
+                  name="help"
                   color={!focused ? Color.darkBlue : 'white'}
                 />
               )
@@ -125,7 +125,7 @@ export default class Main extends Component {
               tabBarLabel: 'Dashboard',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="arrow-back"
+                  name="dashboard"
                   color={!focused ? Color.darkBlue : 'white'}
                 />
               )
@@ -146,7 +146,7 @@ export default class Main extends Component {
               tabBarLabel: 'Profile',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="arrow-back"
+                  name="verified-user"
                   color={!focused ? Color.darkBlue : 'white'}
                 />
               )
@@ -162,7 +162,7 @@ export default class Main extends Component {
               tabBarLabel: 'Settings',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="arrow-back"
+                  name="settings"
                   color={!focused ? Color.darkBlue : 'white'}
                 />
               )

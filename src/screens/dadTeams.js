@@ -15,7 +15,8 @@ export default class DadTeams extends Component {
   constructor() {
     super();
     this.state = {
-      member: null
+      member: null,
+      uniqueKey: 1
     };
   }
 
@@ -44,6 +45,14 @@ export default class DadTeams extends Component {
     })
   }
 
+  componentDidMount = () => {
+    this._subscribe = this.props.navigation.addListener('didFocus', () => {
+      this.setState({
+        uniqueKey: (this.state.uniqueKey + 1)
+      })
+    });
+  }
+  
   async componentWillMount() {
     let user = await AsyncStorage.getItem('USER_INFO');
 
@@ -55,90 +64,90 @@ export default class DadTeams extends Component {
   }
   render() {
     return (
-      <ScrollView>
-      <View style={style.container}>
-        <View style={style.subContainer}>
-          <View style={style.formContainer}>
-            {this.state.member ?
-              <TouchableHighlight style={style.dadProfile} onPress={() => this.showDadInfo()}>
-                <View>
-                  <Image style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25
-                  }}
-                  source={{
-                    uri: this.state.member.profilePictureUrl
-                  }} /> 
-                  <Text style={style.partnerName}>{this.state.member.name}</Text>
-                </View>
-              </TouchableHighlight>
-              :
-              <Text>Loading...</Text>
-            }
-            <View style={style.flexGrid}>
+      <ScrollView key={this.state.uniqueKey}>
+        <View style={style.container}>
+          <View style={style.subContainer}>
+            <View style={style.formContainer}>
               {this.state.member ?
-              <Query query={GET_TEAMS} variables={{ memberId: this.state.member.id}}>
-                  {({ data: { teamByMember }, loading }) => {
-                    if (loading || !teamByMember) {
-                    return <Text>Loading ...</Text>;
-                  }
-                  {
-                    return teamByMember.map(team => {
-                      let partners = team.members.filter(member_user => {
-                        return member_user.id !== this.state.member.id
-                      })
-                      return (
-                        <View style={style.flexItem} key={team.id}>
-                          <TouchableHighlight style={style.flexItemInner} onPress={() => this.showTeamDetail(team)}>
-                            <View>
-                              <Image style={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: 25
-                              }}
-                                source={{
-                                  uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                }} />
-                              <Text style={[style.teamInfo]}>
-                                {team.title}
-                              </Text>
-                              {partners.map(partner => {
-                                return (
-                                  <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
-                                ); 
-                              })
-                            }
-                            </View>
-                          </TouchableHighlight>
-                        </View>
-                      );
-                    })
-                  }
-                }}
-              </Query>
-              :
-              <View></View>
-              }
-              <View style={style.flexItem}>
-                <TouchableHighlight style={style.flexItemInner} onPress={() => this.props.navigation.navigate('newTeam')}>
-                  <View style={style.flexItemInner}>
+                <TouchableHighlight style={style.dadProfile} onPress={() => this.showDadInfo()}>
+                  <View>
                     <Image style={{
                       width: 50,
                       height: 50,
                       borderRadius: 25
                     }}
-                      source={require('../assets/images/add_team.png')} />
-                    <Text style={[style.teamInfo]}>
-                      Add New Team
-                    </Text>
+                    source={{
+                      uri: this.state.member.profilePictureUrl
+                    }} /> 
+                    <Text style={style.partnerName}>{this.state.member.name}</Text>
                   </View>
                 </TouchableHighlight>
+                :
+                <Text>Loading...</Text>
+              }
+              <View style={style.flexGrid}>
+                {this.state.member ?
+                <Query query={GET_TEAMS} variables={{ memberId: this.state.member.id}}>
+                    {({ data: { teamByMember }, loading }) => {
+                      if (loading || !teamByMember) {
+                      return <Text>Loading ...</Text>;
+                    }
+                    {
+                      return teamByMember.map(team => {
+                        let partners = team.members.filter(member_user => {
+                          return member_user.id !== this.state.member.id
+                        })
+                        return (
+                          <View style={style.flexItem} key={team.id}>
+                            <TouchableHighlight style={style.flexItemInner} onPress={() => this.showTeamDetail(team)}>
+                              <View>
+                                <Image style={{
+                                  width: 50,
+                                  height: 50,
+                                  borderRadius: 25
+                                }}
+                                  source={{
+                                    uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                  }} />
+                                <Text style={[style.teamInfo]}>
+                                  {team.title}
+                                </Text>
+                                {partners.map(partner => {
+                                  return (
+                                    <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
+                                  ); 
+                                })
+                              }
+                              </View>
+                            </TouchableHighlight>
+                          </View>
+                        );
+                      })
+                    }
+                  }}
+                </Query>
+                :
+                <View></View>
+                }
+                <View style={style.flexItem}>
+                  <TouchableHighlight style={style.flexItemInner} onPress={() => this.props.navigation.navigate('newTeam')}>
+                    <View style={style.flexItemInner}>
+                      <Image style={{
+                        width: 50,
+                        height: 50,
+                        borderRadius: 25
+                      }}
+                        source={require('../assets/images/add_team.png')} />
+                      <Text style={[style.teamInfo]}>
+                        Add New Team
+                      </Text>
+                    </View>
+                  </TouchableHighlight>
+                </View>
               </View>
             </View>
           </View>
         </View>
-      </View>
       </ScrollView>
     );
   }
