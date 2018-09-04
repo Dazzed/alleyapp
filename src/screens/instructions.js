@@ -28,19 +28,27 @@ export default class Instructions extends Component {
     const data = this.props.navigation.state.params.data;
     const type = this.props.navigation.state.params.type;
     return (
-      <ScrollView>
-        <View style={style.container}>
+      <View style={style.container}>
+        <ScrollView>
           {type === "text" ? <View><Text>{data}</Text></View> : ''}
-          {type === "audio" ? <View><Text>Audio</Text></View> : ''}
-          {type === "video" ? <View style={style.challenge}><Video source={{ uri: "https://challenge-assets.s3.amazonaws.com/1535968519871.mp4" }} ref={(ref) => {
+          {(type === "audio") ? <View style={style.challenge}><Video source={{ uri: data }} ref={(ref) => {
             this.player = ref
-          }}                                     
-            onBuffer={this.onBuffer}             
-            onEnd={this.onEnd}                   
-            onError={this.videoError} 
+          }}
+            onBuffer={this.onBuffer}
+            audioOnly={true}
+            poster="https://placehold.it/300x200"
+            onEnd={this.onEnd}
+            onError={this.videoError}
             style={style.backgroundVideo} /></View> : ''}
-        </View>
-      </ScrollView>
+          {(type === "video") ? <View style={style.challenge}><Video source={{ uri: data }} ref={(ref) => {
+            this.player = ref
+          }}
+            onBuffer={this.onBuffer}
+            onEnd={this.onEnd}
+            onError={this.videoError}
+            style={style.backgroundVideo} /></View> : ''}            
+        </ScrollView>
+      </View>
     );
   }
 }
