@@ -64,6 +64,10 @@ export default class NewDaughter extends Component {
 
   createDaughter = async (targetMutation1, targetMutation2) => {
     try {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
       const {
         daughter_name,
         dob,

@@ -21,6 +21,10 @@ export default class ForgotPassword extends Component {
   }
   forgotPassword = async targetMutation => {
     try {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
       const {
         email
       } = this.state;

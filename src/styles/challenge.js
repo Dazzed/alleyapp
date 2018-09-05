@@ -90,12 +90,11 @@ module.exports = StyleSheet.create({
     color: "#0D0760",
   },
   backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
     height: 200,
+  },
+  video: {
+    width: '100%'
   }
 });

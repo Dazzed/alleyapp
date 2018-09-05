@@ -61,6 +61,10 @@ export default class DadProfile extends Component {
 
   updateDad = async targetMutation => {
     try {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
       const {
         dad_name,
         dob,

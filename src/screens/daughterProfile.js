@@ -15,8 +15,8 @@ import { setUser } from '../utils/util';
 
 const DAUGHTER_NAME = 'Daughter\'s Name*';
 const DATE_OF_BIRTH = 'Date of Birth*';
-const PHONE = 'Phone*';
-const ADDRESS = 'Address*';
+const PHONE = 'Phone';
+const ADDRESS = 'Address';
 const INTERESTS = 'Interests';
 const AFFILIATIONS = 'Affiliations';
 
@@ -76,6 +76,10 @@ export default class DaughterProfile extends Component {
   }
   updateDaughter = async targetMutation => {
     try {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
       const {
         daughter_name,
         dob,

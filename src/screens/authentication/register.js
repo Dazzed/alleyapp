@@ -30,6 +30,10 @@ export default class Register extends Component {
   
   register = async targetMutation => {
     try {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
       const {
         email,
         password,

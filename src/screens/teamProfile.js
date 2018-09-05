@@ -25,6 +25,10 @@ export default class TeamProfile extends Component {
   
   updateTeam = async targetMutation => {
     try {
+      this.setState({
+        error: false,
+        errorMessage: ''
+      });
       const {
         title,
         teamPictureUrl
