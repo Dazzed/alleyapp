@@ -92,8 +92,8 @@ export default class DadProfile extends Component {
       let name = dad_name;
       let dateOfBirth = dob;
       let id = await AsyncStorage.getItem('USER');
-
-      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl } });
+      let isParent = true;
+      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
       this.props.navigation.goBack();
     } catch (e) {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -119,13 +119,12 @@ export default class DadProfile extends Component {
           <KeyboardAvoidingView
             behavior="padding" style={style.container}>
             <ScrollView>
-              <Query query={GET_USER} variables={{ id }}>
+              <Query query={GET_USER} variables={{ id }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
                   if (loading || !user_R) {
                     return <Text>Loading ...</Text>;
                   }
                   {
-                    console.log(106, user_R);
                     this.setUser(user_R);
                     return (
                       <View style={style.subContainer}>

@@ -93,12 +93,12 @@ export default class DaughterProfile extends Component {
       let name = daughter_name;
       let dateOfBirth = dob;
       let id = this.props.navigation.state.params.id;
-
-      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl } });
+      let isParent = false;
+      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
       console.log(data);
       this.props.navigation.navigate('dadTeams');
     } catch (e) {
-      console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      console.log('Error in updating daughter', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
         error: true,
         errorMessage: e.message.replace("GraphQL error: ", "")
@@ -121,7 +121,7 @@ export default class DaughterProfile extends Component {
           <KeyboardAvoidingView
             behavior="padding" style={style.container}>
             <ScrollView>
-              <Query query={GET_USER} variables={{ id }}>
+              <Query query={GET_USER} variables={{ id }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
                   if (loading || !user_R) {
                     return <Text>Loading ...</Text>;

@@ -47,7 +47,7 @@ export const TEAM_MUTATION = gql`
 `;
 
 export const EDIT_USER_MUTATION = gql`
-  mutation UserUpdate($id: ID!, $phone: String!, $name: String!, $dateOfBirth: String!, $address: String!, $interests: String!, $affiliations:String!, $profilePictureUrl: String) {
+  mutation UserUpdate($id: ID!, $phone: String, $name: String!, $dateOfBirth: String!, $address: String, $interests: String, $affiliations:String, $profilePictureUrl: String, $isParent: Boolean) {
     user_U(
       id: $id 
       input: { 
@@ -58,8 +58,14 @@ export const EDIT_USER_MUTATION = gql`
         interests: $interests
         affiliations: $affiliations
         profilePictureUrl: $profilePictureUrl
+        isParent: $isParent
       }
-    )
+    ) {
+      name
+      email
+      profilePictureUrl
+      id
+    }
   }
 `;
 
@@ -88,7 +94,10 @@ export const UPDATE_TEAM_MUTATION = gql`
       input: {
         members: $members
       }
-    )
+    ) {
+      title
+      id
+    }
   }
 `;
 
@@ -101,7 +110,10 @@ export const UPDATE_TEAM_INFO_MUTATION = gql`
         members: $members,
         teamPictureUrl: $teamPictureUrl
       }
-    )
+    ) {
+      title
+      id
+    }
   }
 `;
 

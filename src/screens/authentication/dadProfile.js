@@ -78,8 +78,8 @@ export default class DadProfile extends Component {
       let name = dad_name;
       let dateOfBirth = dob;
       let id = await AsyncStorage.getItem('USER');
-
-      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl } });
+      let isParent = true;
+      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
       console.log(data);
       this.props.navigation.navigate('daughterProfile')
     } catch (e) {

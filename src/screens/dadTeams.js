@@ -1,6 +1,6 @@
 import React, { Component,  } from 'react';
 import { View, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
-import { GET_TEAMS } from '../graphql/queries';
+import { GET_USER, GET_TEAMS } from '../graphql/queries';
 
 import { Query } from "react-apollo";
 
@@ -44,14 +44,6 @@ export default class DadTeams extends Component {
       teamPictureUrl: team.teamPictureUrl
     })
   }
-
-  componentDidMount = () => {
-    this._subscribe = this.props.navigation.addListener('didFocus', () => {
-      this.setState({
-        uniqueKey: (this.state.uniqueKey + 1)
-      })
-    });
-  }
   
   async componentWillMount() {
     let user = await AsyncStorage.getItem('USER_INFO');
@@ -64,30 +56,40 @@ export default class DadTeams extends Component {
   }
   render() {
     return (
-      <ScrollView key={this.state.uniqueKey}>
+      <ScrollView>
         <View style={style.container}>
           <View style={style.subContainer}>
             <View style={style.formContainer}>
-              {this.state.member ?
-                <TouchableHighlight style={style.dadProfile} onPress={() => this.showDadInfo()}>
-                  <View>
-                    <Image style={{
-                      width: 50,
-                      height: 50,
-                      borderRadius: 25
-                    }}
-                    source={{
-                      uri: this.state.member.profilePictureUrl
-                    }} /> 
-                    <Text style={style.partnerName}>{this.state.member.name}</Text>
-                  </View>
-                </TouchableHighlight>
-                :
-                <Text>Loading...</Text>
+            {(this.state.member) ?
+              <Query query={GET_USER} variables={{ id: this.state.member.id }} fetchPolicy="network-only">
+                {({ data: { user_R }, loading }) => {
+                  if (loading || !user_R) {
+                    return <Text>Loading ...</Text>;
+                  }
+                  {
+                    return (
+                      <TouchableHighlight style={style.dadProfile} onPress={() => this.showDadInfo()}>
+                        <View>
+                          <Image style={{
+                            width: 50,
+                            height: 50,
+                            borderRadius: 25
+                          }}
+                          source={{
+                            uri: user_R.profilePictureUrl
+                          }} /> 
+                          <Text style={style.partnerName}>{user_R.name}</Text>
+                        </View>
+                      </TouchableHighlight>
+                    );
+                  }
+                }}
+              </Query>
+              : <View></View>
               }
               <View style={style.flexGrid}>
                 {this.state.member ?
-                <Query query={GET_TEAMS} variables={{ memberId: this.state.member.id}}>
+                  <Query query={GET_TEAMS} variables={{ memberId: this.state.member.id }} fetchPolicy="network-only">
                     {({ data: { teamByMember }, loading }) => {
                       if (loading || !teamByMember) {
                       return <Text>Loading ...</Text>;
