@@ -7,7 +7,7 @@ import { Button } from 'react-native-elements';
 
 export default class Settings extends Component {
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'settings',
+    title: 'SETTINGS',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {

@@ -36,21 +36,29 @@ export default class SignIn extends Component {
         email,
         password
       } = this.state;
-      const data = await targetMutation({ variables: { email, password } });
-      console.log(data);
-      setToken(data.data.user_Login.token);
-      setUserInfo(JSON.stringify(data.data.user_Login.user));
-      setUser(data.data.user_Login.user.id);
 
-      let activeTeam = await AsyncStorage.getItem('ACTIVE_TEAM');
-      if (!activeTeam) {
-        if (data.data.user_Login.teams.length > 0) {
-          setActiveTeam(data.data.user_Login.teams[0].id);
+      if (email.trim() !== '' && password.trim() !== '') {
+        const data = await targetMutation({ variables: { email, password } });
+
+        setToken(data.data.user_Login.token);
+        setUserInfo(JSON.stringify(data.data.user_Login.user));
+        setUser(data.data.user_Login.user.id);
+
+        let activeTeam = await AsyncStorage.getItem('ACTIVE_TEAM');
+        if (!activeTeam) {
+          if (data.data.user_Login.teams.length > 0) {
+            setActiveTeam(data.data.user_Login.teams[0].id);
+          }
         }
+        
+        let { screenProps: { signIn } } = this.props;
+        signIn();
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: "Please enter your username and password"
+        });        
       }
-      
-      let { screenProps: { signIn } } = this.props;
-      signIn();
     } catch (e) {
       console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({

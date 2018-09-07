@@ -7,7 +7,7 @@ import { Query } from "react-apollo";
 import Color from 'constants/colors';
 import style from 'styles/challenge';
 
-import { Text, Icon } from 'react-native-elements';
+import { Text, FormInput, Button } from 'react-native-elements';
 
 
 export default class Challenge extends Component {
@@ -44,6 +44,7 @@ export default class Challenge extends Component {
                 return <Text>Loading ...</Text>;
               }
               {
+
                 return (
                   <View style={style.challenge}>
                     <View style={style.challengeInfo}>
@@ -116,6 +117,52 @@ export default class Challenge extends Component {
                           )
                       })}
                     </View>
+                    <View style={style.challengeResponse}>
+                      {
+                        challenge_R.requests.map(request => {
+                          {
+                            if (request.type === 'text')
+                              return (
+                                <View key={request.id} style={style.requestItem}>
+                                  <FormInput raised
+                                    placeholder={request.data}
+                                  // onChangeText={value => {
+                                  //   this.setState({ confirm_password: value });
+                                  // }}
+                                  />
+                                </View>
+                              )
+                          }
+                          {
+                            if (request.type === 'photoOrVideo')
+                              return (
+                                <View key={request.id} style={style.requestItem}>
+                                  <FormInput raised
+                                    placeholder={request.data}
+                                  />
+                                </View>
+                              )
+                          }
+                          {
+                            if (request.type === 'bubble')
+                              return (
+                                <View key={request.id} style={style.requestItem}>
+                                  <FormInput raised
+                                    placeholder={request.data}
+                                  />
+                                </View>
+                              )
+                          }
+                        })
+                      }
+                      <Button raised
+                        title={'Submit'}
+                        borderRadius={5}
+                        backgroundColor={Color.blue}
+                        textStyle={{ fontWeight: 'bold' }}
+                        style={style.button}
+                      />
+                    </View>                    
                   </View>
                 );
               }

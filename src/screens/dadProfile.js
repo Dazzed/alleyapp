@@ -54,7 +54,7 @@ export default class DadProfile extends Component {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
-    console.log(data);
+
     this.setState({
       profilePictureUrl: data.data.Location
     });
@@ -88,13 +88,20 @@ export default class DadProfile extends Component {
         affiliations,
         profilePictureUrl
       } = this.state;
-      console.log(this.state);
-      let name = dad_name;
-      let dateOfBirth = dob;
-      let id = await AsyncStorage.getItem('USER');
-      let isParent = true;
-      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
-      this.props.navigation.goBack();
+
+      if (dad_name.trim() !== "" && phone.trim() !== "" && address.trim() !== "") {
+        let name = dad_name;
+        let dateOfBirth = dob;
+        let id = await AsyncStorage.getItem('USER');
+        let isParent = true;
+        const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
+        this.props.navigation.goBack();
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: "Please make sure all the required fields are filled"
+        });
+      }
     } catch (e) {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
@@ -145,7 +152,7 @@ export default class DadProfile extends Component {
                               }}
                               resizeMode='cover'
                               source={{
-                                uri: (user_R.profilePictureUrl === '') ? 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg' : user_R.profilePictureUrl
+                                uri: (user_R.profilePictureUrl) ? user_R.profilePictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
                               }}
                             />
                           </PhotoUpload>

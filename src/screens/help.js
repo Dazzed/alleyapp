@@ -13,7 +13,7 @@ export default class Help extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'Help',
+    title: 'HELP',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {

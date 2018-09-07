@@ -13,7 +13,7 @@ export default class SocialFeed extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'Social Feed',
+    title: 'SOCIAL FEED',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {

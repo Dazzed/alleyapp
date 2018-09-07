@@ -54,14 +54,14 @@ export default class DaughterProfile extends Component {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
-    console.log(data);
+
     this.setState({
       profilePictureUrl: data.data.Location
     });
   }
 
   setUser = user => {
-    if (this.state.daughter_name == '') {
+    if (this.state.daughter_name === '') {
       this.setState({
         daughter_name: user.name,
         phone: user.phone,
@@ -72,7 +72,7 @@ export default class DaughterProfile extends Component {
         profilePictureUrl: user.profilePictureUrl
       });
     }
-    console.log(this.state);
+
   }
   updateDaughter = async targetMutation => {
     try {
@@ -89,14 +89,22 @@ export default class DaughterProfile extends Component {
         affiliations,
         profilePictureUrl
       } = this.state;
-      console.log(this.state);
-      let name = daughter_name;
-      let dateOfBirth = dob;
-      let id = this.props.navigation.state.params.id;
-      let isParent = false;
-      const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
-      console.log(data);
-      this.props.navigation.navigate('dadTeams');
+
+
+      if (daughter_name.trim() !== "") {
+        let name = daughter_name;
+        let dateOfBirth = dob;
+        let id = this.props.navigation.state.params.id;
+        let isParent = false;
+        const data = await targetMutation({ variables: { id, phone, name, dateOfBirth, address, interests, affiliations, profilePictureUrl, isParent } });
+
+        this.props.navigation.navigate('dadTeams');
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: "Please make sure all the required fields are filled"
+        });
+      }
     } catch (e) {
       console.log('Error in updating daughter', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({

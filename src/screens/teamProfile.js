@@ -33,20 +33,27 @@ export default class TeamProfile extends Component {
         title,
         teamPictureUrl
       } = this.state;
-      let member = [];
-      let id = this.props.navigation.state.params.id
-      member.push(await AsyncStorage.getItem('USER'));
-      member.push(this.props.navigation.state.params.daughter)
 
-      const data = await targetMutation({ variables: { 
-        id,
-        title, 
-        member, 
-        teamPictureUrl
-       } });
-      console.log(data);
-      AsyncStorage.setItem('ACTIVE_TEAM', id);
-      this.props.navigation.goBack();
+      if (title.trim() !== "") {
+        let members = [];
+        let id = this.props.navigation.state.params.id
+        members.push(await AsyncStorage.getItem('USER'));
+        members.push(this.props.navigation.state.params.daughter)
+
+        const data = await targetMutation({ variables: { 
+          id,
+          title, 
+          members, 
+          teamPictureUrl
+         } });
+        AsyncStorage.setItem('ACTIVE_TEAM', id);
+        this.props.navigation.navigate('dadTeams');
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: "Please make sure all the required fields are filled"
+        });
+      }
     } catch (e) {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
@@ -60,7 +67,7 @@ export default class TeamProfile extends Component {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
-    console.log(data);
+
     this.setState({
       teamPictureUrl: data.data.Location
     });

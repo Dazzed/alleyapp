@@ -96,5 +96,8 @@ module.exports = StyleSheet.create({
   },
   video: {
     width: '100%'
-  }
+  },
+  requestItem: {
+    margin: 10,
+  },
 });

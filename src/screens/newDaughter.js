@@ -56,7 +56,7 @@ export default class NewDaughter extends Component {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
-    console.log(data);
+
     this.setState({
       profilePictureUrl: data.data.Location
     });
@@ -78,21 +78,29 @@ export default class NewDaughter extends Component {
         email,
         profilePictureUrl
       } = this.state;
-      console.log(this.state);
-      let name = daughter_name;
-      let dateOfBirth = dob;
-      const data = await targetMutation1({ variables: { phone, name, dateOfBirth, address, interests, affiliations, email, profilePictureUrl } });
 
-      console.log(data);
-      let members = [];
-      members.push(await AsyncStorage.getItem('USER'));
-      let id = await AsyncStorage.getItem('ACTIVE_TEAM');
-      console.log(id);
-      members.push(data.data.user_C);
-      console.log(64, members);
-      const data2 = await targetMutation2({ variables: { id, members } });
-      console.log(data2);
-      this.props.navigation.navigate('dadTeams')
+      if (daughter_name.trim() !== "") {
+
+        let name = daughter_name;
+        let dateOfBirth = dob;
+        const data = await targetMutation1({ variables: { phone, name, dateOfBirth, address, interests, affiliations, email, profilePictureUrl } });
+
+
+        let members = [];
+        members.push(await AsyncStorage.getItem('USER'));
+        let id = await AsyncStorage.getItem('ACTIVE_TEAM');
+
+        members.push(data.data.user_C);
+
+        const data2 = await targetMutation2({ variables: { id, members } });
+
+        this.props.navigation.navigate('dadTeams')
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: "Please make sure all the required fields are filled"
+        });
+      }
     } catch (e) {
       console.log('Error in creating daughter', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({

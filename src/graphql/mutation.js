@@ -102,7 +102,7 @@ export const UPDATE_TEAM_MUTATION = gql`
 `;
 
 export const UPDATE_TEAM_INFO_MUTATION = gql`
-  mutation TeamInfoUpdate($id: ID!, $title: String!, $members: [ID!], $teamPictureUrl: String!) {
+  mutation TeamInfoUpdate($id: ID!, $title: String!, $members: [ID!], $teamPictureUrl: String) {
     team_U(
       id: $id
       input: {

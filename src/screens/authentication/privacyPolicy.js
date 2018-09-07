@@ -12,14 +12,19 @@ export default class PrivacyPolicy extends Component {
     super();
   }
 
+  static navigationOptions = ({ navigation: { navigate } }) => ({
+    title: 'PRIVACY POLICY',
+    headerMode: 'screen',
+    headerTintColor: Color.white,
+    headerStyle: {
+      backgroundColor: Color.main
+    }
+  });
+
   render() {
     return (
       <View style={style.container}>
         <View style={style.subContainer}>
-          <View style={style.back}>
-            <Icon onPress={() => this.props.navigation.goBack()}
-              name='arrow-back' />
-          </View>
           <View style={style.welcomeContainer}>
             <Text style={style.subTitle}>Privacy Policy</Text>
           </View>

@@ -46,13 +46,20 @@ export default class NewTeam extends Component {
         title,
         teamPictureUrl
       } = this.state;
-      let member = [];
-      member.push(await AsyncStorage.getItem('USER'));
+      if (title.trim() !== "") {
+        let member = [];
+        member.push(await AsyncStorage.getItem('USER'));
 
-      const data = await targetMutation({ variables: { title, member, teamPictureUrl } });
-      console.log(data);
-      AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
-      this.props.navigation.navigate('newDaughter')
+        const data = await targetMutation({ variables: { title, member, teamPictureUrl } });
+
+        AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
+        this.props.navigation.navigate('newDaughter')
+      } else {
+        this.setState({
+          error: true,
+          errorMessage: "Please make sure all the required fields are filled"
+        });
+      }
     } catch (e) {
       console.log('Error in creating team', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       this.setState({
@@ -66,7 +73,7 @@ export default class NewTeam extends Component {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
-    console.log(data);
+
     this.setState({
       teamPictureUrl: data.data.Location
     });

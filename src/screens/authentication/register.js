@@ -40,16 +40,23 @@ export default class Register extends Component {
         confirm_password
       } = this.state;
 
-      let is_parent = true;
-      if (password == confirm_password) {
-        const data = await targetMutation({ variables: { email, password, is_parent } });
-        console.log(data);
-        setUser(data.data.user_C);
-        this.props.navigation.navigate('teamProfile');
+      if (email.trim() !== "" && password.trim() !== "" && confirm_password.trim() !== "") {
+        let is_parent = true;
+        if (password == confirm_password) {
+          const data = await targetMutation({ variables: { email, password, is_parent } });
+
+          setUser(data.data.user_C);
+          this.props.navigation.navigate('teamProfile');
+        } else {
+          this.setState({
+            error: true,
+            errorMessage: "Password mismatch"
+          });
+        }
       } else {
         this.setState({
           error: true,
-          errorMessage: "Password mismatch"
+          errorMessage: "Please enter all the fields"
         });
       }
     } catch (e) {

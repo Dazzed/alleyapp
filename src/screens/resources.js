@@ -16,7 +16,7 @@ export default class Resources extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'RESOURCE',
+    title: 'RESOURCES',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {

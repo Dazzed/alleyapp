@@ -15,7 +15,7 @@ export default class DadTeams extends Component {
   constructor() {
     super();
     this.state = {
-      member: null,
+      member: '',
       uniqueKey: 1
     };
   }
@@ -32,7 +32,7 @@ export default class DadTeams extends Component {
 
   showDadInfo = () => {
     this.props.navigation.navigate('dadProfile', {
-      id: this.state.member.id
+      id: this.state.member
     });
   }
   showTeamDetail = team => {
@@ -46,12 +46,10 @@ export default class DadTeams extends Component {
   }
   
   async componentWillMount() {
-    let user = await AsyncStorage.getItem('USER_INFO');
-
-    let user_info = JSON.parse(user);
+    let user = await AsyncStorage.getItem('USER');
 
     this.setState({
-      member: user_info
+      member: user
     })
   }
   render() {
@@ -60,8 +58,8 @@ export default class DadTeams extends Component {
         <View style={style.container}>
           <View style={style.subContainer}>
             <View style={style.formContainer}>
-            {(this.state.member) ?
-              <Query query={GET_USER} variables={{ id: this.state.member.id }} fetchPolicy="network-only">
+            {(this.state.member != '') ?
+              <Query query={GET_USER} variables={{ id: this.state.member }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
                   if (loading || !user_R) {
                     return <Text>Loading ...</Text>;
@@ -76,7 +74,7 @@ export default class DadTeams extends Component {
                             borderRadius: 25
                           }}
                           source={{
-                            uri: user_R.profilePictureUrl
+                            uri: (user_R.profilePictureUrl) ? user_R.profilePictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
                           }} /> 
                           <Text style={style.partnerName}>{user_R.name}</Text>
                         </View>
@@ -88,8 +86,8 @@ export default class DadTeams extends Component {
               : <View></View>
               }
               <View style={style.flexGrid}>
-                {this.state.member ?
-                  <Query query={GET_TEAMS} variables={{ memberId: this.state.member.id }} fetchPolicy="network-only">
+                {this.state.member != '' ?
+                  <Query query={GET_TEAMS} variables={{ memberId: this.state.member }} fetchPolicy="network-only">
                     {({ data: { teamByMember }, loading }) => {
                       if (loading || !teamByMember) {
                       return <Text>Loading ...</Text>;
@@ -97,7 +95,7 @@ export default class DadTeams extends Component {
                     {
                       return teamByMember.map(team => {
                         let partners = team.members.filter(member_user => {
-                          return member_user.id !== this.state.member.id
+                          return member_user.id !== this.state.member
                         })
                         return (
                           <View style={style.flexItem} key={team.id}>
