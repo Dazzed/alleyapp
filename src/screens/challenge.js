@@ -1,23 +1,41 @@
 import React, { Component } from 'react';
 import { View, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
+import PhotoUpload from 'react-native-photo-upload';
 
 import { Query } from "react-apollo";
 
 import Color from 'constants/colors';
 import style from 'styles/challenge';
 
-import { Text, FormInput, Button } from 'react-native-elements';
-
+import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 
 export default class Challenge extends Component {
   constructor() {
     super();
     this.state = {
-      id: ''
+      id: '',
+      showBubbleQuestion: false,
+      activeBubbleQuestion: '',
+      activeChatItemId: null,
+      challenge5Artboard: null,
+      challenge3Questions: null,
+      challenge3CurrentIndex: 0,
+      challenge3ShowPrompt: false
     }
   }
-  static navigationOptions = ({ navigation: { navigate, state } }) => ({
+
+  chatIcons = [
+    { file: require('../assets/images/chat_question1.png') },
+    { file: require('../assets/images/chat_question2.png') },
+    { file: require('../assets/images/chat_question3.png') },
+    { file: require('../assets/images/chat_question4.png') },
+    { file: require('../assets/images/chat_question5.png') },
+    { file: require('../assets/images/chat_question6.png') },
+    { file: require('../assets/images/chat_question7.png') }
+  ]
+
+static navigationOptions = ({ navigation: { navigate, state } }) => ({
     title: state.params.missionTitle.toUpperCase(),
     headerMode: 'screen',
     headerTintColor: Color.white,
@@ -33,18 +51,189 @@ export default class Challenge extends Component {
       data: data
     })
   }
+
+  renderChallengeFive = challenge => {
+    return (
+      challenge.requests.map(request => {
+        {
+          if (request.type === 'wordFit')
+            return (
+              <View key={request.id} style={style.requestItem}>
+                <FormLabel raised labelStyle={style.formLabel}>{request.data}</FormLabel>
+                <FormInput raised
+                // onChangeText={value => {
+                //   this.setState({ confirm_password: value });
+                // }}
+                />
+              </View>
+            )
+        }
+      })
+    )
+  }
+
+  renderChallengeFour = challenge => {
+    return (
+      challenge.requests.map(request => {
+        {
+          if (request.type === 'wordFit')
+            return (
+              <View key={request.id} style={style.requestItem}>
+                <FormLabel raised labelStyle={style.formLabel}>{request.data}</FormLabel>
+                <FormInput raised
+                // onChangeText={value => {
+                //   this.setState({ confirm_password: value });
+                // }}
+                />
+              </View>
+            )
+        }
+      })      
+    )
+  }
+
+  renderChallengeThree = challenge => {
+    return (
+      challenge.requests.map((request,index) => {
+        {
+          if (request.type === 'prompt' && index == 0)
+            return (
+              <View key={"challenge3_" + request.id} style={style.requestItem}>
+                <View style={style.promptView}>
+                  <Button raised onPress={() => this.showPrompt(index)} title={'Show Prompt'}
+                    borderRadius={5}
+                    backgroundColor={Color.blue}
+                    textStyle={{ fontWeight: 'bold' }}
+                    style={[style.button]}
+                   />
+                  <View style={style.promptQuestionView}>
+                    {this.state.challenge3ShowPrompt && <FormLabel raised labelStyle={style.formLabel}>{this.state.challenge3Questions[this.state.challenge3CurrentIndex].data}</FormLabel>}
+                  </View>
+                </View>
+                <View style={style.promptResponseView}>
+                  <View style={style.promptTime}>
+                    <Text>00:00</Text>
+                  </View>
+                  <View style={style.promptPicture}>
+                    <PhotoUpload containerStyle={{ height: 150 }}
+                      onPhotoSelect={avatar => {
+                        if (avatar) {
+                          this.loadPicture(avatar)
+                        }
+                      }}
+                    >
+                      <Image
+                        style={{
+                          width: 150,
+                          height: 150,
+                        }}
+                        resizeMode='cover'
+                        source={{
+                          uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                        }}
+                      />
+                    </PhotoUpload>
+                  </View>
+                </View>
+              </View>
+            )
+        }
+      })
+    )
+  }
+
+  showPrompt = index => {
+    this.setState({
+      challenge3ShowPrompt: true,
+      challenge3CurrentIndex:index
+    })
+  };
+
+  renderChallengeTwo = challenge => {
+    return (
+      <View style={style.challenge2}>
+        <Text>CHOOSE A BUBBLE TO ANSWER OR EDIT A QUESTION</Text>
+        {this.state.showBubbleQuestion === false ?
+          <View style={style.bubblesView}>
+            {this.renderBubbles(challenge)}
+          </View>
+          :
+          <View>
+            <View style={style.bubbleQuestionView}>
+              <Image style={style.chatIconImage} source={this.chatIcons[this.state.activeChatItemId].file} />
+              <Text style={style.chatIconText}>{this.state.activeBubbleQuestion}</Text>
+            </View>
+            <FormInput raised placeholder="Please type answer here" />
+          </View>
+        }
+      </View>      
+    )
+  }
+
+  renderBubbles = challenge => {
+    let requestIcon = 0;
+    console.log(challenge.requests)
+    return (
+      challenge.requests.map((request, index) => {
+        {
+          if (request.type === 'bubble' || request.type === 'eitherOr') {
+            return (
+              <TouchableHighlight style={style.chatItem} key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data)}>
+                <View>
+                  <Image style={style.chatIcons} source={this.chatIcons[requestIcon++].file} />
+                </View>
+              </TouchableHighlight>
+            )
+          }
+        }
+      })
+    )
+  }
+
+  showChatQuestion = (item, question) => {
+    this.setState({
+      activeBubbleQuestion: question,
+      showBubbleQuestion: true,
+      activeChatItemId: item
+    })
+  }
+
+
+  renderChallengeResponseForm = challenge =>  {
+    if (challenge.type == "1" ) {
+      return this.renderChallengeOne(challenge)
+    }
+    if (challenge.type == "2") {
+      return this.renderChallengeTwo(challenge)
+    }
+    if (challenge.type == "3") {
+      if (this.state.challenge3Questions != null) {
+        return this.renderChallengeThree(challenge)
+      } else {
+        this.setState({
+          challenge3Questions: challenge.requests
+        })
+      } 
+    }
+
+    if (challenge.type == "4") {
+      return this.renderChallengeFour(challenge)
+    }
+    if (challenge.type == "5") {
+      return this.renderChallengeFive(challenge)
+    }
+  }
   render() {
     const id = this.props.navigation.state.params.id;
     return (
       <ScrollView>
         <View style={style.container}>
-          <Query query={GET_CHALLENGE} variables={{ id }}>
+          <Query query={GET_CHALLENGE} variables={{ id }} fetchPolicy="network-only">
             {({ data: { challenge_R }, loading }) => {
               if (loading || !challenge_R) {
                 return <Text>Loading ...</Text>;
               }
               {
-
                 return (
                   <View style={style.challenge}>
                     <View style={style.challengeInfo}>
@@ -119,41 +308,7 @@ export default class Challenge extends Component {
                     </View>
                     <View style={style.challengeResponse}>
                       {
-                        challenge_R.requests.map(request => {
-                          {
-                            if (request.type === 'text')
-                              return (
-                                <View key={request.id} style={style.requestItem}>
-                                  <FormInput raised
-                                    placeholder={request.data}
-                                  // onChangeText={value => {
-                                  //   this.setState({ confirm_password: value });
-                                  // }}
-                                  />
-                                </View>
-                              )
-                          }
-                          {
-                            if (request.type === 'photoOrVideo')
-                              return (
-                                <View key={request.id} style={style.requestItem}>
-                                  <FormInput raised
-                                    placeholder={request.data}
-                                  />
-                                </View>
-                              )
-                          }
-                          {
-                            if (request.type === 'bubble')
-                              return (
-                                <View key={request.id} style={style.requestItem}>
-                                  <FormInput raised
-                                    placeholder={request.data}
-                                  />
-                                </View>
-                              )
-                          }
-                        })
+                        this.renderChallengeResponseForm(challenge_R)
                       }
                       <Button raised
                         title={'Submit'}

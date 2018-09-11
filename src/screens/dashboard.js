@@ -46,7 +46,7 @@ export default class Dashboard extends Component {
     return (
       <ScrollView>
         <View style={style.container}>
-          <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }}>
+          <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only">
             {({ data: { team_Dashboard }, loading }) => {
               if (loading || !team_Dashboard) {
                 return <Text>Loading ...</Text>;

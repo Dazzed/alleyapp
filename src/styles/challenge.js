@@ -68,6 +68,38 @@ module.exports = StyleSheet.create({
   challegeInfoIcons: {
     width: 16, height: 16,
   },
+  chatIcons: {
+    width: 48, height: 48,
+  },
+  chatIconText: {
+    width: '75%',
+    marginLeft: 10
+  },
+  chatIconImage: {
+    width: 48, height: 48,
+  },
+  chatItem: {
+    width: '25%',
+    justifyContent: 'center',
+    padding: 5,
+  },
+  challenge2: {
+    margin: 30
+  },
+  bubbleQuestionView: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    margin: 30
+  },
+  bubblesView: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    margin: 30
+  },
   challengeDetailsLabel: {
     fontWeight: 'bold',
     fontSize: 14,
@@ -100,4 +132,33 @@ module.exports = StyleSheet.create({
   requestItem: {
     margin: 10,
   },
+  promptView: {
+    flex: 1,
+    flexDirection:'row',
+  },
+  promptQuestionView: {
+    width: '50%',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderRadius: 2,
+    borderColor: '#000',
+    marginLeft: '2%'
+  },
+  promptResponseView: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  promptTime: {
+    width: '40%',
+    margin: '5%',
+    height: 24,
+    borderRadius: 2,
+    borderWidth: 1,
+    backgroundColor: '#fff',
+  },
+  promptPicture: {
+    width: '40%',
+    margin: '5%'
+  }
+
 });

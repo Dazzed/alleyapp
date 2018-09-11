@@ -81,31 +81,34 @@ export const GET_CHALLENGE = gql `
   query GetChallenge($id: ID!) {
     challenge_R(id: $id) {
       id
-  missionID
-  title
-  materials
-  pctDone
-  location
-  requests {
-    id
-    type
-    data
-    url
-    qty
-  }
-  description {
-    id
-    type
-    data
-    url
-    qty
-  }
-  ageLimit {
-  	min
-    max
-	}
-  maxPts
-  estTime
+      artboardDetails
+      type
+      missionID
+      title
+      materials
+      pctDone
+      location
+      requests {
+        id
+        requestType
+        type
+        data
+        url
+        qty
+      }
+      description {
+        id
+        type
+        data
+        url
+        qty
+      }
+      ageLimit {
+        min
+        max
+      }
+      maxPts
+      estTime
     }
   }
 
