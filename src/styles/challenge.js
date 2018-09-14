@@ -16,7 +16,7 @@ module.exports = StyleSheet.create({
   challenge: {
     width: '100%',
   },
-  challengeInfo: { 
+  challengeInfo: {
     width: '100%',
   },
   challengeStrip: {
@@ -115,9 +115,9 @@ module.exports = StyleSheet.create({
     padding: 5,
     backgroundColor: "#fff",
     height: 130
-    
+
   },
-  challengeDescription: { 
+  challengeDescription: {
     fontSize: 14,
     color: "#0D0760",
   },
@@ -132,21 +132,18 @@ module.exports = StyleSheet.create({
   requestItem: {
     margin: 10,
   },
+
+
+
   promptView: {
     flex: 1,
     flexDirection:'row',
   },
-  promptQuestionView: {
-    width: '50%',
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderRadius: 2,
-    borderColor: '#000',
-    marginLeft: '2%'
-  },
+
   promptResponseView: {
-    flex: 1,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   promptTime: {
     width: '40%',
@@ -157,8 +154,127 @@ module.exports = StyleSheet.create({
     backgroundColor: '#fff',
   },
   promptPicture: {
-    width: '40%',
-    margin: '5%'
-  }
+    width: '50%',
+    margin: '5%',
+  },
+
+
+  //Style for TimedHunt
+
+  requestItemParent: {
+    backgroundColor: '#FFF',
+  },
+
+  requestItemBg: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: '#8D8F91',
+    padding: 10,
+  },
+
+  promptViewParent: {
+    flexDirection:'row',
+    width: "100%",
+  },
+
+  showPromptView: {
+    width: "40%",
+    marginRight: 5,
+  },
+
+  promptQuestionViewBg: {
+    width: "55%",
+    marginLeft: 5,
+  },
+
+  textQuestion: {
+    width: "100%",
+    margin: 0,
+    padding:5,
+  },
+
+  touchableOpacityShowPrompt: {
+    backgroundColor: 'blue',
+    width: "100%",
+    height: 40,
+    borderRadius: 5,
+    margin:5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  textShowPrompt: {
+    color: 'white',
+    fontSize: 12,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignSelf: 'center',
+},
+
+promptQuestionView: {
+  width: '100%',
+  backgroundColor: '#fff',
+  borderWidth: 1,
+  borderRadius: 2,
+  borderColor: '#0D0760',
+  marginLeft: '2%',
+  margin:5,
+  height:50,
+},
+
+timerViewBg:{
+  width: "35%",
+  height: 150,
+  marginRight: 5,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+pictureViewBg: {
+  width: "60%",
+  height: 150,
+  marginLeft: 5,
+  justifyContent: 'flex-end',
+  alignItems: 'flex-end',
+},
+
+promptPictureBg: {
+    width: "75%",
+    height: 150,
+},
+
+optionNextCancelView: {
+  width: "50%",
+  height: 40,
+  alignSelf: 'flex-end',
+  marginRight: 5,
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+},
+
+touchableOpacityCancelOption: {
+  backgroundColor: 'blue',
+  width: "40%",
+  height: 30,
+  borderRadius: 5,
+  alignItems: 'center',
+  marginRight: 5,
+  justifyContent: 'center',
+},
+
+touchableOpacityNextOption: {
+  backgroundColor: 'grey',
+  width: "40%",
+  height: 30,
+  borderRadius: 5,
+  marginLeft: 5,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
 
 });

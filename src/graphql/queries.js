@@ -95,6 +95,7 @@ export const GET_CHALLENGE = gql `
         data
         url
         qty
+        response
       }
       description {
         id

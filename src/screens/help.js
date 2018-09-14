@@ -27,7 +27,7 @@ export default class Help extends Component {
         <View style={styles.row}>
           <TouchableHighlight style={[styles.box, styles.box1]} onPress={() => { this.props.navigation.navigate('faq') }}>
             <View>
-              <Text h4 style={styles.box_text}>FAQ'S</Text>
+              <Text h4 style={styles.box_text}>FAQ</Text>
             </View>
           </TouchableHighlight>
           <TouchableHighlight style={[styles.box, styles.box2]} onPress={() => { this.props.navigation.navigate('resources') }}>
@@ -48,7 +48,7 @@ export default class Help extends Component {
               <Text h4 style={styles.box_text}>PHONE{'\n'}SUPPORT</Text>
               <Text style={styles.box_subtext}>888-888-8888</Text>
             </View>
-          </TouchableHighlight> 
+          </TouchableHighlight>
         </View>
       </View>
     );

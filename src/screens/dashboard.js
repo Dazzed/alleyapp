@@ -48,6 +48,7 @@ export default class Dashboard extends Component {
         <View style={style.container}>
           <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only">
             {({ data: { team_Dashboard }, loading }) => {
+              console.log('teamId iss: '+this.state.teamId)
               if (loading || !team_Dashboard) {
                 return <Text>Loading ...</Text>;
               }
@@ -85,13 +86,13 @@ export default class Dashboard extends Component {
                                 </View>
                                 <View>
                                   <Text style={style.challengeLabel}>
-                                    Estimated Time: 
+                                    Estimated Time:
                                     <Text style={style.challengeValue}>{challenge.estTime}</Text>
                                   </Text>
                                 </View>
                                 <View>
                                   <Text style={style.challengeLabel}>
-                                    Location: 
+                                    Location:
                                     <Text style={style.challengeValue}>{challenge.location}</Text>
                                   </Text>
                                 </View>

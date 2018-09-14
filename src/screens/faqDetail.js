@@ -26,7 +26,6 @@ export default class FaqDetail extends Component {
 
   render() {
     const id = this.props.navigation.state.params.id;
-    // const id = "6810b91d-83d9-4ee9-b696-aabc170d6491";
     return (
       <View style={style.container}>
         <View style={style.subContainer}>

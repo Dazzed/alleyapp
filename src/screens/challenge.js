@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
+import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView } from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
 import PhotoUpload from 'react-native-photo-upload';
 
@@ -7,6 +7,7 @@ import { Query } from "react-apollo";
 
 import Color from 'constants/colors';
 import style from 'styles/challenge';
+import StopWatch from './stopwatch';
 
 import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 
@@ -21,7 +22,9 @@ export default class Challenge extends Component {
       challenge5Artboard: null,
       challenge3Questions: null,
       challenge3CurrentIndex: 0,
-      challenge3ShowPrompt: false
+      challenge3ShowPrompt: false,
+      stopwatchStart: false,
+      stopwatchReset: true,
     }
   }
 
@@ -46,7 +49,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   loadInstructions = (data, type) => {
     this.props.navigation.navigate('instructions', {
-      missionTitle: this.props.navigation.state.params.missionTitle, 
+      missionTitle: this.props.navigation.state.params.missionTitle,
       type: type,
       data: data
     })
@@ -61,9 +64,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               <View key={request.id} style={style.requestItem}>
                 <FormLabel raised labelStyle={style.formLabel}>{request.data}</FormLabel>
                 <FormInput raised
-                // onChangeText={value => {
-                //   this.setState({ confirm_password: value });
-                // }}
                 />
               </View>
             )
@@ -81,14 +81,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               <View key={request.id} style={style.requestItem}>
                 <FormLabel raised labelStyle={style.formLabel}>{request.data}</FormLabel>
                 <FormInput raised
-                // onChangeText={value => {
-                //   this.setState({ confirm_password: value });
-                // }}
                 />
               </View>
             )
         }
-      })      
+      })
     )
   }
 
@@ -98,42 +95,57 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         {
           if (request.type === 'prompt' && index == 0)
             return (
-              <View key={"challenge3_" + request.id} style={style.requestItem}>
-                <View style={style.promptView}>
-                  <Button raised onPress={() => this.showPrompt(index)} title={'Show Prompt'}
-                    borderRadius={5}
-                    backgroundColor={Color.blue}
-                    textStyle={{ fontWeight: 'bold' }}
-                    style={[style.button]}
-                   />
-                  <View style={style.promptQuestionView}>
-                    {this.state.challenge3ShowPrompt && <FormLabel raised labelStyle={style.formLabel}>{this.state.challenge3Questions[this.state.challenge3CurrentIndex].data}</FormLabel>}
+              <View key={"challenge3_" + request.id} style={style.requestItemParent}>
+                <View style={style.requestItemBg}>
+                  <View style={style.promptViewParent}>
+                    <View style={style.showPromptView}>
+                      <TouchableOpacity onPress={() => this.showPrompt(index)} style = {style.touchableOpacityShowPrompt}>
+                          <Text style={style.textShowPrompt}>SHOW PROMPT</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={style.promptQuestionViewBg}>
+                        <View style={style.promptQuestionView}>
+                          {this.state.challenge3ShowPrompt && <Text raised style={style.textQuestion}>{this.state.challenge3Questions[this.state.challenge3CurrentIndex].data}</Text>}
+                        </View>
+                    </View>
+                  </View>
+                  <View style={style.promptResponseView}>
+                    <View style={style.timerViewBg}>
+                        <StopWatch
+                       false 
+                       start={this.state.stopwatchStart}
+                       reset={this.state.stopwatchReset}/>
+                    </View>
+                    <View style={style.pictureViewBg}>
+                        <View style={style.promptPictureBg}>
+                          <PhotoUpload containerStyle={{ height: 150 }}
+                            onPhotoSelect={avatar => {
+                              if (avatar) {
+                                this.loadPicture(avatar)
+                              }
+                            }}>
+                            <Image
+                                style={{
+                                  width: 150,
+                                  height: 150,
+                                }}
+                                resizeMode='cover'
+                                source={{
+                                  uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                }}
+                              />
+                          </PhotoUpload>
+                        </View>
+                    </View>
                   </View>
                 </View>
-                <View style={style.promptResponseView}>
-                  <View style={style.promptTime}>
-                    <Text>00:00</Text>
-                  </View>
-                  <View style={style.promptPicture}>
-                    <PhotoUpload containerStyle={{ height: 150 }}
-                      onPhotoSelect={avatar => {
-                        if (avatar) {
-                          this.loadPicture(avatar)
-                        }
-                      }}
-                    >
-                      <Image
-                        style={{
-                          width: 150,
-                          height: 150,
-                        }}
-                        resizeMode='cover'
-                        source={{
-                          uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                        }}
-                      />
-                    </PhotoUpload>
-                  </View>
+                <View style= {style.optionNextCancelView}>
+                    <TouchableOpacity onPress={() => this.cancel(index)} style = {style.touchableOpacityCancelOption}>
+                        <Text style={style.textShowPrompt}>CANCEL</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.next(index)} style = {style.touchableOpacityNextOption}>
+                        <Text style={style.textShowPrompt}>NEXT</Text>
+                    </TouchableOpacity>
                 </View>
               </View>
             )
@@ -145,8 +157,20 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   showPrompt = index => {
     this.setState({
       challenge3ShowPrompt: true,
-      challenge3CurrentIndex:index
+      challenge3CurrentIndex:index,
+      stopwatchStart: true,
+      stopwatchReset: true,
     })
+
+    console.log('challenge3CurrentIndex iss: '+this.state.challenge3ShowPrompt)
+  };
+
+  cancel = index => {
+    alert('Click Cancel');
+  };
+
+  next = index => {
+    alert('Click Next');
   };
 
   renderChallengeTwo = challenge => {
@@ -166,7 +190,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             <FormInput raised placeholder="Please type answer here" />
           </View>
         }
-      </View>      
+      </View>
     )
   }
 
@@ -213,7 +237,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         this.setState({
           challenge3Questions: challenge.requests
         })
-      } 
+      }
     }
 
     if (challenge.type == "4") {
@@ -248,11 +272,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       <View style={style.challengeDetailsView}>
                         <View style={style.challengeBasicInfo}>
                           <Text style={style.challengeDetailsLabel}>
-                            Available Points: 
+                            Available Points:
                             <Text style={style.challengeDetailsValue}> {challenge_R.maxPts}</Text>
                           </Text>
                           <Text style={style.challengeDetailsLabel}>
-                            Materials: 
+                            Materials:
                             <Text style={style.challengeDetailsValue}> {challenge_R.materials}</Text>
                           </Text>
                         </View>
@@ -310,14 +334,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       {
                         this.renderChallengeResponseForm(challenge_R)
                       }
-                      <Button raised
-                        title={'Submit'}
-                        borderRadius={5}
-                        backgroundColor={Color.blue}
-                        textStyle={{ fontWeight: 'bold' }}
-                        style={style.button}
-                      />
-                    </View>                    
+                    </View>
                   </View>
                 );
               }

@@ -6,21 +6,6 @@ import style from 'styles/home';
 import SettingsButton from 'components/settingsNavButton';
 
 export default class Home extends Component {
-  // static navigationOptions = ({ navigation: { navigate } }) => ({
-  //   title: 'Welcome Home',
-  //   headerMode: 'screen',
-  //   headerRight: (
-  //     <SettingsButton
-  //       onPress={() => {
-  //         navigate('settings');
-  //       }}
-  //     />
-  //   ),
-  //   headerTintColor: Color.white,
-  //   headerStyle: {
-  //     backgroundColor: Color.main
-  //   }
-  // });
 
   render() {
     return (

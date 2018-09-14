@@ -25,7 +25,7 @@ export default class SignIn extends Component {
   static navigationOptions = {
     header: null
   };
-  
+
   signIn = async targetMutation => {
     try {
       this.setState({
@@ -50,14 +50,14 @@ export default class SignIn extends Component {
             setActiveTeam(data.data.user_Login.teams[0].id);
           }
         }
-        
+        console.log('team_Dashboard iss: '+JSON.stringify(data.data.user_Login.teams[0].id))
         let { screenProps: { signIn } } = this.props;
         signIn();
       } else {
         this.setState({
           error: true,
           errorMessage: "Please enter your username and password"
-        });        
+        });
       }
     } catch (e) {
       console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
