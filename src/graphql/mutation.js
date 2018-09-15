@@ -17,7 +17,7 @@ export const LOGIN_MUTATION = gql`
 
 export const REGISTER_MUTATION = gql`
   mutation UserCreate($email: String!, $password: String!, $isParent: Boolean) {
-    user_C( 
+    user_C(
       input: {
         isParent: $isParent
         email: $email
@@ -36,7 +36,7 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 
 export const TEAM_MUTATION = gql`
   mutation TeamCreate($title: String!, $member: [ID!], $teamPictureUrl: String) {
-    team_C( 
+    team_C(
       input: {
         title: $title
         members: $member
@@ -49,8 +49,8 @@ export const TEAM_MUTATION = gql`
 export const EDIT_USER_MUTATION = gql`
   mutation UserUpdate($id: ID!, $phone: String, $name: String!, $dateOfBirth: String!, $address: String, $interests: String, $affiliations:String, $profilePictureUrl: String, $isParent: Boolean) {
     user_U(
-      id: $id 
-      input: { 
+      id: $id
+      input: {
         phone: $phone
         name: $name
         dateOfBirth: $dateOfBirth
@@ -71,7 +71,7 @@ export const EDIT_USER_MUTATION = gql`
 
 export const DAUGHTER_CREATE_MUTATION = gql`
   mutation UserCreate( $phone: String, $name: String!, $dateOfBirth: String!, $address: String, $interests: String, $affiliations:String, $email: String, $profilePictureUrl: String) {
-    user_C( 
+    user_C(
       input: {
         isParent: false,
         email: $email
@@ -117,3 +117,18 @@ export const UPDATE_TEAM_INFO_MUTATION = gql`
   }
 `;
 
+// export const ANSWER_CHALLENGE_TIMED_HUNT_MUTATION = gql`
+//   mutation AnswerChallengeTimedHunt() {
+//     challengeResponse_C(
+//       input:{
+//         userID:""
+//         missionID:""
+//         teamId:""
+//         challengeID:"3d8c1e28-bb1e-4013-9650-f1608eb67b41"
+//         requestID:61
+//         type:"text"
+//         data:"answer two"
+//     }
+//   )
+// }
+// `;

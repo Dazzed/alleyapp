@@ -266,8 +266,18 @@ touchableOpacityCancelOption: {
   justifyContent: 'center',
 },
 
-touchableOpacityNextOption: {
+touchableOpacityNextInactive: {
   backgroundColor: 'grey',
+  width: "40%",
+  height: 30,
+  borderRadius: 5,
+  marginLeft: 5,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+touchableOpacityNextActive: {
+  backgroundColor: 'blue',
   width: "40%",
   height: 30,
   borderRadius: 5,

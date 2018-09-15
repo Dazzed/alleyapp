@@ -25,6 +25,7 @@ export default class Challenge extends Component {
       challenge3ShowPrompt: false,
       stopwatchStart: false,
       stopwatchReset: true,
+      btnTitle: 'NEXT'
     }
   }
 
@@ -112,7 +113,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   <View style={style.promptResponseView}>
                     <View style={style.timerViewBg}>
                         <StopWatch
-                       false 
+                       false
                        start={this.state.stopwatchStart}
                        reset={this.state.stopwatchReset}/>
                     </View>
@@ -143,8 +144,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     <TouchableOpacity onPress={() => this.cancel(index)} style = {style.touchableOpacityCancelOption}>
                         <Text style={style.textShowPrompt}>CANCEL</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.next(index)} style = {style.touchableOpacityNextOption}>
-                        <Text style={style.textShowPrompt}>NEXT</Text>
+                    <TouchableOpacity onPress={() => this.next(index)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
+                        <Text style={style.textShowPrompt}>{this.state.btnTitle}</Text>
                     </TouchableOpacity>
                 </View>
               </View>
@@ -155,14 +156,18 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   showPrompt = index => {
-    this.setState({
-      challenge3ShowPrompt: true,
-      challenge3CurrentIndex:index,
-      stopwatchStart: true,
-      stopwatchReset: true,
-    })
+    if(!this.state.stopwatchStart){
+      this.setState({
+        challenge3ShowPrompt: true,
+        challenge3CurrentIndex:index,
+        stopwatchStart: true,
+        stopwatchReset: false,
+      })
+      console.log('StopWatch start Running');
+    }else{
+      console.log('StopWatch Running');
+    }
 
-    console.log('challenge3CurrentIndex iss: '+this.state.challenge3ShowPrompt)
   };
 
   cancel = index => {
@@ -170,7 +175,18 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   next = index => {
-    alert('Click Next');
+    if(this.state.stopwatchStart){
+      if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
+          this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1});
+          if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
+              this.setState({btnTitle: "SUBMIT"});
+          }else{
+              console.log('challenge3Questions +1 : '+this.state.challenge3Questions[this.state.challenge3CurrentIndex].data)
+          }
+      }
+    }else{
+      alert('Please start prompt first.');
+    }
   };
 
   renderChallengeTwo = challenge => {
