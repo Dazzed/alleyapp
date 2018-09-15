@@ -141,7 +141,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   </View>
                 </View>
                 <View style= {style.optionNextCancelView}>
-                    <TouchableOpacity onPress={() => this.cancel(index)} style = {style.touchableOpacityCancelOption}>
+                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
                         <Text style={style.textShowPrompt}>CANCEL</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.next(index)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
@@ -168,10 +168,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       console.log('StopWatch Running');
     }
 
-  };
-
-  cancel = index => {
-    alert('Click Cancel');
   };
 
   next = index => {
