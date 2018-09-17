@@ -8,6 +8,7 @@ import { Query } from "react-apollo";
 import Color from 'constants/colors';
 import style from 'styles/challenge';
 import StopWatch from './stopwatch';
+import axios from 'axios';
 
 import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 
@@ -23,9 +24,14 @@ export default class Challenge extends Component {
       challenge3Questions: null,
       challenge3CurrentIndex: 0,
       challenge3ShowPrompt: false,
+      challenge4Images: null,
+      challenge4CurrentIndex: 0,
       stopwatchStart: false,
       stopwatchReset: true,
-      btnTitle: 'NEXT'
+      btnTitle: 'NEXT',
+      missionID: '',
+      teamId: '',
+
     }
   }
 
@@ -74,19 +80,12 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderChallengeFour = challenge => {
-    return (
-      challenge.requests.map(request => {
-        {
-          if (request.type === 'wordFit')
-            return (
-              <View key={request.id} style={style.requestItem}>
-                <FormLabel raised labelStyle={style.formLabel}>{request.data}</FormLabel>
-                <FormInput raised
-                />
-              </View>
-            )
-        }
-      })
+    return(
+      <View  style={style.requestItemParent}>
+        <View style={style.requestItemBg}>
+            <Text style = {style.headingTextChallenge4}>CHOOSE ONE OF THE BELOW AND UPLOAD AN ASSOCIATED PHOTO</Text>
+        </View>
+      </View>
     )
   }
 
@@ -163,9 +162,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         stopwatchStart: true,
         stopwatchReset: false,
       })
-      console.log('StopWatch start Running');
-    }else{
-      console.log('StopWatch Running');
     }
 
   };
@@ -176,8 +172,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1});
           if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
               this.setState({btnTitle: "SUBMIT"});
-          }else{
-              console.log('challenge3Questions +1 : '+this.state.challenge3Questions[this.state.challenge3CurrentIndex].data)
           }
       }
     }else{
@@ -185,24 +179,61 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }
   };
 
+  loadPicture = async avatar => {
+    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
+      base64String: avatar
+    });
+    console.log(192,data.data.Location);
+    this.setState({
+      profilePictureUrl: data.data.Location
+    });
+  }
+
   renderChallengeTwo = challenge => {
     return (
-      <View style={style.challenge2}>
-        <Text>CHOOSE A BUBBLE TO ANSWER OR EDIT A QUESTION</Text>
+      <View  style={style.requestItemParent}>
+        <View style={style.requestItemBg}>
+          {this.state.showBubbleQuestion === false ?
+            <Text style= {style.headingTextChallenge2}>CHOOSE A DOT TO COMPLETE OR EDIT</Text>
+            :
+            null
+          }
+          {this.state.showBubbleQuestion === false ?
+            <View style={style.bubblesView}>
+              {this.renderBubbles(challenge)}
+            </View>
+            :
+            <View>
+              <View style={style.bubbleQuestionView}>
+                <View style = {style.viewQuestionIconChallenge2}>
+                  <Image style={style.iconImageQuestionChallenge2} source={this.chatIcons[this.state.activeChatItemId].file} />
+                </View>
+                <View style = {style.viewQuestionTextChallenge2}>
+                  <Text style={style.questionChallenge2Text}>{this.state.activeBubbleQuestion}</Text>
+                </View>
+              </View>
+              <FormInput raised placeholder="Please type answer here" />
+            </View>
+          }
+        </View>
         {this.state.showBubbleQuestion === false ?
-          <View style={style.bubblesView}>
-            {this.renderBubbles(challenge)}
+          <View style= {style.optionNextCancelView}>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <Text style={style.textShowPrompt}>CANCEL</Text>
+              </TouchableOpacity>
           </View>
           :
-          <View>
-            <View style={style.bubbleQuestionView}>
-              <Image style={style.chatIconImage} source={this.chatIcons[this.state.activeChatItemId].file} />
-              <Text style={style.chatIconText}>{this.state.activeBubbleQuestion}</Text>
-            </View>
-            <FormInput raised placeholder="Please type answer here" />
+          <View style= {style.optionNextCancelView}>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <Text style={style.textShowPrompt}>CANCEL</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.next(0)} style = {style.touchableOpacityNextActive}>
+                  <Text style={style.textShowPrompt}>SAVE</Text>
+              </TouchableOpacity>
           </View>
         }
       </View>
+
     )
   }
 
@@ -253,7 +284,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }
 
     if (challenge.type == "4") {
-      return this.renderChallengeFour(challenge)
+      if (this.state.challenge4Images != null) {
+        return this.renderChallengeFour(challenge)
+      } else {
+        this.setState({
+          challenge4Images: challenge.requests
+        })
+      }
     }
     if (challenge.type == "5") {
       return this.renderChallengeFive(challenge)
@@ -356,4 +393,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       </ScrollView>
     );
   }
+
+
 }

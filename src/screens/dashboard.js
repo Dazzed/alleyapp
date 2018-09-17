@@ -38,6 +38,7 @@ export default class Dashboard extends Component {
   loadChallenge = (id, activeMission) => {
     this.props.navigation.navigate('challenge', {
       id: id,
+      teamId: this.state.teamId,
       missionTitle: activeMission
     });
   }

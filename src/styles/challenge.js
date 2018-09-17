@@ -83,15 +83,13 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
     padding: 5,
   },
-  challenge2: {
-    margin: 30
-  },
+
   bubbleQuestionView: {
-    flex: 1,
+    flex:1,
     flexDirection: "row",
     justifyContent: 'center',
     flexWrap: 'wrap',
-    margin: 30
+    margin: 15
   },
   bubblesView: {
     flex: 1,
@@ -286,5 +284,46 @@ touchableOpacityNextActive: {
   justifyContent: 'center',
 },
 
+headingTextChallenge4:{
+  fontSize: 18,
+  color: '#FFF',
+  alignItems: 'center',
+  justifyContent: 'center',
+  alignSelf: 'center',
+},
+
+headingTextChallenge2:{
+  fontSize: 18,
+  color: '#0D0760',
+  alignItems: 'center',
+  justifyContent: 'center',
+  alignSelf: 'center',
+},
+
+questionChallenge2Text: {
+  width: '85%',
+  marginLeft: 10,
+  fontSize: 15,
+  color: '#0D0760',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+iconImageQuestionChallenge2: {
+  width: 48,
+  height: 48,
+},
+
+viewQuestionIconChallenge2:{
+  width: "20%",
+  alignItems: 'center',
+  justifyContent: 'center',
+  alignSelf: 'center',
+},
+viewQuestionTextChallenge2:{
+  width: "80%",
+  alignItems: 'center',
+  justifyContent: 'center',
+},
 
 });

@@ -124,10 +124,11 @@ export const UPDATE_TEAM_INFO_MUTATION = gql`
 //         userID:""
 //         missionID:""
 //         teamId:""
-//         challengeID:"3d8c1e28-bb1e-4013-9650-f1608eb67b41"
+//         challengeID:""
 //         requestID:61
-//         type:"text"
-//         data:"answer two"
+//         type:"photo"
+//         data:""
+//         duration: ""
 //     }
 //   )
 // }
