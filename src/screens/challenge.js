@@ -24,8 +24,12 @@ export default class Challenge extends Component {
       challenge3Questions: null,
       challenge3CurrentIndex: 0,
       challenge3ShowPrompt: false,
-      challenge4Images: null,
+      challenge4Questions: null,
       challenge4CurrentIndex: 0,
+      showChallenge4Question: false,
+      activeISpyQuestionTitle: '',
+      activeISpyQuestionUrl: '',
+      activeISpyItemId: null,
       stopwatchStart: false,
       stopwatchReset: true,
       btnTitle: 'NEXT',
@@ -80,12 +84,73 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderChallengeFour = challenge => {
-    return(
+    return (
       <View  style={style.requestItemParent}>
         <View style={style.requestItemBg}>
+          {this.state.showChallenge4Question === false ?
             <Text style = {style.headingTextChallenge4}>CHOOSE ONE OF THE BELOW AND UPLOAD AN ASSOCIATED PHOTO</Text>
+            :
+            null
+          }
+          {this.state.showChallenge4Question === false ?
+            <View style={style.iSpyGridView}>
+              {this.renderISpy(challenge)}
+            </View>
+            :
+            <View>
+              <View style={style.bubbleQuestionView}>
+                <View style = {style.iSpyQuestionIconView}>
+                  <Image
+                    style={style.iSpyQuestionSetIcon}
+                    source={{uri: this.state.activeISpyQuestionUrl}}
+                  />
+                  <Text style={style.iSpyQuestionSetText}>{this.state.activeISpyQuestionTitle}</Text>
+                </View>
+                <View style = {style.iSpyQuestionPicView}>
+                  <View style={style.pictureViewBg}>
+                      <View style={style.promptPictureBg}>
+                        <PhotoUpload containerStyle={{ height: 150 }}
+                          onPhotoSelect={avatar => {
+                            if (avatar) {
+                              this.loadPicture(avatar)
+                            }
+                          }}>
+                          <Image
+                              style={{
+                                width: 150,
+                                height: 150,
+                              }}
+                              resizeMode='cover'
+                              source={{
+                                uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                              }}
+                            />
+                        </PhotoUpload>
+                      </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+          }
         </View>
+        {this.state.showChallenge4Question === false ?
+          <View style= {style.optionNextCancelView}>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <Text style={style.textShowPrompt}>CANCEL</Text>
+              </TouchableOpacity>
+          </View>
+          :
+          <View style= {style.optionNextCancelView}>
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <Text style={style.textShowPrompt}>CANCEL</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.next(0)} style = {style.touchableOpacityNextActive}>
+                  <Text style={style.textShowPrompt}>SAVE</Text>
+              </TouchableOpacity>
+          </View>
+        }
       </View>
+
     )
   }
 
@@ -233,7 +298,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           </View>
         }
       </View>
-
     )
   }
 
@@ -265,6 +329,36 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     })
   }
 
+  renderISpy = challenge => {
+    let requestIcon = 0;
+    console.log(challenge.requests)
+    return (
+      challenge.requests.map((request, index) => {
+        {
+          return (
+            <TouchableHighlight style={style.iSpyImageOpacity} onPress={() => this.showISpyQuestion(index, request.data, request.url)}>
+              <View style = {{width: "100%",padding: 4,}}>
+                  <Image
+                    style={{width: "90%",height: 65,}}
+                    source={{uri: this.state.challenge4Questions[index].url}}/>
+                  <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
+              </View>
+            </TouchableHighlight>
+          )
+        }
+      })
+    )
+  }
+
+  showISpyQuestion = (item, question, url) => {
+    this.setState({
+      activeISpyQuestionTitle: question,
+      showChallenge4Question: true,
+      activeISpyItemId: item,
+      activeISpyQuestionUrl: url,
+    })
+  }
+
 
   renderChallengeResponseForm = challenge =>  {
     if (challenge.type == "1" ) {
@@ -284,11 +378,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }
 
     if (challenge.type == "4") {
-      if (this.state.challenge4Images != null) {
+      if (this.state.challenge4Questions != null) {
         return this.renderChallengeFour(challenge)
       } else {
         this.setState({
-          challenge4Images: challenge.requests
+          challenge4Questions: challenge.requests
         })
       }
     }

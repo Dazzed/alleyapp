@@ -326,4 +326,44 @@ viewQuestionTextChallenge2:{
   justifyContent: 'center',
 },
 
+iSpyGridView: {
+  flex: 1,
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  margin: 10
+},
+
+iSpyImageOpacity: {
+  width: '25%',
+},
+
+iSpyQuestionIconView:{
+  width: "45%",
+  height: 150,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+iSpyQuestionSetIcon:{
+  width: "65%",
+  height: 85,
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+
+iSpyQuestionSetText: {
+  width: '100%',
+  fontSize: 15,
+  color: '#FFF',
+  marginTop: 5,
+  textAlign: 'center',
+},
+
+iSpyQuestionPicView:{
+  width: "55%",
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: 150,
+},
+
 });
