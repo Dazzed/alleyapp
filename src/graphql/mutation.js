@@ -117,19 +117,19 @@ export const UPDATE_TEAM_INFO_MUTATION = gql`
   }
 `;
 
-// export const ANSWER_CHALLENGE_TIMED_HUNT_MUTATION = gql`
-//   mutation AnswerChallengeTimedHunt() {
-//     challengeResponse_C(
-//       input:{
-//         userID:""
-//         missionID:""
-//         teamId:""
-//         challengeID:""
-//         requestID:61
-//         type:"photo"
-//         data:""
-//         duration: ""
-//     }
-//   )
-// }
-// `;
+export const ANSWER_CHALLENGE_TIMED_HUNT_MUTATION = gql`
+  mutation AnswerChallengeTimedHunt($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!,$type: String!,$data: String! , $duration: String!) {
+    challengeResponse_C(
+      input:{
+        userID: $userID
+        missionID: $missionID
+        teamId: $teamId
+        challengeID: $challengeID
+        requestID: $requestID
+        type: $type
+        data: $data
+        duration: $duration
+    }
+  )
+}
+`;

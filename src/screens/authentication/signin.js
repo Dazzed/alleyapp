@@ -8,7 +8,7 @@ import style from 'styles/signin';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 import { LOGIN_MUTATION } from '../../graphql/mutation';
-import { setToken, setUserInfo, setUser, getActiveTeam, setActiveTeam } from '../../utils/util';
+import { setToken, setUserInfo, setUser, getUser, getActiveTeam, setActiveTeam } from '../../utils/util';
 const EMAIL = 'Email';
 const PASSWORD = 'Password';
 
@@ -39,11 +39,9 @@ export default class SignIn extends Component {
 
       if (email.trim() !== '' && password.trim() !== '') {
         const data = await targetMutation({ variables: { email, password } });
-
         setToken(data.data.user_Login.token);
         setUserInfo(JSON.stringify(data.data.user_Login.user));
         setUser(data.data.user_Login.user.id);
-
         let activeTeam = await AsyncStorage.getItem('ACTIVE_TEAM');
         if (!activeTeam) {
           if (data.data.user_Login.teams.length > 0) {

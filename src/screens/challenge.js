@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView } from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
 import PhotoUpload from 'react-native-photo-upload';
-
+import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
+import { ANSWER_CHALLENGE_TIMED_HUNT_MUTATION } from '../graphql/mutation';
 
 import Color from 'constants/colors';
 import style from 'styles/challenge';
@@ -35,8 +36,10 @@ export default class Challenge extends Component {
       btnTitle: 'NEXT',
       missionID: '',
       teamId: '',
+      setImageAnswer: '',
 
     }
+    this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
   }
 
   chatIcons = [
@@ -154,12 +157,42 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
+
+  challengeTimedHunt = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
+        console.log('challenge3Question  iss: '+JSON.stringify(this.state.challenge3Questions[this.state.challenge3CurrentIndex]))
+        console.log('challenge3Question Reqest ID iss: '+this.state.challenge3Questions[this.state.challenge3CurrentIndex].id)
+
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.challenge3Questions[this.state.challenge3CurrentIndex].id,type: "photo",data: this.state.setImageAnswer,duration: "121"}});
+        console.log(165, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
+              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, setImageAnswer: ''});
+              if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
+                  this.setState({btnTitle: "SUBMIT"});
+              }
+          }
+        }
+      } catch (e) {
+        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
+
   renderChallengeThree = challenge => {
+    var checkResponse = null;
     return (
       challenge.requests.map((request,index) => {
         {
           if (request.type === 'prompt' && index == 0)
             return (
+          <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+            {(challengeResponse_C) => (
               <View key={"challenge3_" + request.id} style={style.requestItemParent}>
                 <View style={style.requestItemBg}>
                   <View style={style.promptViewParent}>
@@ -196,7 +229,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                 }}
                                 resizeMode='cover'
                                 source={{
-                                  uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                  uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
                                 }}
                               />
                           </PhotoUpload>
@@ -208,11 +241,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
                         <Text style={style.textShowPrompt}>CANCEL</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.next(index)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
+                    <TouchableOpacity onPress={() => this.next(index,challengeResponse_C)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
                         <Text style={style.textShowPrompt}>{this.state.btnTitle}</Text>
                     </TouchableOpacity>
                 </View>
               </View>
+            )}
+          </Mutation>
             )
         }
       })
@@ -225,19 +260,28 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         challenge3ShowPrompt: true,
         challenge3CurrentIndex:index,
         stopwatchStart: true,
-        stopwatchReset: false,
+        stopwatchReset: true,
       })
+
+      for (var i = 0  ; i < this.state.challenge3Questions.length ; i++) {
+          if(this.state.challenge3Questions[i].response == null){
+            this.setState({ challenge3CurrentIndex: index});
+          }else{
+            index = index+1;
+            this.setState({ challenge3CurrentIndex: index});
+          }
+      }
+
     }
 
   };
 
-  next = index => {
+  next = (index,challengeResponse_C) => {
     if(this.state.stopwatchStart){
-      if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
-          this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1});
-          if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
-              this.setState({btnTitle: "SUBMIT"});
-          }
+      if(this.state.setImageAnswer.trim().length > 10){
+          this.challengeTimedHunt(challengeResponse_C)
+      }else{
+        alert('Please select image first.');
       }
     }else{
       alert('Please start prompt first.');
@@ -250,7 +294,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     });
     console.log(192,data.data.Location);
     this.setState({
-      profilePictureUrl: data.data.Location
+      setImageAnswer: data.data.Location
     });
   }
 
@@ -372,6 +416,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         return this.renderChallengeThree(challenge)
       } else {
         this.setState({
+          missionID: challenge.missionID,
           challenge3Questions: challenge.requests
         })
       }
@@ -395,9 +440,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     return (
       <ScrollView>
         <View style={style.container}>
-          <Query query={GET_CHALLENGE} variables={{ id }} fetchPolicy="network-only">
-            {({ data: { challenge_R }, loading }) => {
-              if (loading || !challenge_R) {
+          <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
+            {({ data: { challenge_Team }, loading }) => {
+              if (loading || !challenge_Team) {
                 return <Text>Loading ...</Text>;
               }
               {
@@ -406,9 +451,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     <View style={style.challengeInfo}>
                       <View style={style.challengeStrip}>
                         <View style={style.challengeTitleView}>
-                          <Text style={style.challengeTitle}>{challenge_R.title}</Text>
+                          <Text style={style.challengeTitle}>{challenge_Team.title}</Text>
                           <View style={style.challengePointsView}>
-                            <Text style={style.challengePoints}>{challenge_R.maxPts} Pts</Text>
+                            <Text style={style.challengePoints}>{challenge_Team.maxPts} Pts</Text>
                           </View>
                         </View>
                       </View>
@@ -416,16 +461,16 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         <View style={style.challengeBasicInfo}>
                           <Text style={style.challengeDetailsLabel}>
                             Available Points:
-                            <Text style={style.challengeDetailsValue}> {challenge_R.maxPts}</Text>
+                            <Text style={style.challengeDetailsValue}> {challenge_Team.maxPts}</Text>
                           </Text>
                           <Text style={style.challengeDetailsLabel}>
                             Materials:
-                            <Text style={style.challengeDetailsValue}> {challenge_R.materials}</Text>
+                            <Text style={style.challengeDetailsValue}> {challenge_Team.materials}</Text>
                           </Text>
                         </View>
                         <View style={style.challengeInfoView}>
                           {
-                            challenge_R.description.map(desc => {
+                            challenge_Team.description.map(desc => {
                               if (desc.type === "video")
                                 return (
                                   <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'video')}>
@@ -436,7 +481,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                 )
                             })}
                           {
-                            challenge_R.description.map(desc => {
+                            challenge_Team.description.map(desc => {
                               if (desc.type === "audio")
                                 return (
                                   <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'audio')}>
@@ -447,7 +492,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                 )
                             })}
                           {
-                            challenge_R.description.map(desc => {
+                            challenge_Team.description.map(desc => {
                               if (desc.type === "text")
                                 return (
                                   <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'text')}>
@@ -460,7 +505,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         </View>
                       </View>
                       {
-                        challenge_R.description.map(desc => {
+                        challenge_Team.description.map(desc => {
                           if (desc.type === "text")
                           return (
                             <View key={desc.id} style={style.challengeDetailsView}>
@@ -475,7 +520,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     </View>
                     <View style={style.challengeResponse}>
                       {
-                        this.renderChallengeResponseForm(challenge_R)
+
+                        this.renderChallengeResponseForm(challenge_Team)
                       }
                     </View>
                   </View>

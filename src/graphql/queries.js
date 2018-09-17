@@ -78,8 +78,8 @@ export const GET_DASHBOARD_BY_TEAM = gql`
 `;
 
 export const GET_CHALLENGE = gql `
-  query GetChallenge($id: ID!) {
-    challenge_R(id: $id) {
+  query GetChallenge($challengeId: ID!, $teamId: ID!) {
+    challenge_Team(challengeId: $challengeId, teamId: $teamId) {
       id
       artboardDetails
       type
