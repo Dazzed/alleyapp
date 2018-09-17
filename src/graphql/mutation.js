@@ -133,3 +133,19 @@ export const ANSWER_CHALLENGE_TIMED_HUNT_MUTATION = gql`
   )
 }
 `;
+
+export const ANSWER_CHALLENGE_I_SPY_MUTATION = gql`
+  mutation AnswerChallengeISpy($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!,$type: String!,$data: String!) {
+    challengeResponse_C(
+      input:{
+        userID: $userID
+        missionID: $missionID
+        teamId: $teamId
+        challengeID: $challengeID
+        requestID: $requestID
+        type: $type
+        data: $data
+    }
+  )
+}
+`;

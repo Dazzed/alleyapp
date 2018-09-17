@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView } from 'react-native';
+import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView ,TextInput} from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
 import PhotoUpload from 'react-native-photo-upload';
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
-import { ANSWER_CHALLENGE_TIMED_HUNT_MUTATION } from '../graphql/mutation';
+import { ANSWER_CHALLENGE_TIMED_HUNT_MUTATION, ANSWER_CHALLENGE_I_SPY_MUTATION } from '../graphql/mutation';
 
 import Color from 'constants/colors';
 import style from 'styles/challenge';
@@ -30,7 +30,10 @@ export default class Challenge extends Component {
       showChallenge4Question: false,
       activeISpyQuestionTitle: '',
       activeISpyQuestionUrl: '',
+      activeISpyQuestionID: '',
+      activeISpyQuestionType: '',
       activeISpyItemId: null,
+      setPhotoLable: '',
       stopwatchStart: false,
       stopwatchReset: true,
       btnTitle: 'NEXT',
@@ -40,6 +43,7 @@ export default class Challenge extends Component {
 
     }
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
+    this.challengeISpy = this.challengeISpy.bind(this);
   }
 
   chatIcons = [
@@ -88,74 +92,92 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   renderChallengeFour = challenge => {
     return (
-      <View  style={style.requestItemParent}>
-        <View style={style.requestItemBg}>
-          {this.state.showChallenge4Question === false ?
-            <Text style = {style.headingTextChallenge4}>CHOOSE ONE OF THE BELOW AND UPLOAD AN ASSOCIATED PHOTO</Text>
-            :
-            null
-          }
-          {this.state.showChallenge4Question === false ?
-            <View style={style.iSpyGridView}>
-              {this.renderISpy(challenge)}
-            </View>
-            :
-            <View>
-              <View style={style.bubbleQuestionView}>
-                <View style = {style.iSpyQuestionIconView}>
-                  <Image
-                    style={style.iSpyQuestionSetIcon}
-                    source={{uri: this.state.activeISpyQuestionUrl}}
-                  />
-                  <Text style={style.iSpyQuestionSetText}>{this.state.activeISpyQuestionTitle}</Text>
+      <Mutation mutation={ANSWER_CHALLENGE_I_SPY_MUTATION}>
+        {(challengeResponse_C) => (
+          <View  style={style.requestItemParent}>
+            <View style={style.requestItemBg}>
+              {this.state.showChallenge4Question === false ?
+                <Text style = {style.headingTextChallenge4}>CHOOSE ONE OF THE BELOW AND UPLOAD AN ASSOCIATED PHOTO</Text>
+                :
+                null
+              }
+              {this.state.showChallenge4Question === false ?
+                <View style={style.iSpyGridView}>
+                  {this.renderISpy(challenge)}
                 </View>
-                <View style = {style.iSpyQuestionPicView}>
-                  <View style={style.pictureViewBg}>
-                      <View style={style.promptPictureBg}>
-                        <PhotoUpload containerStyle={{ height: 150 }}
-                          onPhotoSelect={avatar => {
-                            if (avatar) {
-                              this.loadPicture(avatar)
-                            }
-                          }}>
-                          <Image
-                              style={{
-                                width: 150,
-                                height: 150,
-                              }}
-                              resizeMode='cover'
-                              source={{
-                                uri: (this.props.navigation.state.params.teamPictureUrl) ? this.props.navigation.state.params.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                              }}
-                            />
-                        </PhotoUpload>
+                :
+                <View>
+                  <View style={style.bubbleQuestionView}>
+                    <View style = {style.iSpyQuestionIconView}>
+                      <Image
+                        style={style.iSpyQuestionSetIcon}
+                        source={{uri: this.state.activeISpyQuestionUrl}}
+                      />
+                      <Text style={style.iSpyQuestionSetText}>{this.state.activeISpyQuestionTitle}</Text>
+                    </View>
+                    <View style = {style.iSpyQuestionPicView}>
+                      <View style={style.pictureViewBg}>
+                          <View style={style.promptPictureBg}>
+                            <PhotoUpload containerStyle={{ height: 150 }}
+                              onPhotoSelect={avatar => {
+                                if (avatar) {
+                                  this.loadPicture(avatar)
+                                }
+                              }}>
+                              <Image
+                                  style={{
+                                    width: 150,
+                                    height: 150,
+                                  }}
+                                  resizeMode='cover'
+                                  source={{
+                                    uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                  }}
+                                />
+                            </PhotoUpload>
+                          </View>
                       </View>
+                    </View>
+                    <TextInput
+                      style={{width: "100%", alignSelf: 'center', paddingLeft: 15,marginTop: 15, height: 40, backgroundColor: '#ffffff',borderColor: '#BCE0FD',borderWidth:1,}}
+                      placeholder="Photo Label"
+                      onChangeText={(setPhotoLable) => this.setState({setPhotoLable})}
+                      />
                   </View>
                 </View>
-              </View>
+
+              }
             </View>
-          }
-        </View>
-        {this.state.showChallenge4Question === false ?
-          <View style= {style.optionNextCancelView}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
-                  <Text style={style.textShowPrompt}>CANCEL</Text>
-              </TouchableOpacity>
+            {this.state.showChallenge4Question === false ?
+              <View style= {style.optionNextCancelView}>
+                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                      <Text style={style.textShowPrompt}>CANCEL</Text>
+                  </TouchableOpacity>
+              </View>
+              :
+              <View style= {style.optionNextCancelView}>
+                  <TouchableOpacity onPress={() => this.setState({showChallenge4Question: false})} style = {style.touchableOpacityCancelOption}>
+                      <Text style={style.textShowPrompt}>CANCEL</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.saveISpyAnswer(challengeResponse_C)} style = {style.touchableOpacityNextActive}>
+                      <Text style={style.textShowPrompt}>SAVE</Text>
+                  </TouchableOpacity>
+              </View>
+            }
           </View>
-          :
-          <View style= {style.optionNextCancelView}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
-                  <Text style={style.textShowPrompt}>CANCEL</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.next(0)} style = {style.touchableOpacityNextActive}>
-                  <Text style={style.textShowPrompt}>SAVE</Text>
-              </TouchableOpacity>
-          </View>
-        }
-      </View>
+        )}
+      </Mutation>
 
     )
   }
+
+  saveISpyAnswer = (challengeResponse_C) => {
+    if(this.state.setImageAnswer.trim().length > 10){
+        this.challengeISpy(challengeResponse_C)
+    }else{
+      alert('Please select image first.');
+    }
+  };
 
 
   challengeTimedHunt = async targetMutation => {
@@ -185,7 +207,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderChallengeThree = challenge => {
-    var checkResponse = null;
     return (
       challenge.requests.map((request,index) => {
         {
@@ -333,7 +354,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           </View>
           :
           <View style= {style.optionNextCancelView}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+              <TouchableOpacity onPress={() => this.setState({showBubbleQuestion: false})} style = {style.touchableOpacityCancelOption}>
                   <Text style={style.textShowPrompt}>CANCEL</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => this.next(0)} style = {style.touchableOpacityNextActive}>
@@ -380,7 +401,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       challenge.requests.map((request, index) => {
         {
           return (
-            <TouchableHighlight style={style.iSpyImageOpacity} onPress={() => this.showISpyQuestion(index, request.data, request.url)}>
+            <TouchableHighlight style={style.iSpyImageOpacity} onPress={() => this.showISpyQuestion(index, request.data, request.url,request.type,request.id,request.response)}>
               <View style = {{width: "100%",padding: 4,}}>
                   <Image
                     style={{width: "90%",height: 65,}}
@@ -394,15 +415,45 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  showISpyQuestion = (item, question, url) => {
-    this.setState({
-      activeISpyQuestionTitle: question,
-      showChallenge4Question: true,
-      activeISpyItemId: item,
-      activeISpyQuestionUrl: url,
-    })
+  showISpyQuestion = (item, question, url,type, requestID,response) => {
+    if(response == null){
+      this.setState({
+        activeISpyQuestionTitle: question,
+        showChallenge4Question: true,
+        activeISpyItemId: item,
+        activeISpyQuestionUrl: url,
+        activeISpyQuestionType:type,
+        activeISpyQuestionID: requestID,
+      })
+    }else{
+      alert("You already answerd this question.")
+    }
+
   }
 
+  challengeISpy = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
+        console.log('activeISpyQuestionType  iss: '+this.state.activeISpyQuestionType)
+        console.log('activeISpyQuestionID Reqest ID iss: '+this.state.activeISpyQuestionID)
+        var userAnswer = JSON.stringify({
+            "label":this.state.setPhotoLable,
+            "url" : this.state.setImageAnswer
+          })
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.activeISpyQuestionID ,type:this.state.activeISpyQuestionType ,data: userAnswer }});
+        console.log(428, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          this.setState({showChallenge4Question: false})
+        }
+      } catch (e) {
+        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
 
   renderChallengeResponseForm = challenge =>  {
     if (challenge.type == "1" ) {
@@ -427,6 +478,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         return this.renderChallengeFour(challenge)
       } else {
         this.setState({
+          missionID: challenge.missionID,
           challenge4Questions: challenge.requests
         })
       }
