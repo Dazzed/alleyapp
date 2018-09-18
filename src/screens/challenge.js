@@ -21,6 +21,9 @@ export default class Challenge extends Component {
       showBubbleQuestion: false,
       activeBubbleQuestion: '',
       activeChatItemId: null,
+      requestTypeChitChat: '',
+      requestIDChitChat: null,
+      setChitChatAnswer: '',
       challenge5Artboard: null,
       challenge3Questions: null,
       challenge3CurrentIndex: 0,
@@ -42,6 +45,7 @@ export default class Challenge extends Component {
       setImageAnswer: '',
 
     }
+    this.challengeChitChat = this.challengeChitChat.bind(this);
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
     this.challengeISpy = this.challengeISpy.bind(this);
   }
@@ -53,7 +57,8 @@ export default class Challenge extends Component {
     { file: require('../assets/images/chat_question4.png') },
     { file: require('../assets/images/chat_question5.png') },
     { file: require('../assets/images/chat_question6.png') },
-    { file: require('../assets/images/chat_question7.png') }
+    { file: require('../assets/images/chat_question7.png') },
+    { file: require('../assets/images/chat_responded.png') },
   ]
 
 static navigationOptions = ({ navigation: { navigate, state } }) => ({
@@ -139,7 +144,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       </View>
                     </View>
                     <TextInput
-                      style={{width: "100%", alignSelf: 'center', paddingLeft: 15,marginTop: 15, height: 40, backgroundColor: '#ffffff',borderColor: '#BCE0FD',borderWidth:1,}}
+                      style={style.inputPhotoLabelISpy}
                       placeholder="Photo Label"
                       onChangeText={(setPhotoLable) => this.setState({setPhotoLable})}
                       />
@@ -171,14 +176,25 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  saveISpyAnswer = (challengeResponse_C) => {
-    if(this.state.setImageAnswer.trim().length > 10){
-        this.challengeISpy(challengeResponse_C)
-    }else{
-      alert('Please select image first.');
-    }
-  };
+  challengeChitChat = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setImageAnswer iss: '+this.state.setChitChatAnswer)
+        console.log('Reqest ID iss: '+this.state.requestIDChitChat)
 
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
+        console.log(165, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          this.setState({showBubbleQuestion: false})
+        }
+      } catch (e) {
+        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
 
   challengeTimedHunt = async targetMutation => {
       try {
@@ -262,7 +278,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
                         <Text style={style.textShowPrompt}>CANCEL</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.next(index,challengeResponse_C)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
+                    <TouchableOpacity onPress={() => this.saveTimedHuntAnswer(index,challengeResponse_C)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
                         <Text style={style.textShowPrompt}>{this.state.btnTitle}</Text>
                     </TouchableOpacity>
                 </View>
@@ -297,7 +313,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   };
 
-  next = (index,challengeResponse_C) => {
+  saveTimedHuntAnswer = (index,challengeResponse_C) => {
     if(this.state.stopwatchStart){
       if(this.state.setImageAnswer.trim().length > 10){
           this.challengeTimedHunt(challengeResponse_C)
@@ -306,6 +322,22 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       }
     }else{
       alert('Please start prompt first.');
+    }
+  };
+
+  saveISpyAnswer = (challengeResponse_C) => {
+    if(this.state.setImageAnswer.trim().length > 10){
+        this.challengeISpy(challengeResponse_C)
+    }else{
+      alert('Please select image first.');
+    }
+  };
+
+  saveChitChatAnswer = (challengeResponse_C) => {
+    if(this.state.setChitChatAnswer.trim().length > 0){
+        this.challengeChitChat(challengeResponse_C)
+    }else{
+      alert('Please select image first.');
     }
   };
 
@@ -321,64 +353,80 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   renderChallengeTwo = challenge => {
     return (
-      <View  style={style.requestItemParent}>
-        <View style={style.requestItemBg}>
-          {this.state.showBubbleQuestion === false ?
-            <Text style= {style.headingTextChallenge2}>CHOOSE A DOT TO COMPLETE OR EDIT</Text>
-            :
-            null
-          }
-          {this.state.showBubbleQuestion === false ?
-            <View style={style.bubblesView}>
-              {this.renderBubbles(challenge)}
+      <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+        {(challengeResponse_C) => (
+          <View  style={style.requestItemParent}>
+            <View style={style.requestItemBg}>
+              {this.state.showBubbleQuestion === false ?
+                <Text style= {style.headingTextChallenge2}>CHOOSE A DOT TO COMPLETE OR EDIT</Text>
+                :
+                null
+              }
+              {this.state.showBubbleQuestion === false ?
+                <View style={style.bubblesView}>
+                  {this.renderBubbles(challenge)}
+                </View>
+                :
+                <View>
+                  <View style={style.bubbleQuestionView}>
+                    <View style = {style.viewQuestionIconChallenge2}>
+                      <Image style={style.iconImageQuestionChallenge2} source={this.chatIcons[this.state.activeChatItemId].file} />
+                    </View>
+                    <View style = {style.viewQuestionTextChallenge2}>
+                      <Text style={style.questionChallenge2Text}>{this.state.activeBubbleQuestion}</Text>
+                    </View>
+                  </View>
+                  <TextInput
+                    style={style.inputChitChatAnswer}
+                    placeholder="Please type answer here"
+                    multiline = {true}
+                    numberOfLines = {5}
+                    onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                    />
+                </View>
+              }
             </View>
-            :
-            <View>
-              <View style={style.bubbleQuestionView}>
-                <View style = {style.viewQuestionIconChallenge2}>
-                  <Image style={style.iconImageQuestionChallenge2} source={this.chatIcons[this.state.activeChatItemId].file} />
-                </View>
-                <View style = {style.viewQuestionTextChallenge2}>
-                  <Text style={style.questionChallenge2Text}>{this.state.activeBubbleQuestion}</Text>
-                </View>
+            {this.state.showBubbleQuestion === false ?
+              <View style= {style.optionNextCancelView}>
+                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                      <Text style={style.textShowPrompt}>CANCEL</Text>
+                  </TouchableOpacity>
               </View>
-              <FormInput raised placeholder="Please type answer here" />
-            </View>
-          }
-        </View>
-        {this.state.showBubbleQuestion === false ?
-          <View style= {style.optionNextCancelView}>
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
-                  <Text style={style.textShowPrompt}>CANCEL</Text>
-              </TouchableOpacity>
+              :
+              <View style= {style.optionNextCancelView}>
+                  <TouchableOpacity onPress={() => this.setState({showBubbleQuestion: false})} style = {style.touchableOpacityCancelOption}>
+                      <Text style={style.textShowPrompt}>CANCEL</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.saveChitChatAnswer(challengeResponse_C)} style = {style.touchableOpacityNextActive}>
+                      <Text style={style.textShowPrompt}>SAVE</Text>
+                  </TouchableOpacity>
+              </View>
+            }
           </View>
-          :
-          <View style= {style.optionNextCancelView}>
-              <TouchableOpacity onPress={() => this.setState({showBubbleQuestion: false})} style = {style.touchableOpacityCancelOption}>
-                  <Text style={style.textShowPrompt}>CANCEL</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.next(0)} style = {style.touchableOpacityNextActive}>
-                  <Text style={style.textShowPrompt}>SAVE</Text>
-              </TouchableOpacity>
-          </View>
-        }
-      </View>
+        )}
+      </Mutation>
     )
   }
 
   renderBubbles = challenge => {
     let requestIcon = 0;
-    console.log(challenge.requests)
     return (
       challenge.requests.map((request, index) => {
         {
           if (request.type === 'bubble' || request.type === 'eitherOr') {
             return (
-              <TouchableHighlight style={style.chatItem} key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data)}>
-                <View>
-                  <Image style={style.chatIcons} source={this.chatIcons[requestIcon++].file} />
-                </View>
-              </TouchableHighlight>
+              <View style={style.chatItem} >
+              {request.response == null ?
+                  <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID)}>
+                    <View>
+                      <Image style={style.chatIcons} source={this.chatIcons[requestIcon++].file} />
+                    </View>
+                  </TouchableHighlight>
+                  :
+                  <Image style={style.chatIcons} source={this.chatIcons[7].file} increaseIconCounter={requestIcon++} />
+
+              }
+              </View>
             )
           }
         }
@@ -386,11 +434,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  showChatQuestion = (item, question) => {
+  showChatQuestion = (item, question,id,type,missionID) => {
+    console.log("challenge.missionID iss: "+missionID)
     this.setState({
       activeBubbleQuestion: question,
       showBubbleQuestion: true,
-      activeChatItemId: item
+      activeChatItemId: item,
+      requestTypeChitChat: type,
+      requestIDChitChat: id,
+      missionID: missionID,
     })
   }
 

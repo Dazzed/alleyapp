@@ -366,4 +366,26 @@ iSpyQuestionPicView:{
   height: 150,
 },
 
+inputChitChatAnswer:{
+  width: "100%",
+  alignSelf: 'center',
+  padding: 10,
+  marginTop: 15,
+  height: 100,
+  backgroundColor: '#ffffff',
+  borderColor: '#BCE0FD',
+  borderWidth:1,
+},
+
+inputPhotoLabelISpy:{
+  width: "100%",
+  alignSelf: 'center',
+  padding: 10,
+  marginTop: 15,
+  height: 40,
+  backgroundColor: '#ffffff',
+  borderColor: '#BCE0FD',
+  borderWidth:1,
+}
+
 });
