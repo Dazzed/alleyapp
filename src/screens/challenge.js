@@ -10,7 +10,7 @@ import Color from 'constants/colors';
 import style from 'styles/challenge';
 import StopWatch from './stopwatch';
 import axios from 'axios';
-
+import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 
 export default class Challenge extends Component {
@@ -20,6 +20,7 @@ export default class Challenge extends Component {
       id: '',
       showBubbleQuestion: false,
       activeBubbleQuestion: '',
+      activeBubbledataObj: null,
       activeChatItemId: null,
       requestTypeChitChat: '',
       requestIDChitChat: null,
@@ -52,8 +53,10 @@ export default class Challenge extends Component {
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
     this.challengeISpy = this.challengeISpy.bind(this);
     this.challengeFoodCrazy = this.challengeFoodCrazy.bind(this);
-  }
+    this.myRef = React.createRef()
 
+  }
+  pos = 0;
   chatIcons = [
     { file: require('../assets/images/chat_question1.png') },
     { file: require('../assets/images/chat_question2.png') },
@@ -91,8 +94,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('missionID ID iss: '+this.state.missionID)
         console.log('setImageAnswer iss: '+this.state.setChitChatAnswer)
         console.log('Reqest ID iss: '+this.state.requestIDChitChat)
+        console.log('Reqest ID iss: '+this.state.selectedEitherOrOptions)
 
-        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
+        const data = null ;
+        if(this.state.requestTypeChitChat === 'bubble') {
+            data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
+        }else{
+          data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
+        }
+
         console.log(165, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           this.setState({showBubbleQuestion: false})
@@ -364,7 +374,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderFieldFifth = challenge => {
-    //setIndexValue = {this.setFoodCrazyAnswerValue.bind(this)
     return (
       challenge.requests.map((request,index) => {
         {
@@ -409,13 +418,19 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       <Text style={style.questionChallenge2Text}>{this.state.activeBubbleQuestion}</Text>
                     </View>
                   </View>
-                  <TextInput
-                    style={style.inputChitChatAnswer}
-                    placeholder="Please type answer here"
-                    multiline = {true}
-                    numberOfLines = {5}
-                    onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
-                    />
+                  {this.state.requestTypeChitChat === 'bubble' ?
+                      <TextInput
+                        style={style.inputChitChatAnswer}
+                        placeholder="Please type answer here"
+                        multiline = {true}
+                        numberOfLines = {5}
+                        onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                      />
+                      :
+                      <View style={style.chitChatEitherOrParentView}>
+                        {this.renderEitherOr(this.state.activeBubbledataObj.data)}
+                      </View>
+                    }
                 </View>
               }
             </View>
@@ -450,7 +465,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             return (
               <View style={style.chatItem} >
               {request.response == null ?
-                  <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID)}>
+                  <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID, request.dataObj)}>
                     <View>
                       <Image style={style.chatIcons} source={this.chatIcons[requestIcon++].file} />
                     </View>
@@ -464,6 +479,50 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         }
       })
     )
+  }
+
+
+  renderEitherOr = data => {
+
+    if (this.pos === 0) {
+      let values = new Array(data.length)
+      this.setState({selectedEitherOrOptions: values})
+      this.pos = 1
+    }
+
+    return (
+      data.map((request,index) => {
+        {
+          return (
+            <View key={request.id} style={style.foodCrazyChildRowView}>
+              <RadioGroup
+                size={24}
+                thickness={1}
+                color='#0D0760'
+                activeColor = '#0D0760'
+                onSelect = {(select_index, value) => this.onSelect(index, value)}>
+                    <RadioButton value={1} >
+                      <Text style = {{color: '#0D0760', fontSize: 16,marginLeft: 10}}>{request.either}</Text>
+                    </RadioButton>
+
+                    <RadioButton value={2}>
+                      <Text style = {{color: '#0D0760', fontSize: 16,marginLeft: 10}}>{request.or}</Text>
+                    </RadioButton>
+               </RadioGroup>
+               <View style={{width: "100%",height: 1, backgroundColor: '#0D0760'}}/>
+            </View>
+          )
+        }
+      })
+    )
+  }
+
+  onSelect(index, value){
+      let values = this.state.selectedEitherOrOptions
+      values[index]= value
+      this.setState({
+        selectedEitherOrOptions: values,
+      })
   }
 
   renderISpy = challenge => {
@@ -521,12 +580,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {
+      debugger
       console.log(301, this.state.foodCrazyAnswers);
       var SampleText = challenge.artboardDetails.toString();
       var NewText = SampleText.replace(/\(Description #1\)/g, "AppBuilderMahadev");
       console.log(304, NewText);
       this.setState({requestIDFoodCrazy: 1,setUpdatedArtBoard: NewText, missionID: challenge.missionID});
-      this.challengeFoodCrazy(challengeResponse_C);
+      //this.challengeFoodCrazy(challengeResponse_C);
   };
 
   saveTimedHuntAnswer = (index,challengeResponse_C) => {
@@ -550,11 +610,17 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   saveChitChatAnswer = (challengeResponse_C) => {
-    if(this.state.setChitChatAnswer.trim().length > 0){
-        this.challengeChitChat(challengeResponse_C)
+    if(this.state.requestTypeChitChat === 'bubble') {
+      if(this.state.setChitChatAnswer.trim().length > 0){
+          this.challengeChitChat(challengeResponse_C)
+      }else{
+        alert('Please select image first.');
+      }
     }else{
-      alert('Please select image first.');
+      console.log("selectedEitherOrOptions"+this.state.selectedEitherOrOptions);
+      this.challengeChitChat(challengeResponse_C)
     }
+
   };
 
   loadPicture = async avatar => {
@@ -574,7 +640,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       this.setState({foodCrazyAnswers: foodCrazyAnswers})
   }
 
-  showChatQuestion = (item, question,id,type,missionID) => {
+  showChatQuestion = (item, question,id,type,missionID,dataObj) => {
     console.log("challenge.missionID iss: "+missionID)
     this.setState({
       activeBubbleQuestion: question,
@@ -583,6 +649,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       requestTypeChitChat: type,
       requestIDChitChat: id,
       missionID: missionID,
+      activeBubbledataObj: dataObj,
     })
   }
 

@@ -413,6 +413,15 @@ foodCrazyParentView: {
   width: "100%",
 },
 
+chitChatEitherOrParentView: {
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
+  width: "100%",
+  backgroundColor: '#FFF'
+},
+
 foodCrazyChildRowView: {
   width: "100%",
   justifyContent: 'center',
