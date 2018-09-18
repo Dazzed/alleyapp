@@ -96,7 +96,8 @@ module.exports = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    margin: 30
+    margin: 30,
+
   },
   challengeDetailsLabel: {
     fontWeight: 'bold',
@@ -130,8 +131,6 @@ module.exports = StyleSheet.create({
   requestItem: {
     margin: 10,
   },
-
-
 
   promptView: {
     flex: 1,
@@ -169,6 +168,24 @@ module.exports = StyleSheet.create({
     marginLeft: 5,
     marginRight: 5,
     backgroundColor: '#8D8F91',
+    padding: 10,
+  },
+
+  equestItemBg2: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 2,
+    marginRight: 2,
+    backgroundColor: '#8D8F91',
+    padding: 10,
+  },
+
+  requestItemBg1: {
+    marginTop: 10,
+    marginBottom: 10,
+    marginLeft: 5,
+    marginRight: 5,
+    backgroundColor: '#EFF1F2',
     padding: 10,
   },
 
@@ -330,11 +347,11 @@ iSpyGridView: {
   flex: 1,
   flexDirection: 'row',
   flexWrap: 'wrap',
-  margin: 10
 },
 
 iSpyImageOpacity: {
-  width: '25%',
+  width: '24%',
+  margin: 1,
 },
 
 iSpyQuestionIconView:{
@@ -386,6 +403,49 @@ inputPhotoLabelISpy:{
   backgroundColor: '#ffffff',
   borderColor: '#BCE0FD',
   borderWidth:1,
+},
+
+foodCrazyParentView: {
+  flex: 1,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
+  width: "100%",
+},
+
+foodCrazyChildRowView: {
+  width: "100%",
+  justifyContent: 'center',
+},
+
+foodCrazyLabel: {
+  fontSize: 15,
+  color: '#FFF',
+  textAlign: 'left',
+  marginTop: 15,
+},
+
+inputfoodCrazy:{
+  width: "100%",
+  alignSelf: 'center',
+  padding: 10,
+  height: 40,
+  backgroundColor: '#ffffff',
+  borderColor: '#BCE0FD',
+  borderWidth:1,
+},
+
+iSpyActiveImageIcon: {
+  width: "90%",
+  height: 65,
+  alignSelf: 'center',
+},
+
+iSpyInActiveImageIcon: {
+  width: "90%",
+  height: 65,
+  backgroundColor: '#dddddd',
+  alignSelf: 'center',
 }
 
 });

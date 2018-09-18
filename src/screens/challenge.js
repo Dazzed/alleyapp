@@ -24,7 +24,6 @@ export default class Challenge extends Component {
       requestTypeChitChat: '',
       requestIDChitChat: null,
       setChitChatAnswer: '',
-      challenge5Artboard: null,
       challenge3Questions: null,
       challenge3CurrentIndex: 0,
       challenge3ShowPrompt: false,
@@ -39,15 +38,20 @@ export default class Challenge extends Component {
       setPhotoLable: '',
       stopwatchStart: false,
       stopwatchReset: true,
+      challenge5Artboard: null,
+      showChallengeArtboard: false,
       btnTitle: 'NEXT',
       missionID: '',
       teamId: '',
       setImageAnswer: '',
-
+      foodCrazyAnswers: {},
+      setUpdatedArtBoard: '',
+      requestIDFoodCrazy: null,
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
     this.challengeISpy = this.challengeISpy.bind(this);
+    this.challengeFoodCrazy = this.challengeFoodCrazy.bind(this);
   }
 
   chatIcons = [
@@ -78,29 +82,103 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     })
   }
 
-  renderChallengeFive = challenge => {
-    return (
-      challenge.requests.map(request => {
-        {
-          if (request.type === 'wordFit')
-            return (
-              <View key={request.id} style={style.requestItem}>
-                <FormLabel raised labelStyle={style.formLabel}>{request.data}</FormLabel>
-                <FormInput raised
-                />
-              </View>
-            )
+  challengeChitChat = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setImageAnswer iss: '+this.state.setChitChatAnswer)
+        console.log('Reqest ID iss: '+this.state.requestIDChitChat)
+
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
+        console.log(165, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          this.setState({showBubbleQuestion: false})
         }
-      })
-    )
+      } catch (e) {
+        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
   }
+
+  challengeFoodCrazy = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setUpdatedArtBoard iss: '+this.state.setUpdatedArtBoard)
+        console.log('Reqest ID iss: '+this.state.requestIDFoodCrazy)
+
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
+        console.log(165, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          this.setState({showChallengeArtboard: true})
+        }
+      } catch (e) {
+        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
+
+  challengeTimedHunt = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
+        console.log('challenge3Question  iss: '+JSON.stringify(this.state.challenge3Questions[this.state.challenge3CurrentIndex]))
+        console.log('challenge3Question Reqest ID iss: '+this.state.challenge3Questions[this.state.challenge3CurrentIndex].id)
+
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.challenge3Questions[this.state.challenge3CurrentIndex].id,type: "photo",data: this.state.setImageAnswer,duration: "121"}});
+        console.log(165, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
+              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, setImageAnswer: ''});
+              if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
+                  this.setState({btnTitle: "SUBMIT"});
+              }
+          }
+        }
+      } catch (e) {
+        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
+
+  challengeISpy = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
+        console.log('activeISpyQuestionType  iss: '+this.state.activeISpyQuestionType)
+        console.log('activeISpyQuestionID Reqest ID iss: '+this.state.activeISpyQuestionID)
+        var userAnswer = JSON.stringify({
+            "label":this.state.setPhotoLable,
+            "url" : this.state.setImageAnswer
+          })
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.activeISpyQuestionID ,type:this.state.activeISpyQuestionType ,data: userAnswer }});
+        console.log(428, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          this.setState({showChallenge4Question: false})
+        }
+      } catch (e) {
+        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
+
 
   renderChallengeFour = challenge => {
     return (
       <Mutation mutation={ANSWER_CHALLENGE_I_SPY_MUTATION}>
         {(challengeResponse_C) => (
           <View  style={style.requestItemParent}>
-            <View style={style.requestItemBg}>
+            <View style={style.equestItemBg2}>
               {this.state.showChallenge4Question === false ?
                 <Text style = {style.headingTextChallenge4}>CHOOSE ONE OF THE BELOW AND UPLOAD AN ASSOCIATED PHOTO</Text>
                 :
@@ -176,52 +254,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  challengeChitChat = async targetMutation => {
-      try {
-        var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setImageAnswer iss: '+this.state.setChitChatAnswer)
-        console.log('Reqest ID iss: '+this.state.requestIDChitChat)
-
-        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
-        console.log(165, data.data.challengeResponse_C);
-        if(data.data.challengeResponse_C.length > 10){
-          this.setState({showBubbleQuestion: false})
-        }
-      } catch (e) {
-        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
-      }
-  }
-
-  challengeTimedHunt = async targetMutation => {
-      try {
-        var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
-        console.log('challenge3Question  iss: '+JSON.stringify(this.state.challenge3Questions[this.state.challenge3CurrentIndex]))
-        console.log('challenge3Question Reqest ID iss: '+this.state.challenge3Questions[this.state.challenge3CurrentIndex].id)
-
-        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.challenge3Questions[this.state.challenge3CurrentIndex].id,type: "photo",data: this.state.setImageAnswer,duration: "121"}});
-        console.log(165, data.data.challengeResponse_C);
-        if(data.data.challengeResponse_C.length > 10){
-          if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
-              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, setImageAnswer: ''});
-              if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
-                  this.setState({btnTitle: "SUBMIT"});
-              }
-          }
-        }
-      } catch (e) {
-        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
-      }
-  }
-
   renderChallengeThree = challenge => {
     return (
       challenge.requests.map((request,index) => {
@@ -291,64 +323,65 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  showPrompt = index => {
-    if(!this.state.stopwatchStart){
-      this.setState({
-        challenge3ShowPrompt: true,
-        challenge3CurrentIndex:index,
-        stopwatchStart: true,
-        stopwatchReset: true,
+  renderChallengeFive = challenge => {
+    return (
+      <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+        {(challengeResponse_C) => (
+          <View  style={style.requestItemParent}>
+            <View style={[!this.state.showChallengeArtboard ? style.requestItemBg : style.requestItemBg1]}>
+              {this.state.showChallengeArtboard === false ?
+                <View style={style.foodCrazyParentView}>
+                  {this.renderFieldFifth(challenge)}
+                </View>
+                :
+                <View>
+                    <View style={style.bubbleQuestionView}>
+                      <Text style= {{color: "#0D0760",fontSize: 16}}>{this.state.setUpdatedArtBoard}</Text>
+                    </View>
+                </View>
+              }
+            </View>
+            {this.state.showChallengeArtboard === false ?
+              <View style= {style.optionNextCancelView}>
+                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                      <Text style={style.textShowPrompt}>CANCEL</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => this.generateArtBoardText(challenge, challengeResponse_C)} style = {style.touchableOpacityNextActive}>
+                      <Text style={style.textShowPrompt}>GENERATE</Text>
+                  </TouchableOpacity>
+              </View>
+              :
+              <View style= {style.optionNextCancelView}>
+                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                      <Text style={style.textShowPrompt}>EXIT</Text>
+                  </TouchableOpacity>
+              </View>
+            }
+          </View>
+        )}
+      </Mutation>
+    )
+  }
+
+  renderFieldFifth = challenge => {
+    //setIndexValue = {this.setFoodCrazyAnswerValue.bind(this)
+    return (
+      challenge.requests.map((request,index) => {
+        {
+          if (request.type === 'wordFit')
+            return (
+              <View key={request.id} style={style.foodCrazyChildRowView}>
+                  <Text style={style.foodCrazyLabel}>{request.data}</Text>
+                  <TextInput
+                    key={request.id}
+                    style={style.inputfoodCrazy}
+                    onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                  />
+              </View>
+            )
+        }
       })
-
-      for (var i = 0  ; i < this.state.challenge3Questions.length ; i++) {
-          if(this.state.challenge3Questions[i].response == null){
-            this.setState({ challenge3CurrentIndex: index});
-          }else{
-            index = index+1;
-            this.setState({ challenge3CurrentIndex: index});
-          }
-      }
-
-    }
-
-  };
-
-  saveTimedHuntAnswer = (index,challengeResponse_C) => {
-    if(this.state.stopwatchStart){
-      if(this.state.setImageAnswer.trim().length > 10){
-          this.challengeTimedHunt(challengeResponse_C)
-      }else{
-        alert('Please select image first.');
-      }
-    }else{
-      alert('Please start prompt first.');
-    }
-  };
-
-  saveISpyAnswer = (challengeResponse_C) => {
-    if(this.state.setImageAnswer.trim().length > 10){
-        this.challengeISpy(challengeResponse_C)
-    }else{
-      alert('Please select image first.');
-    }
-  };
-
-  saveChitChatAnswer = (challengeResponse_C) => {
-    if(this.state.setChitChatAnswer.trim().length > 0){
-        this.challengeChitChat(challengeResponse_C)
-    }else{
-      alert('Please select image first.');
-    }
-  };
-
-  loadPicture = async avatar => {
-    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
-      base64String: avatar
-    });
-    console.log(192,data.data.Location);
-    this.setState({
-      setImageAnswer: data.data.Location
-    });
+    )
   }
 
   renderChallengeTwo = challenge => {
@@ -424,7 +457,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   </TouchableHighlight>
                   :
                   <Image style={style.chatIcons} source={this.chatIcons[7].file} increaseIconCounter={requestIcon++} />
-
               }
               </View>
             )
@@ -432,6 +464,114 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         }
       })
     )
+  }
+
+  renderISpy = challenge => {
+    let requestIcon = 0;
+    console.log(challenge.requests)
+    return (
+      challenge.requests.map((request, index) => {
+        {
+          return (
+            <View style={style.iSpyImageOpacity}>
+            {request.response == null ?
+                <TouchableHighlight  onPress={() => this.showISpyQuestion(index, request.data, request.url,request.type,request.id,request.response)}>
+                  <View style = {{width: "100%",padding: 4,}}>
+                      <Image
+                        style={style.iSpyActiveImageIcon}
+                        source={{uri: this.state.challenge4Questions[index].url}}/>
+                      <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
+                  </View>
+                </TouchableHighlight>
+                :
+                <View style = {{width: "100%",padding: 4,backgroundColor: '#dddddd'}}>
+                    <Image
+                      style={style.iSpyInActiveImageIcon}
+                      source={{uri: this.state.challenge4Questions[index].url}}/>
+                    <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
+                </View>
+            }
+          </View>
+          )
+        }
+      })
+    )
+  }
+
+  showPrompt = index => {
+    if(!this.state.stopwatchStart){
+      this.setState({
+        challenge3ShowPrompt: true,
+        challenge3CurrentIndex:index,
+        stopwatchStart: true,
+        stopwatchReset: true,
+      })
+
+      for (var i = 0  ; i < this.state.challenge3Questions.length ; i++) {
+          if(this.state.challenge3Questions[i].response == null){
+            this.setState({ challenge3CurrentIndex: index});
+          }else{
+            index = index+1;
+            this.setState({ challenge3CurrentIndex: index});
+          }
+      }
+
+    }
+
+  };
+
+  generateArtBoardText = (challenge,challengeResponse_C)=> {
+      console.log(301, this.state.foodCrazyAnswers);
+      var SampleText = challenge.artboardDetails.toString();
+      var NewText = SampleText.replace(/\(Description #1\)/g, "AppBuilderMahadev");
+      console.log(304, NewText);
+      this.setState({requestIDFoodCrazy: 1,setUpdatedArtBoard: NewText, missionID: challenge.missionID});
+      this.challengeFoodCrazy(challengeResponse_C);
+  };
+
+  saveTimedHuntAnswer = (index,challengeResponse_C) => {
+    if(this.state.stopwatchStart){
+      if(this.state.setImageAnswer.trim().length > 10){
+          this.challengeTimedHunt(challengeResponse_C)
+      }else{
+        alert('Please select image first.');
+      }
+    }else{
+      alert('Please start prompt first.');
+    }
+  };
+
+  saveISpyAnswer = (challengeResponse_C) => {
+    if(this.state.setImageAnswer.trim().length > 10){
+        this.challengeISpy(challengeResponse_C)
+    }else{
+      alert('Please select image first.');
+    }
+  };
+
+  saveChitChatAnswer = (challengeResponse_C) => {
+    if(this.state.setChitChatAnswer.trim().length > 0){
+        this.challengeChitChat(challengeResponse_C)
+    }else{
+      alert('Please select image first.');
+    }
+  };
+
+  loadPicture = async avatar => {
+    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
+      base64String: avatar
+    });
+    console.log(192,data.data.Location);
+    this.setState({
+      setImageAnswer: data.data.Location
+    });
+  }
+
+  setFoodCrazyAnswerValue = a => {
+      foodCrazyAnswers = this.state.foodCrazyAnswers
+      foodCrazyAnswers[a] = ''
+      console.log(408, foodCrazyAnswers)
+      this.setState({foodCrazyAnswers: foodCrazyAnswers})
   }
 
   showChatQuestion = (item, question,id,type,missionID) => {
@@ -444,27 +584,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       requestIDChitChat: id,
       missionID: missionID,
     })
-  }
-
-  renderISpy = challenge => {
-    let requestIcon = 0;
-    console.log(challenge.requests)
-    return (
-      challenge.requests.map((request, index) => {
-        {
-          return (
-            <TouchableHighlight style={style.iSpyImageOpacity} onPress={() => this.showISpyQuestion(index, request.data, request.url,request.type,request.id,request.response)}>
-              <View style = {{width: "100%",padding: 4,}}>
-                  <Image
-                    style={{width: "90%",height: 65,}}
-                    source={{uri: this.state.challenge4Questions[index].url}}/>
-                  <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
-              </View>
-            </TouchableHighlight>
-          )
-        }
-      })
-    )
   }
 
   showISpyQuestion = (item, question, url,type, requestID,response) => {
@@ -481,30 +600,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       alert("You already answerd this question.")
     }
 
-  }
-
-  challengeISpy = async targetMutation => {
-      try {
-        var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
-        console.log('activeISpyQuestionType  iss: '+this.state.activeISpyQuestionType)
-        console.log('activeISpyQuestionID Reqest ID iss: '+this.state.activeISpyQuestionID)
-        var userAnswer = JSON.stringify({
-            "label":this.state.setPhotoLable,
-            "url" : this.state.setImageAnswer
-          })
-        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.activeISpyQuestionID ,type:this.state.activeISpyQuestionType ,data: userAnswer }});
-        console.log(428, data.data.challengeResponse_C);
-        if(data.data.challengeResponse_C.length > 10){
-          this.setState({showChallenge4Question: false})
-        }
-      } catch (e) {
-        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
-      }
   }
 
   renderChallengeResponseForm = challenge =>  {
