@@ -393,6 +393,104 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
+
+  renderChallengeOne = challenge => {
+    return (
+      <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+        {(challengeResponse_C) => (
+          <View  style={style.requestItemParent}>
+            <View style={style.requestItemBg1}>
+                <View style={style.foodCrazyParentView}>
+                  {this.renderFieldsOne(challenge)}
+                </View>
+            </View>
+            <View style= {style.optionNextCancelView}>
+                <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                    <Text style={style.textShowPrompt}>CANCEL</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.submitChallengeOneAnswers(challenge, challengeResponse_C)} style = {style.touchableOpacityNextActive}>
+                    <Text style={style.textShowPrompt}>SUBMIT</Text>
+                </TouchableOpacity>
+            </View>
+          </View>
+        )}
+      </Mutation>
+    )
+  }
+
+  renderFieldsOne = challenge => {
+    return (
+      challenge.requests.map((request,index) => {
+        {
+          return (
+              <View style = {{width: "100%"}}>
+                {request.type === 'text' ?
+                    <View style = {{width: "100%"}}>
+                      {request.requestType === "none" ?
+                        <View key={request.id} style={style.eggTossChildRowView100}>
+                            <Text style={style.eggTossLabel}>{request.data}</Text>
+                            <TextInput
+                              key={request.id}
+                              style={style.inputEggToss}
+                              onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                            />
+                        </View>
+                        :
+                        <View style = {{width: "100%"}}>
+                          {request.requestType === "1" ?
+                              <View key={request.id} style={style.eggTossChildRowView50Left}>
+                                  <Text style={style.eggTossLabel}>{request.data}</Text>
+                                  <TextInput
+                                    key={request.id}
+                                    style={style.inputEggToss}
+                                    onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                                  />
+                              </View>
+                              :
+                              <View key={request.id} style={style.eggTossChildRowView50Right}>
+                                  <Text style={style.eggTossLabel}>{request.data}</Text>
+                                  <TextInput
+                                    key={request.id}
+                                    style={style.inputEggToss}
+                                    onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                                  />
+                              </View>
+                          }
+                        </View>
+                      }
+                    </View>
+                    :
+                    <View style = {{backgroundColor: '#B7BABC',width: 150,height: 150,marginTop: 15}}>
+                      <View>
+                          <PhotoUpload containerStyle={{height: 150 }}
+                            onPhotoSelect={avatar => {
+                              if (avatar) {
+                                this.loadPicture(avatar)
+                              }
+                            }}>
+                            <Image
+                                style={{
+                                  width: 150,
+                                  height: 150,
+                                }}
+                                resizeMode='stretch'
+                                source={{
+                                  uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                }}
+                              />
+                          </PhotoUpload>
+                      </View>
+                    </View>
+                }
+              </View>
+          )
+
+        }
+      })
+    )
+  }
+
+
   renderChallengeTwo = challenge => {
     return (
       <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
@@ -579,8 +677,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   };
 
+  submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
+      console.log(301, this.state.foodCrazyAnswers);
+  };
+
   generateArtBoardText = (challenge,challengeResponse_C)=> {
-      debugger
       console.log(301, this.state.foodCrazyAnswers);
       var SampleText = challenge.artboardDetails.toString();
       var NewText = SampleText.replace(/\(Description #1\)/g, "AppBuilderMahadev");

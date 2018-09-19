@@ -455,6 +455,39 @@ iSpyInActiveImageIcon: {
   height: 65,
   backgroundColor: '#dddddd',
   alignSelf: 'center',
-}
+},
+
+eggTossLabel: {
+  fontSize: 15,
+  color: '#0D0760',
+  textAlign: 'left',
+  marginTop: 15,
+},
+
+inputEggToss:{
+  width: "100%",
+  alignSelf: 'center',
+  padding: 10,
+  height: 40,
+  backgroundColor: '#ffffff',
+  borderColor: '#0D0760',
+  borderWidth:1,
+},
+
+eggTossChildRowView100: {
+  width: "100%",
+  justifyContent: 'center',
+},
+
+eggTossChildRowView50Left: {
+  width: "50%",
+  justifyContent: 'flex-start',
+},
+
+eggTossChildRowView50Right: {
+  width: "50%",
+  justifyContent: 'flex-end',
+  alignSelf: 'flex-end'
+},
 
 });
