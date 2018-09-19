@@ -48,6 +48,8 @@ export default class Challenge extends Component {
       foodCrazyAnswers: {},
       setUpdatedArtBoard: '',
       requestIDFoodCrazy: null,
+      selectedFoodCrazyValues: null,
+      challengeTwoDetail: null
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
@@ -374,6 +376,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderFieldFifth = challenge => {
+    if (this.pos === 0) {
+      let values = new Array(challenge.requests.length)
+      for(let i = 0; i<values.length;i++){
+          values[i] = "";
+      }
+      this.setState({selectedFoodCrazyValues: values})
+      this.pos = 1
+    }
     return (
       challenge.requests.map((request,index) => {
         {
@@ -384,13 +394,21 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   <TextInput
                     key={request.id}
                     style={style.inputfoodCrazy}
-                    onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                    onChangeText={(setChitChatAnswer) => this.setCrazyFoodOptionsValue(index,setChitChatAnswer)}
                   />
               </View>
             )
         }
       })
     )
+  }
+
+  setCrazyFoodOptionsValue(index, value){
+      let values = this.state.selectedFoodCrazyValues
+      values[index]= value
+      this.setState({
+        selectedFoodCrazyValues: values,
+      })
   }
 
 
@@ -432,7 +450,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                             <TextInput
                               key={request.id}
                               style={style.inputEggToss}
-                              onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                              onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
                             />
                         </View>
                         :
@@ -443,7 +461,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                   <TextInput
                                     key={request.id}
                                     style={style.inputEggToss}
-                                    onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                                    onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
                                   />
                               </View>
                               :
@@ -452,7 +470,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                   <TextInput
                                     key={request.id}
                                     style={style.inputEggToss}
-                                    onChangeTextonChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                                    onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
                                   />
                               </View>
                           }
@@ -490,8 +508,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-
+  isChallengeTwoSetInState = false;
   renderChallengeTwo = challenge => {
+    if (this.isChallengeTwoSetInState == false) {
+      this.setState({
+        challengeTwoDetail: challenge
+      })
+      this.isChallengeTwoSetInState = true;
+    }
+    if (this.state.challengeTwoDetail !== null)
     return (
       <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
         {(challengeResponse_C) => (
@@ -504,7 +529,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               }
               {this.state.showBubbleQuestion === false ?
                 <View style={style.bubblesView}>
-                  {this.renderBubbles(challenge)}
+                  {this.renderBubbles(this.state.challengeTwoDetail)}
                 </View>
                 :
                 <View>
@@ -584,6 +609,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
     if (this.pos === 0) {
       let values = new Array(data.length)
+      for(let i = 0; i<values.length;i++){
+          values[i] = -1;
+      }
       this.setState({selectedEitherOrOptions: values})
       this.pos = 1
     }
@@ -641,10 +669,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   </View>
                 </TouchableHighlight>
                 :
-                <View style = {{width: "100%",padding: 4,backgroundColor: '#dddddd'}}>
+                <View style = {{width: "100%",padding: 4,position: 'relative'}}>
                     <Image
                       style={style.iSpyInActiveImageIcon}
                       source={{uri: this.state.challenge4Questions[index].url}}/>
+                    <View style={style.iSpyInActiveView}/>
                     <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
                 </View>
             }
@@ -682,12 +711,28 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {
-      console.log(301, this.state.foodCrazyAnswers);
-      var SampleText = challenge.artboardDetails.toString();
-      var NewText = SampleText.replace(/\(Description #1\)/g, "AppBuilderMahadev");
-      console.log(304, NewText);
-      this.setState({requestIDFoodCrazy: 1,setUpdatedArtBoard: NewText, missionID: challenge.missionID});
-      //this.challengeFoodCrazy(challengeResponse_C);
+      console.log(301, this.state.selectedFoodCrazyValues);
+      let updatedAetBoardValue = challenge.artboardDetails.toString();
+      console.log(716, updatedAetBoardValue);
+      var allValueSet = true;
+      for(let i = 0; i<this.state.selectedFoodCrazyValues.length;i++){
+          if(this.state.selectedFoodCrazyValues[i] !== ""){
+              var replacementString = '\(Description #'+(i+1)+'\)';
+              console.log("replacementString iss: "+replacementString)
+              var myRegExp = new RegExp(replacementString,'g');
+              updatedAetBoardValue = updatedAetBoardValue.replace(myRegExp, this.state.selectedFoodCrazyValues[i]);
+          }else{
+            allValueSet = false;
+          }
+      }
+      console.log(728, updatedAetBoardValue);
+      if(allValueSet){
+        this.setState({requestIDFoodCrazy: 1,setUpdatedArtBoard: updatedAetBoardValue, missionID: challenge.missionID});
+        this.challengeFoodCrazy(challengeResponse_C);
+      }else{
+          alert("Please fill all values.")
+      }
+
   };
 
   saveTimedHuntAnswer = (index,challengeResponse_C) => {
@@ -718,8 +763,18 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         alert('Please select image first.');
       }
     }else{
-      console.log("selectedEitherOrOptions"+this.state.selectedEitherOrOptions);
-      this.challengeChitChat(challengeResponse_C)
+      var isSelectedAllOption = true;
+      for(let i = 0; i<this.state.selectedEitherOrOptions.length;i++){
+          if (this.state.selectedEitherOrOptions[i] === -1){
+              isSelectedAllOption = false;
+              break;
+          }
+      }
+      if(isSelectedAllOption){
+          this.challengeChitChat(challengeResponse_C)
+      }else{
+          alert("Please select all questions atleast one option");
+      }
     }
 
   };

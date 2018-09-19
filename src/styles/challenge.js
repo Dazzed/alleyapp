@@ -453,8 +453,16 @@ iSpyActiveImageIcon: {
 iSpyInActiveImageIcon: {
   width: "90%",
   height: 65,
-  backgroundColor: '#dddddd',
   alignSelf: 'center',
+},
+
+iSpyInActiveView: {
+  width: "90%",
+  height: 65,
+  position: 'absolute',
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  alignSelf: 'center',
+  top:4,
 },
 
 eggTossLabel: {
