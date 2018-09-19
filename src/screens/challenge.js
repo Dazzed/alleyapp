@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView ,TextInput} from 'react-native';
+import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView, TextInput, KeyboardAvoidingView} from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
 import PhotoUpload from 'react-native-photo-upload';
 import { Mutation } from "react-apollo";
@@ -846,8 +846,10 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   render() {
     const id = this.props.navigation.state.params.id;
     return (
+      <KeyboardAvoidingView
+        behavior="padding" style={style.container}>
       <ScrollView>
-        <View style={style.container}>
+        <View>
           <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
             {({ data: { challenge_Team }, loading }) => {
               if (loading || !challenge_Team) {
@@ -939,6 +941,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           </Query>
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     );
   }
 
