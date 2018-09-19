@@ -49,6 +49,7 @@ export default class SignIn extends Component {
           }
         }
         console.log('team_Dashboard iss: '+JSON.stringify(data.data.user_Login.teams[0].id))
+        AsyncStorage.setItem('ACTIVE_TEAM', data.data.user_Login.teams[0].id);
         let { screenProps: { signIn } } = this.props;
         signIn();
       } else {

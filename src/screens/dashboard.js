@@ -29,7 +29,7 @@ export default class Dashboard extends Component {
 
   async componentWillMount() {
     let team = await AsyncStorage.getItem('ACTIVE_TEAM');
-
+    console.log(32, team);
     this.setState({
       teamId: team
     })
