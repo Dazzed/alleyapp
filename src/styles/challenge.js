@@ -413,6 +413,12 @@ foodCrazyParentView: {
   width: "100%",
 },
 
+eggTossParentView: {
+  flex: 1,
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+},
+
 chitChatEitherOrParentView: {
   flex: 1,
   flexDirection: 'row',
@@ -470,6 +476,7 @@ eggTossLabel: {
   color: '#0D0760',
   textAlign: 'left',
   marginTop: 15,
+  height: 40,
 },
 
 inputEggToss:{
@@ -488,8 +495,9 @@ eggTossChildRowView100: {
 },
 
 eggTossChildRowView50Left: {
-  width: "50%",
-  justifyContent: 'flex-start',
+  width: "47%",
+  justifyContent: 'center',
+  margin: 4,
 },
 
 eggTossChildRowView50Right: {

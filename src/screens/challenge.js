@@ -418,7 +418,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         {(challengeResponse_C) => (
           <View  style={style.requestItemParent}>
             <View style={style.requestItemBg1}>
-                <View style={style.foodCrazyParentView}>
+                <View style={style.eggTossParentView}>
                   {this.renderFieldsOne(challenge)}
                 </View>
             </View>
@@ -440,69 +440,55 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     return (
       challenge.requests.map((request,index) => {
         {
-          return (
-              <View style = {{width: "100%"}}>
-                {request.type === 'text' ?
-                    <View style = {{width: "100%"}}>
-                      {request.requestType === "none" ?
-                        <View key={request.id} style={style.eggTossChildRowView100}>
-                            <Text style={style.eggTossLabel}>{request.data}</Text>
-                            <TextInput
-                              key={request.id}
-                              style={style.inputEggToss}
-                              onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
-                            />
-                        </View>
-                        :
-                        <View style = {{width: "100%"}}>
-                          {request.requestType === "1" ?
-                              <View key={request.id} style={style.eggTossChildRowView50Left}>
-                                  <Text style={style.eggTossLabel}>{request.data}</Text>
-                                  <TextInput
-                                    key={request.id}
-                                    style={style.inputEggToss}
-                                    onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
-                                  />
-                              </View>
-                              :
-                              <View key={request.id} style={style.eggTossChildRowView50Right}>
-                                  <Text style={style.eggTossLabel}>{request.data}</Text>
-                                  <TextInput
-                                    key={request.id}
-                                    style={style.inputEggToss}
-                                    onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
-                                  />
-                              </View>
-                          }
-                        </View>
-                      }
+          if(request.type === 'text'){
+              if(request.requestType === "none"){
+                  return (
+                    <View key={request.id} style={style.eggTossChildRowView100}>
+                        <Text style={style.eggTossLabel}>{request.data}</Text>
+                        <TextInput
+                          key={request.id}
+                          style={style.inputEggToss}
+                          onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                        />
                     </View>
-                    :
-                    <View style = {{backgroundColor: '#B7BABC',width: 150,height: 150,marginTop: 15}}>
-                      <View>
-                          <PhotoUpload containerStyle={{height: 150 }}
-                            onPhotoSelect={avatar => {
-                              if (avatar) {
-                                this.loadPicture(avatar)
-                              }
-                            }}>
-                            <Image
-                                style={{
-                                  width: 150,
-                                  height: 150,
-                                }}
-                                resizeMode='stretch'
-                                source={{
-                                  uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                }}
-                              />
-                          </PhotoUpload>
-                      </View>
-                    </View>
-                }
+                  )
+              }else{
+                return (
+                  <View key={request.id} style={style.eggTossChildRowView50Left}>
+                      <Text numberOfLines={2} style={style.eggTossLabel}>{request.data}</Text>
+                      <TextInput
+                        key={request.id}
+                        style={style.inputEggToss}
+                        onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                      />
+                  </View>
+                )
+              }
+          }else{
+            return (
+              <View style = {{backgroundColor: '#B7BABC',width: 150,height: 150,marginTop: 15}}>
+                <View>
+                    <PhotoUpload containerStyle={{height: 150 }}
+                      onPhotoSelect={avatar => {
+                        if (avatar) {
+                          this.loadPicture(avatar)
+                        }
+                      }}>
+                      <Image
+                          style={{
+                            width: 150,
+                            height: 150,
+                          }}
+                          resizeMode='stretch'
+                          source={{
+                            uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                          }}
+                        />
+                    </PhotoUpload>
+                </View>
               </View>
-          )
-
+            )
+          }
         }
       })
     )
