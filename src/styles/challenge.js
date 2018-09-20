@@ -350,8 +350,14 @@ iSpyGridView: {
 },
 
 iSpyImageOpacity: {
-  width: '24%',
-  margin: 1,
+  width: '33%',
+},
+
+iSpyTitle:{
+  width: "100%",
+  fontSize:13,
+  color: 'white',
+  textAlign: 'center',
 },
 
 iSpyQuestionIconView:{
@@ -452,19 +458,19 @@ inputfoodCrazy:{
 
 iSpyActiveImageIcon: {
   width: "90%",
-  height: 65,
+  height: 75,
   alignSelf: 'center',
 },
 
 iSpyInActiveImageIcon: {
   width: "90%",
-  height: 65,
+  height: 75,
   alignSelf: 'center',
 },
 
 iSpyInActiveView: {
   width: "90%",
-  height: 65,
+  height: 75,
   position: 'absolute',
   backgroundColor: 'rgba(0, 0, 0, 0.5)',
   alignSelf: 'center',

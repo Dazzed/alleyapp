@@ -651,7 +651,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       <Image
                         style={style.iSpyActiveImageIcon}
                         source={{uri: this.state.challenge4Questions[index].url}}/>
-                      <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
+                      <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={style.iSpyTitle}>{this.state.challenge4Questions[index].data}</Text>
                   </View>
                 </TouchableHighlight>
                 :
@@ -699,19 +699,17 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   generateArtBoardText = (challenge,challengeResponse_C)=> {
       console.log(301, this.state.selectedFoodCrazyValues);
       let updatedAetBoardValue = challenge.artboardDetails.toString();
-      console.log(716, updatedAetBoardValue);
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedFoodCrazyValues.length;i++){
           if(this.state.selectedFoodCrazyValues[i] !== ""){
-              var replacementString = '\(Description #'+(i+1)+'\)';
-              console.log("replacementString iss: "+replacementString)
+              var replacementString = '\\(Description #'+(i+1)+'\\)';
               var myRegExp = new RegExp(replacementString,'g');
               updatedAetBoardValue = updatedAetBoardValue.replace(myRegExp, this.state.selectedFoodCrazyValues[i]);
           }else{
             allValueSet = false;
           }
       }
-      console.log(728, updatedAetBoardValue);
+      console.log(714, updatedAetBoardValue);
       if(allValueSet){
         this.setState({requestIDFoodCrazy: 1,setUpdatedArtBoard: updatedAetBoardValue, missionID: challenge.missionID});
         this.challengeFoodCrazy(challengeResponse_C);
