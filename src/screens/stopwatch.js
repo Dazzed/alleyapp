@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet,AsyncStorage} from 'react-native';
 
 
 class StopWatch extends Component {
@@ -11,6 +11,7 @@ class StopWatch extends Component {
       pausedTime: null,
       started: false,
       elapsed: null,
+      isFixedTimer:  'false',
     };
     this.start = this.start.bind(this);
     this.stop = this.stop.bind(this);
@@ -35,6 +36,7 @@ class StopWatch extends Component {
       }
     };
   }
+
 
   componentDidMount() {
     if(this.props.start) {
@@ -90,7 +92,7 @@ class StopWatch extends Component {
     this.setState({elapsed: null, startTime: null, stopTime: null, pausedTime: null});
   }
 
-  formatTime() {
+  formatTime () {
     let now = this.state.elapsed;
     let msecs = now % 1000;
 
@@ -118,7 +120,29 @@ class StopWatch extends Component {
     if (typeof this.props.getTime === "function")
       this.props.getTime(formatted);
 
-    return formatted;
+    //console.log('formatted time issss: '+formatted.toString().split(':')[0].trim())
+    AsyncStorage.getItem('TIMER').then((value) => {
+      if(value === null){
+        value = 'false';
+        AsyncStorage.setItem('TIMER', 'false');
+      }
+      if(value === 'false'){
+        if(formatted.toString().split(':')[0].trim() > 59) {
+          if(formatted.toString().split(':')[1].trim() > 50) {
+            //console.log('isDoneTimer: '+value)
+            AsyncStorage.setItem('TIMER', 'true');
+            this.setState({isFixedTimer: 'true'});
+          }
+        }
+      }else{
+        this.setState({isFixedTimer: 'true'});
+      }
+    });
+    if(this.state.isFixedTimer === 'true'){
+        return '59:59';
+    }else{
+        return formatted;
+    }
   }
 
 

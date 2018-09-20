@@ -4,7 +4,7 @@ import { GET_CHALLENGE } from '../graphql/queries';
 import PhotoUpload from 'react-native-photo-upload';
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
-import { ANSWER_CHALLENGE_TIMED_HUNT_MUTATION, ANSWER_CHALLENGE_I_SPY_MUTATION } from '../graphql/mutation';
+import { ANSWER_CHALLENGE_MUTATION, ANSWER_CHALLENGE_I_SPY_MUTATION } from '../graphql/mutation';
 
 import Color from 'constants/colors';
 import style from 'styles/challenge';
@@ -49,7 +49,8 @@ export default class Challenge extends Component {
       setUpdatedArtBoard: '',
       requestIDFoodCrazy: null,
       selectedFoodCrazyValues: null,
-      challengeTwoDetail: null
+      challengeTwoDetail: null,
+      selectedEggTossValues: null,
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
@@ -98,13 +99,23 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('Reqest ID iss: '+this.state.requestIDChitChat)
         console.log('Reqest ID iss: '+this.state.selectedEitherOrOptions)
 
-        const data = null ;
+        // const data = null ;
+        // console.log(103, this.state.challengeTwoDetail);
+        // let challengeData = this.state.challengeTwoDetail;
+        // console.log(105, challengeData);
+        // console.log(106, challengeData.requests[0].data);
+        // let a = challengeData.requests[0].data;
+        // a = "Maahdev Update the things.";
+        // challengeData.requests[0].data = a;
+        // console.log(108, a);
+        // debugger
+        // console.log(108, challengeData);
+
         if(this.state.requestTypeChitChat === 'bubble') {
             data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
         }else{
           data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
         }
-
         console.log(165, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           this.setState({showBubbleQuestion: false})
@@ -272,7 +283,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         {
           if (request.type === 'prompt' && index == 0)
             return (
-          <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+          <Mutation mutation={ANSWER_CHALLENGE_MUTATION}>
             {(challengeResponse_C) => (
               <View key={"challenge3_" + request.id} style={style.requestItemParent}>
                 <View style={style.requestItemBg}>
@@ -291,9 +302,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   <View style={style.promptResponseView}>
                     <View style={style.timerViewBg}>
                         <StopWatch
-                       false
-                       start={this.state.stopwatchStart}
-                       reset={this.state.stopwatchReset}/>
+                        false
+                        start={this.state.stopwatchStart}
+                        reset={this.state.stopwatchReset}/>
                     </View>
                     <View style={style.pictureViewBg}>
                         <View style={style.promptPictureBg}>
@@ -337,7 +348,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   renderChallengeFive = challenge => {
     return (
-      <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+      <Mutation mutation={ANSWER_CHALLENGE_MUTATION}>
         {(challengeResponse_C) => (
           <View  style={style.requestItemParent}>
             <View style={[!this.state.showChallengeArtboard ? style.requestItemBg : style.requestItemBg1]}>
@@ -414,7 +425,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   renderChallengeOne = challenge => {
     return (
-      <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+      <Mutation mutation={ANSWER_CHALLENGE_MUTATION}>
         {(challengeResponse_C) => (
           <View  style={style.requestItemParent}>
             <View style={style.requestItemBg1}>
@@ -437,6 +448,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderFieldsOne = challenge => {
+    if (this.pos === 0) {
+      let values = new Array(challenge.requests.length)
+      for(let i = 0; i<values.length;i++){
+          values[i] = "";
+      }
+      this.setState({selectedEggTossValues: values})
+      this.pos = 1
+    }
     return (
       challenge.requests.map((request,index) => {
         {
@@ -448,7 +467,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         <TextInput
                           key={request.id}
                           style={style.inputEggToss}
-                          onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                          onChangeText={(setChitChatAnswer) => this.setEggTossOptionsValue(index,setChitChatAnswer)}
                         />
                     </View>
                   )
@@ -459,7 +478,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       <TextInput
                         key={request.id}
                         style={style.inputEggToss}
-                        onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+                        onChangeText={(setChitChatAnswer) => this.setEggTossOptionsValue(index,setChitChatAnswer)}
                       />
                   </View>
                 )
@@ -494,6 +513,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
+  setEggTossOptionsValue(index, value){
+      let values = this.state.selectedEggTossValues
+      values[index]= value
+      this.setState({
+        selectedEggTossValues: values,
+      })
+  }
+
   isChallengeTwoSetInState = false;
   renderChallengeTwo = challenge => {
     if (this.isChallengeTwoSetInState == false) {
@@ -504,7 +531,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }
     if (this.state.challengeTwoDetail !== null)
     return (
-      <Mutation mutation={ANSWER_CHALLENGE_TIMED_HUNT_MUTATION}>
+      <Mutation mutation={ANSWER_CHALLENGE_MUTATION}>
         {(challengeResponse_C) => (
           <View  style={style.requestItemParent}>
             <View style={style.requestItemBg}>
@@ -693,7 +720,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
-      console.log(301, this.state.foodCrazyAnswers);
+      console.log(301, this.state.selectedEggTossValues);
   };
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {

@@ -117,7 +117,7 @@ export const UPDATE_TEAM_INFO_MUTATION = gql`
   }
 `;
 
-export const ANSWER_CHALLENGE_TIMED_HUNT_MUTATION = gql`
+export const ANSWER_CHALLENGE_MUTATION = gql`
   mutation AnswerChallengeTimedHunt($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!,$type: String!,$data: String! , $duration: String!) {
     challengeResponse_C(
       input:{
