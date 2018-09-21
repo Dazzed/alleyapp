@@ -49,7 +49,7 @@ export default class Challenge extends Component {
       setUpdatedArtBoard: '',
       requestIDFoodCrazy: null,
       selectedFoodCrazyValues: null,
-      challengeTwoDetail: null,
+      challengeResponseDetail: null,
       selectedEggTossValues: null,
       videoSource: null,
       isRequestForImage: true,
@@ -103,25 +103,19 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('Reqest ID iss: '+this.state.requestIDChitChat)
         console.log('Reqest ID iss: '+this.state.selectedEitherOrOptions)
 
-        // const data = null ;
-        // console.log(103, this.state.challengeTwoDetail);
-        // let challengeData = this.state.challengeTwoDetail;
-        // console.log(105, challengeData);
-        // console.log(106, challengeData.requests[0].data);
-        // let a = challengeData.requests[0].data;
-        // a = "Maahdev Update the things.";
-        // challengeData.requests[0].data = a;
-        // console.log(108, a);
-        // debugger
-        // console.log(108, challengeData);
-
         if(this.state.requestTypeChitChat === 'bubble') {
             data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
         }else{
           data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
         }
-        console.log(165, data.data.challengeResponse_C);
+
+        console.log(123, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
+          const requestId = this.state.requestIDChitChat;
+          const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
+          let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
+          challengeResponseDetail.requests[targetIndex].response = true;
+          this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests } });
           this.setState({showBubbleQuestion: false})
         }
       } catch (e) {
@@ -192,6 +186,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.activeISpyQuestionID ,type:this.state.activeISpyQuestionType ,data: userAnswer }});
         console.log(428, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
+          const requestId = this.state.activeISpyQuestionID;
+          const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
+          let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
+          challengeResponseDetail.requests[targetIndex].response = true;
+          this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests }});
           this.setState({showChallenge4Question: false})
         }
       } catch (e) {
@@ -201,6 +200,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
 
   renderChallengeFour = challenge => {
+    if (this.isChallengeTwoSetInState == false) {
+      this.setState({
+        challengeResponseDetail: challenge
+      })
+      this.isChallengeTwoSetInState = true;
+    }
+    if (this.state.challengeResponseDetail !== null)
     return (
       <Mutation mutation={ANSWER_CHALLENGE_I_SPY_MUTATION}>
         {(challengeResponse_C) => (
@@ -213,7 +219,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               }
               {this.state.showChallenge4Question === false ?
                 <View style={style.iSpyGridView}>
-                  {this.renderISpy(challenge)}
+                  {this.renderISpy(this.state.challengeResponseDetail)}
                 </View>
                 :
                 <View>
@@ -506,11 +512,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   renderChallengeTwo = challenge => {
     if (this.isChallengeTwoSetInState == false) {
       this.setState({
-        challengeTwoDetail: challenge
+        challengeResponseDetail: challenge
       })
       this.isChallengeTwoSetInState = true;
     }
-    if (this.state.challengeTwoDetail !== null)
+    if (this.state.challengeResponseDetail !== null)
     return (
       <Mutation mutation={ANSWER_CHALLENGE_MUTATION}>
         {(challengeResponse_C) => (
@@ -523,7 +529,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               }
               {this.state.showBubbleQuestion === false ?
                 <View style={style.bubblesView}>
-                  {this.renderBubbles(this.state.challengeTwoDetail)}
+                  {this.renderBubbles(this.state.challengeResponseDetail)}
                 </View>
                 :
                 <View>
@@ -668,7 +674,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       style={style.iSpyInActiveImageIcon}
                       source={{uri: this.state.challenge4Questions[index].url}}/>
                     <View style={style.iSpyInActiveView}/>
-                    <Text numberOfLines = { 1 } ellipsizeMode = 'tail' style={{width: "100%",fontSize:15,color: 'white',}}>{this.state.challenge4Questions[index].data}</Text>
+                    <Text numberOfLines = { 1 } ellipsizeMode = 'tail'  style={style.iSpyTitle} >{this.state.challenge4Questions[index].data}</Text>
                 </View>
             }
           </View>

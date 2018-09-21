@@ -249,7 +249,7 @@ timerViewBg:{
 },
 
 pictureViewBg: {
-  width: "80%",
+  width: "60%",
   height: 150,
   marginLeft: 5,
   justifyContent: 'flex-end',
