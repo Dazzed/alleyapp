@@ -101,7 +101,7 @@ export default class SignIn extends Component {
                     this.setState({ password: value });
                   }}
                 />
-                {this.state.error ? <Text style={style.error}>{this.state.errorMessage}</Text> : ''}
+                {this.state.error ? <Text style={style.error}>{this.state.errorMessage}</Text> : null}
               </View>
               <Button raised
                 title={'Login'}
