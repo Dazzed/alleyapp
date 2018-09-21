@@ -51,6 +51,9 @@ export default class Challenge extends Component {
       selectedFoodCrazyValues: null,
       challengeResponseDetail: null,
       selectedEggTossValues: null,
+      isLoadChallengeOne: false,
+      challengeOneCurrentIndex: -1,
+      requestIDEggToss: null,
       videoSource: null,
       isRequestForImage: true,
       isSetDefaultImage: true,
@@ -60,6 +63,7 @@ export default class Challenge extends Component {
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
     this.challengeISpy = this.challengeISpy.bind(this);
     this.challengeFoodCrazy = this.challengeFoodCrazy.bind(this);
+    this.challengeEggToss = this.challengeEggToss.bind(this);
     this.myRef = React.createRef()
 
   }
@@ -138,6 +142,25 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         if(data.data.challengeResponse_C.length > 10){
           this.setState({showChallengeArtboard: true})
         }
+      } catch (e) {
+        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
+
+  challengeEggToss = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        console.log('userId iss: '+userId)
+        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
+        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
+        console.log('missionID ID iss: '+this.state.missionID)
+        console.log('Reqest ID iss: '+this.state.requestIDEggToss)
+
+        // const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
+        // console.log(165, data.data.challengeResponse_C);
+        // if(data.data.challengeResponse_C.length > 10){
+        //   this.setState({showChallengeArtboard: true})
+        // }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       }
@@ -234,7 +257,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     <View style = {style.iSpyQuestionPicView}>
                       <View style={style.pictureViewBg1}>
                           <View style={style.promptPictureBg1}>
-                            <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                            <TouchableOpacity onPress={this.selectPhotoTapped.bind(this,-1)}>
                               <Image
                                   style={{
                                     width: 150,
@@ -311,7 +334,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     </View>
                     <View style={style.pictureViewBg}>
                         <View style={style.promptPictureBg}>
-                          <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                          <TouchableOpacity onPress={this.selectPhotoTapped.bind(this,-1)}>
                             <Image
                                 style={{
                                   width: 150,
@@ -448,7 +471,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       for(let i = 0; i<values.length;i++){
           values[i] = "";
       }
-      this.setState({selectedEggTossValues: values})
+      this.setState({selectedEggTossValues: values,isLoadChallengeOne: true})
       this.pos = 1
     }
     return (
@@ -480,9 +503,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               }
           }else{
             return (
-              <View style = {{backgroundColor: '#B7BABC',width: 150,height: 150,marginTop: 15}}>
-                <View>
-                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+              <View style = {{backgroundColor: '#B7BABC', width: "100%", height: 150,marginTop: 15,flexDirection: 'row',}}>
+                <View style= {{width: 150,}}>
+                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this,index)}>
                     <Image
                         style={{
                           width: 150,
@@ -490,6 +513,30 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         }}
                         source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
                       />
+                    </TouchableOpacity>
+                </View>
+                <View style= {{width: 200,height: 150, flex: 1,justifyContent: 'center',flexDirection: 'column',alignItems: 'center',backgroundColor: 'white'}}>
+                    <TouchableOpacity onPress={() => this.selectPhotoTapped(index)} style = {{
+                      backgroundColor: 'blue',
+                      width: "75%",
+                      height: 30,
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      margin: 10,
+                      justifyContent: 'center',
+                    }}>
+                        <Text style={style.textShowPrompt}>Upload Image</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.selectVideoTapped(index)} style = {{
+                      backgroundColor: 'blue',
+                      width: "75%",
+                      height: 30,
+                      borderRadius: 5,
+                      alignItems: 'center',
+                      margin: 10,
+                      justifyContent: 'center',
+                    }}>
+                        <Text style={style.textShowPrompt}>Upload Video</Text>
                     </TouchableOpacity>
                 </View>
               </View>
@@ -707,7 +754,20 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
-      console.log(301, this.state.selectedEggTossValues);
+      console.log(740, this.state.selectedEggTossValues);
+      var allValueSet = true;
+      for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
+          if(this.state.selectedEggTossValues[i] === ""){
+            allValueSet = false;
+            break;
+          }
+      }
+      if(allValueSet){
+        this.setState({requestIDEggToss: challenge.requests[0].id,missionID: challenge.missionID});
+        this.challengeEggToss(challengeResponse_C);
+      }else{
+          alert("Please fill all values & upload image or video for option.")
+      }
   };
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {
@@ -725,7 +785,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       }
       console.log(714, updatedAetBoardValue);
       if(allValueSet){
-        this.setState({requestIDFoodCrazy: 1,setUpdatedArtBoard: updatedAetBoardValue, missionID: challenge.missionID});
+        this.setState({requestIDFoodCrazy: challenge.requests[0].id,setUpdatedArtBoard: updatedAetBoardValue, missionID: challenge.missionID});
         this.challengeFoodCrazy(challengeResponse_C);
       }else{
           alert("Please fill all values.")
@@ -783,6 +843,27 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       base64String: avatar
     });
     console.log(192,data.data.Location);
+    this.setState({
+      setImageAnswer: data.data.Location,
+    });
+
+    if(this.state.isLoadChallengeOne){
+      let obj = this.state.selectedEggTossValues
+      obj[this.state.challengeOneCurrentIndex] = this.state.setImageAnswer;
+      console.log('738'+obj)
+      this.setState({selectedEggTossValues: obj})
+    }
+  }
+
+  loadVideo = async avatar => {
+    console.log('VideoUploading iss: '+avatar);
+    // http://ec2-35-171-162-131.compute-1.amazonaws.com/uploadChallengeResponses
+    // 'Content-Type': 'multipart/form-data',
+    // keyName: file
+    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
+      base64String: avatar
+    });
+    console.log(825,data.data.Location);
     this.setState({
       setImageAnswer: data.data.Location,
     });
@@ -957,8 +1038,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     );
   }
 
-  selectPhotoTapped() {
-    this.setState({isRequestForImage: true})
+  selectPhotoTapped(index) {
+    this.setState({isRequestForImage: true,challengeOneCurrentIndex: index})
     const options = {
       quality: 1.0,
       maxWidth: 500,
@@ -970,7 +1051,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     this.openCamera(options);
   }
 
-  selectVideoTapped() {
+  selectVideoTapped(index) {
+    this.setState({isRequestForImage:false,challengeOneCurrentIndex: index})
     const options  = {
         title: 'Video Picker',
         takePhotoButtonTitle: 'Take Video...',
