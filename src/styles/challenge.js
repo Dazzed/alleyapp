@@ -249,16 +249,30 @@ timerViewBg:{
 },
 
 pictureViewBg: {
-  width: "60%",
+  width: "80%",
   height: 150,
   marginLeft: 5,
   justifyContent: 'flex-end',
   alignItems: 'flex-end',
+  alignSelf: 'flex-end',
+},
+
+pictureViewBg1: {
+  width: "80%",
+  height: 150,
+  marginLeft: 5,
+  alignSelf: 'flex-end',
 },
 
 promptPictureBg: {
     width: "75%",
     height: 150,
+},
+
+promptPictureBg1: {
+    width: "75%",
+    height: 150,
+    alignSelf: 'flex-start',
 },
 
 optionNextCancelView: {
@@ -374,6 +388,13 @@ iSpyQuestionSetIcon:{
   justifyContent: 'center',
 },
 
+iSpyQuestionPicView:{
+  width: "55%",
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: 150,
+},
+
 iSpyQuestionSetText: {
   width: '100%',
   fontSize: 15,
@@ -382,12 +403,7 @@ iSpyQuestionSetText: {
   textAlign: 'center',
 },
 
-iSpyQuestionPicView:{
-  width: "55%",
-  alignItems: 'center',
-  justifyContent: 'center',
-  height: 150,
-},
+
 
 inputChitChatAnswer:{
   width: "100%",

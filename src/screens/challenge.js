@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView, TextInput, KeyboardAvoidingView} from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
-import PhotoUpload from 'react-native-photo-upload';
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
 import { ANSWER_CHALLENGE_MUTATION, ANSWER_CHALLENGE_I_SPY_MUTATION } from '../graphql/mutation';
@@ -12,6 +11,7 @@ import StopWatch from './stopwatch';
 import axios from 'axios';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
+import ImagePicker from 'react-native-image-picker';
 
 export default class Challenge extends Component {
   constructor() {
@@ -51,6 +51,10 @@ export default class Challenge extends Component {
       selectedFoodCrazyValues: null,
       challengeTwoDetail: null,
       selectedEggTossValues: null,
+      videoSource: null,
+      isRequestForImage: true,
+      isSetDefaultImage: true,
+      setImageFromLocal: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
@@ -160,7 +164,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log(165, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
-              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, setImageAnswer: ''});
+              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true, setImageFromLocal: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'});
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
                   this.setState({btnTitle: "SUBMIT"});
               }
@@ -222,25 +226,18 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       <Text style={style.iSpyQuestionSetText}>{this.state.activeISpyQuestionTitle}</Text>
                     </View>
                     <View style = {style.iSpyQuestionPicView}>
-                      <View style={style.pictureViewBg}>
-                          <View style={style.promptPictureBg}>
-                            <PhotoUpload containerStyle={{ height: 150 }}
-                              onPhotoSelect={avatar => {
-                                if (avatar) {
-                                  this.loadPicture(avatar)
-                                }
-                              }}>
+                      <View style={style.pictureViewBg1}>
+                          <View style={style.promptPictureBg1}>
+                            <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
                               <Image
                                   style={{
                                     width: 150,
                                     height: 150,
+                                    marginRight: 15,
                                   }}
-                                  resizeMode='cover'
-                                  source={{
-                                    uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                  }}
+                                  source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
                                 />
-                            </PhotoUpload>
+                              </TouchableOpacity>
                           </View>
                       </View>
                     </View>
@@ -308,23 +305,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     </View>
                     <View style={style.pictureViewBg}>
                         <View style={style.promptPictureBg}>
-                          <PhotoUpload containerStyle={{ height: 150 }}
-                            onPhotoSelect={avatar => {
-                              if (avatar) {
-                                this.loadPicture(avatar)
-                              }
-                            }}>
+                          <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
                             <Image
                                 style={{
                                   width: 150,
                                   height: 150,
                                 }}
-                                resizeMode='cover'
-                                source={{
-                                  uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                }}
+                                source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
                               />
-                          </PhotoUpload>
+                            </TouchableOpacity>
                         </View>
                     </View>
                   </View>
@@ -487,23 +476,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             return (
               <View style = {{backgroundColor: '#B7BABC',width: 150,height: 150,marginTop: 15}}>
                 <View>
-                    <PhotoUpload containerStyle={{height: 150 }}
-                      onPhotoSelect={avatar => {
-                        if (avatar) {
-                          this.loadPicture(avatar)
-                        }
-                      }}>
-                      <Image
-                          style={{
-                            width: 150,
-                            height: 150,
-                          }}
-                          resizeMode='stretch'
-                          source={{
-                            uri: (this.state.setImageAnswer.trim().length > 5) ? this.state.setImageAnswer : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                          }}
-                        />
-                    </PhotoUpload>
+                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                    <Image
+                        style={{
+                          width: 150,
+                          height: 150,
+                        }}
+                        source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
+                      />
+                    </TouchableOpacity>
                 </View>
               </View>
             )
@@ -748,7 +729,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   saveTimedHuntAnswer = (index,challengeResponse_C) => {
     if(this.state.stopwatchStart){
-      if(this.state.setImageAnswer.trim().length > 10){
+      if(!this.state.isSetDefaultImage){
           this.challengeTimedHunt(challengeResponse_C)
       }else{
         alert('Please select image first.');
@@ -791,12 +772,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   loadPicture = async avatar => {
+    console.log('Avatarr iss: '+avatar);
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
     console.log(192,data.data.Location);
     this.setState({
-      setImageAnswer: data.data.Location
+      setImageAnswer: data.data.Location,
     });
   }
 
@@ -955,7 +937,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     </View>
                     <View style={style.challengeResponse}>
                       {
-
                         this.renderChallengeResponseForm(challenge_Team)
                       }
                     </View>
@@ -970,5 +951,60 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     );
   }
 
+  selectPhotoTapped() {
+    this.setState({isRequestForImage: true})
+    const options = {
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      },
+    };
+    this.openCamera(options);
+  }
+
+  selectVideoTapped() {
+    const options  = {
+        title: 'Video Picker',
+        takePhotoButtonTitle: 'Take Video...',
+        mediaType: 'video',
+        videoQuality: 'medium'
+      };
+      this.openCamera(options);
+  }
+
+  openCamera(options) {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled video picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        if(this.state.isRequestForImage){
+          let source = response.data;
+          let imagePath = { uri: 'data:image/jpeg;base64,' + response.data} ;
+          this.setState({
+            isSetDefaultImage: false,
+            setImageFromLocal: imagePath
+          });
+          if (source) {
+            this.loadPicture(source)
+          }
+        }else {
+          this.setState({
+            videoSource: response.uri
+          });
+        }
+      }
+    });
+  }
 
 }
