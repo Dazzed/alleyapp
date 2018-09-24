@@ -16,7 +16,7 @@ export default class FaqDetail extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'FAQ',
+    title: 'FAQs',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {

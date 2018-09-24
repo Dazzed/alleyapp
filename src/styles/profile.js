@@ -6,7 +6,6 @@ const { width } = Dimensions.get('window');
 
 module.exports = StyleSheet.create({
   container: {
-    padding: 10,
     flex: 1,
     backgroundColor: Color.white,
     justifyContent: 'space-between'
@@ -114,7 +113,25 @@ module.exports = StyleSheet.create({
   },
   flexGrid: { flex: 1, flexDirection: 'row', flexWrap: 'wrap', marginTop: 20 },
   flexItem: { width: '50%', padding: 5, height: 125, justifyContent: 'center', alignItems: 'center' },
+  flexItem1: { width: '100%', height: 75, justifyContent: 'center', alignItems: 'center' },
   flexItemInner: { width: '100%', backgroundColor: Color.gray, padding: 10, justifyContent: 'center', alignItems: 'center'},
+  flexItemInner1: { width: '100%', height: 60, backgroundColor: Color.gray, justifyContent: 'flex-start', alignItems: 'flex-start'},
+  flexRow: { flex: 1, flexDirection: 'row', flexWrap: 'wrap',justifyContent: 'center', alignItems: 'center',marginLeft: 10,},
+  flexColumn: {flexDirection: 'column', marginLeft: 15,justifyContent: 'flex-start', alignItems: 'flex-start'},
   teamInfo: { fontWeight: 'bold', marginTop: 2, textAlign: 'center' },
   partnerName: {  marginTop: 2, textAlign: 'center' },
+  swipeViewOption1:{
+    backgroundColor: 'green',
+    height: 60,
+    width: 75,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  swipeViewOption2:{
+    backgroundColor: 'red',
+    height: 60,
+    width: 75,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });

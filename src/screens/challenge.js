@@ -12,6 +12,7 @@ import axios from 'axios';
 import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default class Challenge extends Component {
   constructor() {
@@ -51,6 +52,7 @@ export default class Challenge extends Component {
       selectedFoodCrazyValues: null,
       challengeResponseDetail: null,
       selectedEggTossValues: null,
+      requestResponseEggToss: null,
       isLoadChallengeOne: false,
       challengeOneCurrentIndex: -1,
       requestIDEggToss: null,
@@ -467,6 +469,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   renderFieldsOne = challenge => {
     if (this.pos === 0) {
+      this.setState({requestResponseEggToss: challenge.requests});
       let values = new Array(challenge.requests.length)
       for(let i = 0; i<values.length;i++){
           values[i] = "";
@@ -548,8 +551,10 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   setEggTossOptionsValue(index, value){
+      console.log(554, this.state.requestResponseEggToss)
       let values = this.state.selectedEggTossValues
       values[index]= value
+      
       this.setState({
         selectedEggTossValues: values,
       })
@@ -755,6 +760,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
       console.log(740, this.state.selectedEggTossValues);
+      console.log(775, this.state.requestResponseEggToss);
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
           if(this.state.selectedEggTossValues[i] === ""){
@@ -940,8 +946,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   render() {
     const id = this.props.navigation.state.params.id;
     return (
-      <KeyboardAvoidingView
-        behavior="padding" style={style.container}>
+      <KeyboardAwareScrollView>
       <ScrollView>
         <View>
           <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
@@ -1034,7 +1039,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           </Query>
         </View>
       </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     );
   }
 

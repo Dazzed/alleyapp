@@ -31,7 +31,6 @@ import DadTeams from 'screens/dadTeams';
 import DaughterProfile from 'screens/daughterProfile';
 import NewTeam from 'screens/newTeam';
 import NewDaughter from 'screens/newDaughter';
-
 import Settings from 'screens/settings';
 
 
@@ -48,7 +47,7 @@ export default class Main extends Component {
     };
     Text.defaultProps.allowFontScaling = false;
   }
-  
+
 
   componentWillMount() {
     this.checkIfSignedIn();
@@ -118,7 +117,7 @@ export default class Main extends Component {
             dashboard: { screen: Dashboard },
             challenge: { screen: Challenge },
             instructions: { screen: Instructions }
-            
+
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
@@ -168,7 +167,7 @@ export default class Main extends Component {
               )
             };
           }
-        }        
+        }
       },
       {
         tabBarOptions: {
@@ -208,6 +207,6 @@ export default class Main extends Component {
           <StatusBar barStyle="dark-content" />
           {this.renderContent()}
         </View>
-      ); 
+      );
   }
 }

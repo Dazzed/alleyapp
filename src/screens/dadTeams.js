@@ -1,5 +1,5 @@
 import React, { Component,  } from 'react';
-import { View, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
+import { View, TouchableHighlight, AsyncStorage, Image, ScrollView} from 'react-native';
 import { GET_USER, GET_TEAMS } from '../graphql/queries';
 
 import { Query } from "react-apollo";
@@ -9,14 +9,31 @@ import style from 'styles/profile';
 import styles from 'styles/help';
 
 import { Text, Icon } from 'react-native-elements';
+import Swipeable from 'react-native-swipeable';
 
 
 export default class DadTeams extends Component {
+
+  rightButtons = [
+    <TouchableHighlight style = {style.swipeViewOption1} onPress={() => this.actionSwipeOption1()}><Text style = {{color: 'white', textAlign:'center',}}>Make team Active</Text></TouchableHighlight>,
+    <TouchableHighlight style = {style.swipeViewOption2} onPress={() => this.actionSwipeOption2()}><Text style = {{color: 'white',textAlign:'center',}}>Delete Team</Text></TouchableHighlight>
+  ];
+
+  swipeable = null;
+
+  handleUserBeganScrollingParentView() {
+    this.swipeable.recenter();
+  }
+
+
   constructor() {
     super();
     this.state = {
       member: '',
-      uniqueKey: 1
+      uniqueKey: 1,
+      isSwiping: false,
+      isCloseSwipe: false,
+      show_something: false,
     };
   }
 
@@ -27,7 +44,19 @@ export default class DadTeams extends Component {
     headerStyle: {
       backgroundColor: Color.main
     },
-    headerLeft: null
+    headerLeft: null,
+    headerRight: (
+      <TouchableHighlight onPress={() =>  {navigate('newTeam')}}>
+        <View style={{width: 40,height:40,alignItems: 'center',marginRight: 5}}>
+          <Image style={{
+            width: 36,
+            height: 39,
+            borderRadius: 18
+          }}
+          source={require('../assets/images/add_icon_white.png')} />
+        </View>
+      </TouchableHighlight>
+    ),
   });
 
   showDadInfo = () => {
@@ -35,6 +64,19 @@ export default class DadTeams extends Component {
       id: this.state.member
     });
   }
+
+  actionSwipeOption1 = () => {
+    alert('Button1 Click');
+  }
+
+  actionSwipeOption2 = () => {
+    alert('Button2 Click');
+  }
+
+  clickAddTeam = () => {
+    this.props.navigation.navigate('newTeam');
+  }
+
   showTeamDetail = team => {
     this.props.navigation.navigate('teamProfile', {
       id: team.id,
@@ -44,7 +86,7 @@ export default class DadTeams extends Component {
       teamPictureUrl: team.teamPictureUrl
     })
   }
-  
+
   async componentWillMount() {
     let user = await AsyncStorage.getItem('USER');
 
@@ -54,10 +96,10 @@ export default class DadTeams extends Component {
   }
   render() {
     return (
-      <ScrollView>
+      <ScrollView scrollEnabled={!this.state.isSwiping}>
         <View style={style.container}>
           <View style={style.subContainer}>
-            <View style={style.formContainer}>
+            <View >
             {(this.state.member != '') ?
               <Query query={GET_USER} variables={{ id: this.state.member }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
@@ -75,7 +117,7 @@ export default class DadTeams extends Component {
                           }}
                           source={{
                             uri: (user_R.profilePictureUrl) ? user_R.profilePictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                          }} /> 
+                          }} />
                           <Text style={style.partnerName}>{user_R.name}</Text>
                         </View>
                       </TouchableHighlight>
@@ -98,29 +140,40 @@ export default class DadTeams extends Component {
                           return member_user.id !== this.state.member
                         })
                         return (
-                          <View style={style.flexItem} key={team.id}>
-                            <TouchableHighlight style={style.flexItemInner} onPress={() => this.showTeamDetail(team)}>
-                              <View>
-                                <Image style={{
-                                  width: 50,
-                                  height: 50,
-                                  borderRadius: 25
-                                }}
-                                  source={{
-                                    uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                  }} />
-                                <Text style={[style.teamInfo]}>
-                                  {team.title}
-                                </Text>
-                                {partners.map(partner => {
-                                  return (
-                                    <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
-                                  ); 
-                                })
-                              }
+                              <View style={style.flexItem1} key={team.id}>
+                              <Swipeable
+                                  onRef={ref => this.swipeable = ref}
+                                  onSwipeStart={() => this.setState({isSwiping: true})}
+                                  onSwipeRelease={() => this.setState({isSwiping: false})}
+                                  closeOnRowPress = {this.state.isCloseSwipe}
+                                  rightButtons = {this.rightButtons}>
+
+                                  <TouchableHighlight style={style.flexItemInner1} onPress={() => this.showTeamDetail(team)}>
+                                    <View style= {style.flexRow}>
+                                      <Image style={{
+                                        width: 50,
+                                        height: 50,
+                                        borderRadius: 25
+                                      }}
+                                        source={{
+                                          uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                        }} />
+                                      <View style= {style.flexColumn}>
+                                          <Text style={[style.teamInfo]}>
+                                            {team.title}
+                                          </Text>
+                                          {partners.map(partner => {
+                                              return (
+                                                <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
+                                              );
+                                            })
+                                          }
+                                      </View>
+
+                                    </View>
+                                  </TouchableHighlight>
+                                </Swipeable>
                               </View>
-                            </TouchableHighlight>
-                          </View>
                         );
                       })
                     }
@@ -129,21 +182,6 @@ export default class DadTeams extends Component {
                 :
                 <View></View>
                 }
-                <View style={style.flexItem}>
-                  <TouchableHighlight style={style.flexItemInner} onPress={() => this.props.navigation.navigate('newTeam')}>
-                    <View style={style.flexItemInner}>
-                      <Image style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: 25
-                      }}
-                        source={require('../assets/images/add_team.png')} />
-                      <Text style={[style.teamInfo]}>
-                        Add New Team
-                      </Text>
-                    </View>
-                  </TouchableHighlight>
-                </View>
               </View>
             </View>
           </View>
