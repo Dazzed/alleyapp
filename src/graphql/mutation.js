@@ -87,6 +87,7 @@ export const DAUGHTER_CREATE_MUTATION = gql`
   }
 `;
 
+
 export const UPDATE_TEAM_MUTATION = gql`
   mutation TeamUpdate($id: ID!, $members: [ID!]) {
     team_U(
@@ -134,6 +135,23 @@ export const ANSWER_CHALLENGE_MUTATION = gql`
 }
 `;
 
+export const ANSWER_CHALLENGE_EGG_TOSS_MUTATION = gql`
+  mutation AnswerChallengeEggToss($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!,$type: String!,$data: String! , $dataObj: Object!) {
+    challengeResponse_C(
+      input:{
+        userID: $userID
+        missionID: $missionID
+        teamId: $teamId
+        challengeID: $challengeID
+        requestID: $requestID
+        type: $type
+        data: $data
+        dataObj: $dataObj
+    }
+  )
+}
+`;
+
 export const ANSWER_CHALLENGE_I_SPY_MUTATION = gql`
   mutation AnswerChallengeISpy($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!,$type: String!,$data: String!) {
     challengeResponse_C(
@@ -147,5 +165,13 @@ export const ANSWER_CHALLENGE_I_SPY_MUTATION = gql`
         data: $data
     }
   )
+}
+`;
+
+export const DELETE_TEAM = gql`
+mutation DeleteTeam($teamID: ID!){
+team_D(
+   id: $teamID
+)
 }
 `;

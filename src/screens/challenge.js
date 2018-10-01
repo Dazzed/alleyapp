@@ -3,7 +3,7 @@ import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, Scroll
 import { GET_CHALLENGE } from '../graphql/queries';
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
-import { ANSWER_CHALLENGE_MUTATION, ANSWER_CHALLENGE_I_SPY_MUTATION } from '../graphql/mutation';
+import { ANSWER_CHALLENGE_MUTATION, ANSWER_CHALLENGE_I_SPY_MUTATION , ANSWER_CHALLENGE_EGG_TOSS_MUTATION} from '../graphql/mutation';
 
 import Color from 'constants/colors';
 import style from 'styles/challenge';
@@ -59,7 +59,7 @@ export default class Challenge extends Component {
       videoSource: null,
       isRequestForImage: true,
       isSetDefaultImage: true,
-      setImageFromLocal: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+      setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
     this.challengeTimedHunt = this.challengeTimedHunt.bind(this);
@@ -70,6 +70,7 @@ export default class Challenge extends Component {
 
   }
   pos = 0;
+
   chatIcons = [
     { file: require('../assets/images/chat_question1.png') },
     { file: require('../assets/images/chat_question2.png') },
@@ -157,12 +158,18 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
         console.log('missionID ID iss: '+this.state.missionID)
         console.log('Reqest ID iss: '+this.state.requestIDEggToss)
+        console.log(161,JSON.stringify(this.state.selectedEggTossValues))
+        let objj = {
+          data: this.state.selectedEggTossValues
+        }
 
-        // const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
-        // console.log(165, data.data.challengeResponse_C);
-        // if(data.data.challengeResponse_C.length > 10){
-        //   this.setState({showChallengeArtboard: true})
-        // }
+        console.log(166,JSON.stringify(objj))
+
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,type: "text",data: "none",dataObj: objj}});
+        console.log(169, data.data.challengeResponse_C);
+        if(data.data.challengeResponse_C.length > 10){
+          this.setState({showChallengeArtboard: true})
+        }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       }
@@ -266,7 +273,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                     height: 150,
                                     marginRight: 15,
                                   }}
-                                  source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
+                                  source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromLocal}
                                 />
                               </TouchableOpacity>
                           </View>
@@ -342,7 +349,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                   width: 150,
                                   height: 150,
                                 }}
-                                source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
+                                source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromLocal}
                               />
                             </TouchableOpacity>
                         </View>
@@ -445,7 +452,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   renderChallengeOne = challenge => {
     return (
-      <Mutation mutation={ANSWER_CHALLENGE_MUTATION}>
+      <Mutation mutation={ANSWER_CHALLENGE_EGG_TOSS_MUTATION}>
         {(challengeResponse_C) => (
           <View  style={style.requestItemParent}>
             <View style={style.requestItemBg1}>
@@ -467,15 +474,20 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
+  //MahadevWorkkk
   renderFieldsOne = challenge => {
     if (this.pos === 0) {
-      this.setState({requestResponseEggToss: challenge.requests});
-      let values = new Array(challenge.requests.length)
-      for(let i = 0; i<values.length;i++){
-          values[i] = "";
+      let answerObject = [];
+      for(let i = 0; i < challenge.requests.length;i++){
+        var eggTossAnswer = {
+            "requestId":challenge.requests[i].id,
+            "type" : challenge.requests[i].type,
+            "data": ""
+          }
+          answerObject.push(eggTossAnswer);
       }
-      this.setState({selectedEggTossValues: values,isLoadChallengeOne: true})
-      this.pos = 1
+      this.setState({selectedEggTossValues: answerObject,isLoadChallengeOne: true});
+      this.pos = 1;
     }
     return (
       challenge.requests.map((request,index) => {
@@ -514,7 +526,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                           width: 150,
                           height: 150,
                         }}
-                        source={this.state.isSetDefaultImage ? {uri:this.state.setImageFromLocal} : this.state.setImageFromLocal}
+                        source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromLocal}
                       />
                     </TouchableOpacity>
                 </View>
@@ -551,13 +563,12 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   setEggTossOptionsValue(index, value){
-      console.log(554, this.state.requestResponseEggToss)
-      let values = this.state.selectedEggTossValues
-      values[index]= value
-      
-      this.setState({
-        selectedEggTossValues: values,
-      })
+      console.log(562, this.state.selectedEggTossValues);
+      console.log(563, this.state.selectedEggTossValues.length);
+      let selectedEggTossValues = this.state.selectedEggTossValues;
+      this.state.selectedEggTossValues[index].data = value;
+      this.setState({ selectedEggTossValues: [...selectedEggTossValues]});
+      console.log(565, this.state.selectedEggTossValues);
   }
 
   isChallengeTwoSetInState = false;
@@ -759,11 +770,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
-      console.log(740, this.state.selectedEggTossValues);
-      console.log(775, this.state.requestResponseEggToss);
+      let ar = [];
+      ar.push(this.state.selectedEggTossValues)
+      console.log(764, this.state.selectedEggTossValues);
+      console.log(765, ar);
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
-          if(this.state.selectedEggTossValues[i] === ""){
+          console.log(769, this.state.selectedEggTossValues[i].data)
+          if(this.state.selectedEggTossValues[i].data === ""){
             allValueSet = false;
             break;
           }
@@ -854,10 +868,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     });
 
     if(this.state.isLoadChallengeOne){
-      let obj = this.state.selectedEggTossValues
-      obj[this.state.challengeOneCurrentIndex] = this.state.setImageAnswer;
-      console.log('738'+obj)
-      this.setState({selectedEggTossValues: obj})
+      console.log(860,this.state.challengeOneCurrentIndex)
+      this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, this.state.setImageAnswer);
     }
   }
 
@@ -962,7 +974,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         <View style={style.challengeTitleView}>
                           <Text style={style.challengeTitle}>{challenge_Team.title}</Text>
                           <View style={style.challengePointsView}>
-                            <Text style={style.challengePoints}>{challenge_Team.maxPts} Pts</Text>
+                            <Text style={style.challengePoints}>{challenge_Team.pctDone} Pts</Text>
                           </View>
                         </View>
                       </View>

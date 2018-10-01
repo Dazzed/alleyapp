@@ -1,7 +1,8 @@
 import React, { Component,  } from 'react';
 import { View, TouchableHighlight, AsyncStorage, Image, ScrollView} from 'react-native';
 import { GET_USER, GET_TEAMS } from '../graphql/queries';
-
+import { Mutation } from "react-apollo";
+import { DELETE_TEAM } from '../graphql/mutation';
 import { Query } from "react-apollo";
 
 import Color from 'constants/colors';
@@ -15,8 +16,8 @@ import Swipeable from 'react-native-swipeable';
 export default class DadTeams extends Component {
 
   rightButtons = [
-    <TouchableHighlight style = {style.swipeViewOption1} onPress={() => this.actionSwipeOption1()}><Text style = {{color: 'white', textAlign:'center',}}>Make team Active</Text></TouchableHighlight>,
-    <TouchableHighlight style = {style.swipeViewOption2} onPress={() => this.actionSwipeOption2()}><Text style = {{color: 'white',textAlign:'center',}}>Delete Team</Text></TouchableHighlight>
+    <TouchableHighlight style = {style.swipeViewOption1} onPress={() => this.actionMakeTeamActive()}><Text style = {{color: 'white', textAlign:'center',}}>Make team Active</Text></TouchableHighlight>,
+    <TouchableHighlight style = {style.swipeViewOption2} onPress={() => this.actionDeleteTeam()}><Text style = {{color: 'white',textAlign:'center',}}>Delete Team</Text></TouchableHighlight>
   ];
 
   swipeable = null;
@@ -34,7 +35,10 @@ export default class DadTeams extends Component {
       isSwiping: false,
       isCloseSwipe: false,
       show_something: false,
+      teamID: null,
+      team_D: null,
     };
+    this.deleteTeam = this.deleteTeam.bind(this);
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
@@ -65,16 +69,32 @@ export default class DadTeams extends Component {
     });
   }
 
-  actionSwipeOption1 = () => {
-    alert('Button1 Click');
+  actionMakeTeamActive = () => {
+    AsyncStorage.setItem('ACTIVE_TEAM', this.state.teamID);
   }
 
-  actionSwipeOption2 = () => {
-    alert('Button2 Click');
+  actionDeleteTeam = () => {
+    this.deleteTeam(this.state.team_D);
   }
 
   clickAddTeam = () => {
     this.props.navigation.navigate('newTeam');
+  }
+
+  deleteTeam = async targetMutation => {
+      try {
+        console.log('teamId iss: '+this.state.teamID)
+
+        const data = await targetMutation({ variables: {teamID: this.state.teamID}});
+        console.log(88, data.data.team_D);
+        if(data.data.team_D === true){
+
+        }else{
+            alert('Team not deleted.')
+        }
+      } catch (e) {
+        console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
   }
 
   showTeamDetail = team => {
@@ -140,40 +160,44 @@ export default class DadTeams extends Component {
                           return member_user.id !== this.state.member
                         })
                         return (
-                              <View style={style.flexItem1} key={team.id}>
-                              <Swipeable
-                                  onRef={ref => this.swipeable = ref}
-                                  onSwipeStart={() => this.setState({isSwiping: true})}
-                                  onSwipeRelease={() => this.setState({isSwiping: false})}
-                                  closeOnRowPress = {this.state.isCloseSwipe}
-                                  rightButtons = {this.rightButtons}>
+                          <Mutation mutation = {DELETE_TEAM}>
+                            {(team_D) => (
+                                <View style={style.flexItem1} key={team.id}>
+                                <Swipeable
+                                    onRef={ref => this.swipeable = ref}
+                                    onSwipeStart={() => this.setState({isSwiping: true})}
+                                    onSwipeRelease={() => this.setState({isSwiping: false,teamID: team.id, team_D: team_D})}
+                                    closeOnRowPress = {this.state.isCloseSwipe}
+                                    rightButtons = {this.rightButtons}>
 
-                                  <TouchableHighlight style={style.flexItemInner1} onPress={() => this.showTeamDetail(team)}>
-                                    <View style= {style.flexRow}>
-                                      <Image style={{
-                                        width: 50,
-                                        height: 50,
-                                        borderRadius: 25
-                                      }}
-                                        source={{
-                                          uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                        }} />
-                                      <View style= {style.flexColumn}>
-                                          <Text style={[style.teamInfo]}>
-                                            {team.title}
-                                          </Text>
-                                          {partners.map(partner => {
-                                              return (
-                                                <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
-                                              );
-                                            })
-                                          }
+                                    <TouchableHighlight style={style.flexItemInner1} onPress={() => this.showTeamDetail(team)}>
+                                      <View style= {style.flexRow}>
+                                        <Image style={{
+                                          width: 50,
+                                          height: 50,
+                                          borderRadius: 25
+                                        }}
+                                          source={{
+                                            uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                          }} />
+                                        <View style= {style.flexColumn}>
+                                            <Text style={[style.teamInfo]}>
+                                              {team.title}
+                                            </Text>
+                                            {partners.map(partner => {
+                                                return (
+                                                  <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
+                                                );
+                                              })
+                                            }
+                                        </View>
+
                                       </View>
-
-                                    </View>
-                                  </TouchableHighlight>
-                                </Swipeable>
-                              </View>
+                                    </TouchableHighlight>
+                                  </Swipeable>
+                                </View>
+                            )}
+                          </Mutation>
                         );
                       })
                     }
