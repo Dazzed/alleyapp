@@ -15,6 +15,7 @@ export const getToken = async () => {
   }
 
   token = await AsyncStorage.getItem(AUTH_TOKEN);
+  token = await AsyncStorage.getItem('AUTH_TOKEN');
   return token;
 };
 
@@ -60,4 +61,3 @@ export const getUser = async () => {
   user = await AsyncStorage.getItem(USER);
   return user;
 };
-

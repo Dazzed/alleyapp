@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image,AsyncStorage} from 'react-native';
 
 import Color from 'constants/colors';
 import style from 'styles/signin';
@@ -10,6 +10,7 @@ import { Text, Icon } from 'react-native-elements';
 export default class SocialFeed extends Component {
   constructor() {
     super();
+    AsyncStorage.setItem('IS_LOGIN', 'true');
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({

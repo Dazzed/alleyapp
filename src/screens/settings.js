@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text,AsyncStorage} from 'react-native';
 
 import style from 'styles/settings';
 import Color from 'constants/colors';
@@ -24,6 +24,7 @@ export default class Settings extends Component {
           backgroundColor={Color.red}
           textStyle={{ fontWeight: 'bold' }}
           onPress={() => {
+            AsyncStorage.setItem('IS_LOGIN', 'false');
             this.props.screenProps.signOut();
           }}
         />

@@ -26,6 +26,16 @@ export default class SignIn extends Component {
     header: null
   };
 
+  componentDidMount(){
+    AsyncStorage.getItem('IS_LOGIN').then((value) => {
+        if(value === 'true'){
+          let { screenProps: { signIn } } = this.props;
+          signIn();
+        }
+    });
+
+  }
+
   signIn = async targetMutation => {
     try {
       this.setState({
