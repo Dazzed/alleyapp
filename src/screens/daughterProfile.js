@@ -4,7 +4,7 @@ import { Mutation, Query } from "react-apollo";
 import PhotoUpload from 'react-native-photo-upload';
 import axios from 'axios';
 import DatePicker from 'react-native-datepicker'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Color from 'constants/colors';
 import style from 'styles/profile';
 
@@ -126,8 +126,7 @@ export default class DaughterProfile extends Component {
     return (
       <Mutation mutation={EDIT_USER_MUTATION}>
         {(user_U) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
+          <KeyboardAwareScrollView>
             <ScrollView>
               <Query query={GET_USER} variables={{ id }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
@@ -246,7 +245,7 @@ export default class DaughterProfile extends Component {
                 }}
               </Query>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         )}
       </Mutation>
     );

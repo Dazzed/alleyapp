@@ -59,6 +59,7 @@ export default class Challenge extends Component {
       videoSource: null,
       isRequestForImage: true,
       isSetDefaultImage: true,
+      setImageFromServer: '',
       setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
@@ -133,15 +134,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   challengeFoodCrazy = async targetMutation => {
       try {
         var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setUpdatedArtBoard iss: '+this.state.setUpdatedArtBoard)
-        console.log('Reqest ID iss: '+this.state.requestIDFoodCrazy)
-
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
-        console.log(165, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           this.setState({showChallengeArtboard: true})
         }
@@ -159,16 +152,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('missionID ID iss: '+this.state.missionID)
         console.log('Reqest ID iss: '+this.state.requestIDEggToss)
         console.log(161,JSON.stringify(this.state.selectedEggTossValues))
-        let objj = {
+        let answerObject = {
           data: this.state.selectedEggTossValues
         }
+        console.log(165,JSON.stringify(answerObject))
 
-        console.log(166,JSON.stringify(objj))
-
-        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,type: "text",data: "none",dataObj: objj}});
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
         console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
-          this.setState({showChallengeArtboard: true})
+          this.props.navigation.goBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -178,19 +170,10 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   challengeTimedHunt = async targetMutation => {
       try {
         var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
-        console.log('challenge3Question  iss: '+JSON.stringify(this.state.challenge3Questions[this.state.challenge3CurrentIndex]))
-        console.log('challenge3Question Reqest ID iss: '+this.state.challenge3Questions[this.state.challenge3CurrentIndex].id)
-
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.challenge3Questions[this.state.challenge3CurrentIndex].id,type: "photo",data: this.state.setImageAnswer,duration: "121"}});
-        console.log(165, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
-              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true, setImageFromLocal: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'});
+              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true,setImageAnswer: '',});
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
                   this.setState({btnTitle: "SUBMIT"});
               }
@@ -204,19 +187,12 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   challengeISpy = async targetMutation => {
       try {
         var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setImageAnswer iss: '+this.state.setImageAnswer)
-        console.log('activeISpyQuestionType  iss: '+this.state.activeISpyQuestionType)
-        console.log('activeISpyQuestionID Reqest ID iss: '+this.state.activeISpyQuestionID)
         var userAnswer = JSON.stringify({
             "label":this.state.setPhotoLable,
             "url" : this.state.setImageAnswer
           })
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.activeISpyQuestionID ,type:this.state.activeISpyQuestionType ,data: userAnswer }});
-        console.log(428, data.data.challengeResponse_C);
+
         if(data.data.challengeResponse_C.length > 10){
           const requestId = this.state.activeISpyQuestionID;
           const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
@@ -273,7 +249,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                     height: 150,
                                     marginRight: 15,
                                   }}
-                                  source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromLocal}
+                                  source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
                                 />
                               </TouchableOpacity>
                           </View>
@@ -343,13 +319,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     </View>
                     <View style={style.pictureViewBg}>
                         <View style={style.promptPictureBg}>
-                          <TouchableOpacity onPress={this.selectPhotoTapped.bind(this,-1)}>
+                          <TouchableOpacity onPress={!this.state.stopwatchStart ? this.checkTimerStart : this.selectPhotoTapped.bind(this,-1)} >
                             <Image
                                 style={{
                                   width: 150,
                                   height: 150,
                                 }}
-                                source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromLocal}
+                                source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
                               />
                             </TouchableOpacity>
                         </View>
@@ -449,7 +425,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       })
   }
 
-
   renderChallengeOne = challenge => {
     return (
       <Mutation mutation={ANSWER_CHALLENGE_EGG_TOSS_MUTATION}>
@@ -474,7 +449,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  //MahadevWorkkk
   renderFieldsOne = challenge => {
     if (this.pos === 0) {
       let answerObject = [];
@@ -526,7 +500,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                           width: 150,
                           height: 150,
                         }}
-                        source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromLocal}
+                        source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
                       />
                     </TouchableOpacity>
                 </View>
@@ -667,7 +641,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-
   renderEitherOr = data => {
 
     if (this.pos === 0) {
@@ -792,13 +765,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {
       console.log(301, this.state.selectedFoodCrazyValues);
+      console.log(768, challenge.artboardDetails);
       let updatedAetBoardValue = challenge.artboardDetails.toString();
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedFoodCrazyValues.length;i++){
           if(this.state.selectedFoodCrazyValues[i] !== ""){
               var replacementString = '\\(Description #'+(i+1)+'\\)';
               var myRegExp = new RegExp(replacementString,'g');
-              updatedAetBoardValue = updatedAetBoardValue.replace(myRegExp, this.state.selectedFoodCrazyValues[i]);
+              updatedAetBoardValue = updatedAetBoardValue.replace(myRegExp, '<b>'+this.state.selectedFoodCrazyValues[i]+'</b>');
           }else{
             allValueSet = false;
           }
@@ -811,6 +785,10 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           alert("Please fill all values.")
       }
 
+  };
+
+  checkTimerStart = () => {
+    alert('Please select image first.');
   };
 
   saveTimedHuntAnswer = (index,challengeResponse_C) => {
@@ -881,7 +859,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
     });
-    console.log(825,data.data.Location);
+    console.log(880,data.data.Location);
     this.setState({
       setImageAnswer: data.data.Location,
     });
@@ -908,6 +886,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   showISpyQuestion = (item, question, url,type, requestID,response) => {
+    console.log(907,url)
     if(response == null){
       this.setState({
         activeISpyQuestionTitle: question,
@@ -916,6 +895,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         activeISpyQuestionUrl: url,
         activeISpyQuestionType:type,
         activeISpyQuestionID: requestID,
+        isSetDefaultImage: true,
+        setImageAnswer: '',
       })
     }else{
       alert("You already answerd this question.")
@@ -1031,7 +1012,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                           return (
                             <View key={desc.id} style={style.challengeDetailsView}>
                               <View style={style.challengeDescriptionView}>
-                                <ScrollView>
+                                <ScrollView ref={this._setScrollView} >
                                   <Text style={style.challengeDescription}>{desc.data}</Text>
                                 </ScrollView>
                               </View>
@@ -1098,7 +1079,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           let imagePath = { uri: 'data:image/jpeg;base64,' + response.data} ;
           this.setState({
             isSetDefaultImage: false,
-            setImageFromLocal: imagePath
+            setImageFromServer: imagePath
           });
           if (source) {
             this.loadPicture(source)
@@ -1111,5 +1092,4 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       }
     });
   }
-
 }

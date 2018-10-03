@@ -7,6 +7,7 @@ import DatePicker from 'react-native-datepicker'
 
 import Color from 'constants/colors';
 import style from 'styles/profile';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { FormLabel, FormInput, Button, Text } from 'react-native-elements';
 import { EDIT_USER_MUTATION } from '../graphql/mutation';
@@ -123,8 +124,7 @@ export default class DadProfile extends Component {
     return (
       <Mutation mutation={EDIT_USER_MUTATION}>
         {(user_U) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
+          <KeyboardAwareScrollView>
             <ScrollView>
               <Query query={GET_USER} variables={{ id }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
@@ -243,7 +243,7 @@ export default class DadProfile extends Component {
                 }}
               </Query>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         )}
       </Mutation>
     );

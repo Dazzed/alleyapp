@@ -136,7 +136,7 @@ export const ANSWER_CHALLENGE_MUTATION = gql`
 `;
 
 export const ANSWER_CHALLENGE_EGG_TOSS_MUTATION = gql`
-  mutation AnswerChallengeEggToss($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!,$type: String!,$data: String! , $dataObj: Object!) {
+  mutation AnswerChallengeEggToss($userID: ID!, $missionID: ID!, $teamId: ID!, $challengeID: ID!,$requestID: Int!, $data: String!) {
     challengeResponse_C(
       input:{
         userID: $userID
@@ -144,9 +144,8 @@ export const ANSWER_CHALLENGE_EGG_TOSS_MUTATION = gql`
         teamId: $teamId
         challengeID: $challengeID
         requestID: $requestID
-        type: $type
+        type: "text"
         data: $data
-        dataObj: $dataObj
     }
   )
 }
