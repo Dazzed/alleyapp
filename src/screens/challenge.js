@@ -70,6 +70,18 @@ export default class Challenge extends Component {
     this.myRef = React.createRef()
 
   }
+
+  componentDidMount(){
+    AsyncStorage.getItem('IS_TIMER_RESET').then((value) => {
+        if(value === 'true'){
+            this.setState({stopwatchReset: false});
+        }else{
+            this.setState({stopwatchReset: true});
+        }
+        AsyncStorage.setItem('IS_TIMER_RESET', 'false');
+    });
+  }
+
   pos = 0;
 
   chatIcons = [
@@ -110,11 +122,13 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('setImageAnswer iss: '+this.state.setChitChatAnswer)
         console.log('Reqest ID iss: '+this.state.requestIDChitChat)
         console.log('Reqest ID iss: '+this.state.selectedEitherOrOptions)
+        this.setState({selectedEitherOrOptions: "["+this.state.selectedEitherOrOptions+"]"})
+        console.log('selectedEitherOrOptions After ID iss: '+this.state.selectedEitherOrOptions)
 
         if(this.state.requestTypeChitChat === 'bubble') {
             data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
         }else{
-          data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
+            data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
         }
 
         console.log(123, data.data.challengeResponse_C);
@@ -726,7 +740,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         challenge3ShowPrompt: true,
         challenge3CurrentIndex:index,
         stopwatchStart: true,
-        stopwatchReset: true,
       })
 
       for (var i = 0  ; i < this.state.challenge3Questions.length ; i++) {
@@ -1012,7 +1025,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                           return (
                             <View key={desc.id} style={style.challengeDetailsView}>
                               <View style={style.challengeDescriptionView}>
-                                <ScrollView ref={this._setScrollView} >
+                                <ScrollView>
                                   <Text style={style.challengeDescription}>{desc.data}</Text>
                                 </ScrollView>
                               </View>

@@ -29,11 +29,11 @@ export default class SignIn extends Component {
   componentDidMount(){
     AsyncStorage.getItem('IS_LOGIN').then((value) => {
         if(value === 'true'){
+          AsyncStorage.setItem('IS_TIMER_RESET', 'false');
           let { screenProps: { signIn } } = this.props;
           signIn();
         }
     });
-
   }
 
   signIn = async targetMutation => {
@@ -60,6 +60,7 @@ export default class SignIn extends Component {
         }
         console.log('team_Dashboard iss: '+JSON.stringify(data.data.user_Login.teams[0].id))
         AsyncStorage.setItem('ACTIVE_TEAM', data.data.user_Login.teams[0].id);
+        AsyncStorage.setItem('IS_TIMER_RESET', 'true');
         let { screenProps: { signIn } } = this.props;
         signIn();
       } else {
