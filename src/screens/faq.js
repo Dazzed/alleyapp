@@ -16,7 +16,7 @@ export default class Faq extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'FAQ',
+    title: 'FAQs',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
@@ -29,7 +29,7 @@ export default class Faq extends Component {
       id: faq_item
     })
   }
-  
+
   render() {
     return (
       <View style={style.container}>
@@ -51,7 +51,7 @@ export default class Faq extends Component {
                       </View>
                     );
                   })
-                }                  
+                }
               }}
             </Query>
           </View>

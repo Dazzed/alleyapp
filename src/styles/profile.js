@@ -10,6 +10,11 @@ module.exports = StyleSheet.create({
     backgroundColor: Color.white,
     justifyContent: 'space-between'
   },
+
+  containerScrollbar: {
+    flex: 1,
+    backgroundColor: Color.white,
+  },
   photoContainer: {
     padding: 10,
     flex: 1,
@@ -115,10 +120,11 @@ module.exports = StyleSheet.create({
   flexItem: { width: '50%', padding: 5, height: 125, justifyContent: 'center', alignItems: 'center' },
   flexItem1: { width: '100%', height: 75, justifyContent: 'center', alignItems: 'center' },
   flexItemInner: { width: '100%', backgroundColor: Color.gray, padding: 10, justifyContent: 'center', alignItems: 'center'},
-  flexItemInner1: { width: '100%', height: 60, backgroundColor: Color.gray, justifyContent: 'flex-start', alignItems: 'flex-start'},
+  flexItemInnerInActive: { width: '100%', height: 60, backgroundColor: Color.gray, justifyContent: 'flex-start', alignItems: 'flex-start'},
+  flexItemInnerActive: { width: '100%', height: 60, justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: 'rgb(240, 128, 128)'},
   flexRow: { flex: 1, flexDirection: 'row', flexWrap: 'wrap',justifyContent: 'center', alignItems: 'center',marginLeft: 10,},
   flexColumn: {flexDirection: 'column', marginLeft: 15,justifyContent: 'flex-start', alignItems: 'flex-start'},
-  teamInfo: { fontWeight: 'bold', marginTop: 2, textAlign: 'center' },
+  teamInfo: { fontWeight: 'bold', marginTop: 2, textAlign: 'center',},
   partnerName: {  marginTop: 2, textAlign: 'center' },
   swipeViewOption1:{
     backgroundColor: 'green',

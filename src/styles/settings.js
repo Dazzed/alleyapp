@@ -6,7 +6,7 @@ const { width } = Dimensions.get('window');
 
 module.exports = StyleSheet.create({
   container: {
-    backgroundColor: Color.background,
+    backgroundColor: Color.white,
     padding: 20,
     flex: 1
   },

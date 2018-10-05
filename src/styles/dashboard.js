@@ -84,7 +84,7 @@ module.exports = StyleSheet.create({
     textAlign: 'right'
   },
   challengeLabel: {
-    fontSize: 14, 
+    fontSize: 14,
     color: "#0D0760",
     fontWeight: 'bold',
     marginLeft: 10,

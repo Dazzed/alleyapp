@@ -7,25 +7,12 @@ import { Query } from "react-apollo";
 
 import Color from 'constants/colors';
 import style from 'styles/profile';
-import styles from 'styles/help';
 
 import { Text, Icon } from 'react-native-elements';
 import Swipeable from 'react-native-swipeable';
 
 
 export default class DadTeams extends Component {
-
-  rightButtons = [
-    <TouchableHighlight style = {style.swipeViewOption1} onPress={() => this.actionMakeTeamActive()}><Text style = {{color: 'white', textAlign:'center',}}>Make team Active</Text></TouchableHighlight>,
-    <TouchableHighlight style = {style.swipeViewOption2} onPress={() => this.actionDeleteTeam()}><Text style = {{color: 'white',textAlign:'center',}}>Delete Team</Text></TouchableHighlight>
-  ];
-
-  swipeable = null;
-
-  handleUserBeganScrollingParentView() {
-    this.swipeable.recenter();
-  }
-
 
   constructor() {
     super();
@@ -37,9 +24,19 @@ export default class DadTeams extends Component {
       show_something: false,
       teamID: null,
       team_D: null,
+      teamIDActivated: null,
+      currentlyOpenSwipeable: null
     };
     this.deleteTeam = this.deleteTeam.bind(this);
   }
+
+  handleScroll = () => {
+    const {currentlyOpenSwipeable} = this.state;
+
+    if (currentlyOpenSwipeable) {
+      currentlyOpenSwipeable.recenter();
+    }
+  };
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
     title: 'TEAMS',
@@ -63,6 +60,13 @@ export default class DadTeams extends Component {
     ),
   });
 
+  componentDidMount(){
+    AsyncStorage.getItem('ACTIVE_TEAM').then((value) => {
+        this.setState({teamIDActivated: value})
+        console.log('teamId iss: '+this.state.teamIDActivated)
+    });
+  }
+
   showDadInfo = () => {
     this.props.navigation.navigate('dadProfile', {
       id: this.state.member
@@ -70,7 +74,9 @@ export default class DadTeams extends Component {
   }
 
   actionMakeTeamActive = () => {
+    this.setState({teamIDActivated: this.state.teamID})
     AsyncStorage.setItem('ACTIVE_TEAM', this.state.teamID);
+    this.state.currentlyOpenSwipeable.recenter();
   }
 
   actionDeleteTeam = () => {
@@ -88,7 +94,7 @@ export default class DadTeams extends Component {
         const data = await targetMutation({ variables: {teamID: this.state.teamID}});
         console.log(88, data.data.team_D);
         if(data.data.team_D === true){
-
+            this.state.currentlyOpenSwipeable.recenter();
         }else{
             alert('Team not deleted.')
         }
@@ -115,8 +121,21 @@ export default class DadTeams extends Component {
     })
   }
   render() {
+    const {currentlyOpenSwipeable} = this.state;
+    const itemProps = {
+      onOpen: (event, gestureState, swipeable) => {
+        if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
+          currentlyOpenSwipeable.recenter();
+        }
+
+        this.setState({currentlyOpenSwipeable: swipeable});
+      },
+      onClose: () => this.setState({currentlyOpenSwipeable: null})
+    };
+
+
     return (
-      <ScrollView scrollEnabled={!this.state.isSwiping}>
+      <ScrollView style={style.containerScrollbar}>
         <View style={style.container}>
           <View style={style.subContainer}>
             <View >
@@ -164,36 +183,44 @@ export default class DadTeams extends Component {
                             {(team_D) => (
                                 <View style={style.flexItem1} key={team.id}>
                                 <Swipeable
-                                    onRef={ref => this.swipeable = ref}
-                                    onSwipeStart={() => this.setState({isSwiping: true})}
-                                    onSwipeRelease={() => this.setState({isSwiping: false,teamID: team.id, team_D: team_D})}
-                                    closeOnRowPress = {this.state.isCloseSwipe}
-                                    rightButtons = {this.rightButtons}>
+                                  onSwipeStart={() => this.setState({isSwiping: true})}
+                                  onSwipeRelease={() => this.setState({isSwiping: false,teamID: team.id, team_D: team_D})}
+                                  rightButtons={[
+                                    <TouchableHighlight style = {style.swipeViewOption1} onPress={() => this.actionMakeTeamActive()}><Text style = {{color: 'white', textAlign:'center',}}>Make team Active</Text></TouchableHighlight>,
+                                    <TouchableHighlight style = {style.swipeViewOption2} onPress={() => this.actionDeleteTeam()}><Text style = {{color: 'white',textAlign:'center',}}>Delete Team</Text></TouchableHighlight>
+                                  ]}
+                                  onRightButtonsOpenRelease={(event, gestureState, swipeable) => {
+                                    if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
+                                      currentlyOpenSwipeable.recenter();
+                                    }
+                                    this.setState({currentlyOpenSwipeable: swipeable});
+                                  }}
+                                  onRightButtonsCloseRelease={() => this.setState({currentlyOpenSwipeable: null})}>
 
-                                    <TouchableHighlight style={style.flexItemInner1} onPress={() => this.showTeamDetail(team)}>
-                                      <View style= {style.flexRow}>
-                                        <Image style={{
-                                          width: 50,
-                                          height: 50,
-                                          borderRadius: 25
-                                        }}
-                                          source={{
-                                            uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-                                          }} />
-                                        <View style= {style.flexColumn}>
-                                            <Text style={[style.teamInfo]}>
-                                              {team.title}
-                                            </Text>
-                                            {partners.map(partner => {
-                                                return (
-                                                  <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
-                                                );
-                                              })
-                                            }
+                                  <TouchableHighlight style={this.state.teamIDActivated === team.id ? style.flexItemInnerActive : style.flexItemInnerInActive} onPress={() => this.showTeamDetail(team)}>
+                                        <View style= {style.flexRow}>
+                                          <Image style={{
+                                            width: 50,
+                                            height: 50,
+                                            borderRadius: 25
+                                          }}
+                                            source={{
+                                              uri: (team.teamPictureUrl) ? team.teamPictureUrl : 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
+                                            }} />
+                                          <View style= {style.flexColumn}>
+                                              <Text style={[style.teamInfo]}>
+                                                {team.title}
+                                              </Text>
+                                              {partners.map(partner => {
+                                                  return (
+                                                    <Text style={[style.partnerName]} key={partner.id}>{partner.name}</Text>
+                                                  );
+                                                })
+                                              }
+                                          </View>
+
                                         </View>
-
-                                      </View>
-                                    </TouchableHighlight>
+                                      </TouchableHighlight>
                                   </Swipeable>
                                 </View>
                             )}
