@@ -11,6 +11,7 @@ export default class SocialFeed extends Component {
   constructor() {
     super();
     AsyncStorage.setItem('IS_LOGIN', 'true');
+
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({

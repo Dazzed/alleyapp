@@ -24,6 +24,13 @@ export const REGISTER_MUTATION = gql`
         password: $password
       }
     )
+    {
+       token
+       user {
+         id
+       }
+       teams
+    }
   }
 `;
 
@@ -84,6 +91,16 @@ export const DAUGHTER_CREATE_MUTATION = gql`
         profilePictureUrl: $profilePictureUrl
       }
     )
+    {
+      user {
+        name
+        email
+        profilePictureUrl
+        id
+      }
+      token
+      teams
+    }
   }
 `;
 
