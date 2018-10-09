@@ -49,7 +49,7 @@ export default class SignIn extends Component {
 
       if (email.trim() !== '' && password.trim() !== '') {
         const data = await targetMutation({ variables: { email, password } });
-        console.log(88, data);
+
         setToken(data.data.user_Login.token);
         setUserInfo(JSON.stringify(data.data.user_Login.user));
         setUser(data.data.user_Login.user.id);
@@ -62,6 +62,7 @@ export default class SignIn extends Component {
         console.log('team_Dashboard iss: '+JSON.stringify(data.data.user_Login.teams[0].id))
         AsyncStorage.setItem('ACTIVE_TEAM', data.data.user_Login.teams[0].id);
         AsyncStorage.setItem('IS_TIMER_RESET', 'true');
+        debugger
         let { screenProps: { signIn } } = this.props;
         signIn();
       } else {

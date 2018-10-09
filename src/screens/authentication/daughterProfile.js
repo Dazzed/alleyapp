@@ -95,7 +95,9 @@ export default class DaughterProfile extends Component {
         members.push(data.data.user_C);
 
         const data2 = await targetMutation2({ variables: { id, members } });
-        this.props.navigation.navigate('signin');
+        console.log(98, data2);
+        let { screenProps: { signIn } } = this.props;
+        signIn();
       } else {
         this.setState({
           error: true,

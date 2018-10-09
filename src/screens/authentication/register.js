@@ -8,7 +8,7 @@ import style from 'styles/signin';
 import { FormLabel, FormInput, Button } from 'react-native-elements';
 
 import { REGISTER_MUTATION } from '../../graphql/mutation';
-import { setUser } from '../../utils/util';
+import { setToken, setUserInfo, setUser, getUser, getActiveTeam, setActiveTeam } from '../../utils/util';
 const EMAIL = 'Email';
 const PASSWORD = 'Password';
 const CONFIRM_PASSWORD = 'Confirm Password';
@@ -27,7 +27,7 @@ export default class Register extends Component {
   static navigationOptions = {
     header: null
   };
-  
+
   register = async targetMutation => {
     try {
       this.setState({
@@ -44,8 +44,11 @@ export default class Register extends Component {
         let is_parent = true;
         if (password == confirm_password) {
           const data = await targetMutation({ variables: { email, password, is_parent } });
+          console.log(47,JSON.stringify(data))
 
-          setUser(data.data.user_C);
+          setToken(data.data.user_C.token);
+          setUserInfo(JSON.stringify(data.data.user_C));
+          setUser(data.data.user_C.user.id);
           this.props.navigation.navigate('teamProfile');
         } else {
           this.setState({
@@ -119,7 +122,7 @@ export default class Register extends Component {
                   textStyle={{ fontWeight: 'bold' }}
                   style={style.button}
                   onPress={this.register.bind(this, user_C)}
-                  
+
                 />
                 <TouchableHighlight onPress={() => this.props.navigation.goBack()}><Text style={style.forgotPassword}>Already have an account? Log In</Text></TouchableHighlight>
                 <Text style={style.footerText}>By creating an account you agree to our{'\n'} <Text style={style.tos} onPress={() => this.props.navigation.navigate('tos')}>Terms of Service</Text> and <Text onPress={() => this.props.navigation.navigate('privacyPolicy')} style={style.tos}>Privacy Policy</Text>

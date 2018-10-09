@@ -63,6 +63,7 @@ export default class Challenge extends Component {
       isSetDefaultImage: true,
       setImageFromServer: '',
       requestForVideo: false,
+      eggTossItemType: "photo",
       setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
@@ -569,6 +570,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       console.log(563, this.state.selectedEggTossValues.length);
       let selectedEggTossValues = this.state.selectedEggTossValues;
       this.state.selectedEggTossValues[index].data = value;
+      if(this.state.selectedEggTossValues[index].type !== 'text'){
+          this.state.selectedEggTossValues[index].type = this.state.eggTossItemType;
+      }
       this.setState({ selectedEggTossValues: [...selectedEggTossValues]});
       console.log(565, this.state.selectedEggTossValues);
   }
@@ -1122,6 +1126,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             isSetDefaultImage: false,
             setImageFromServer: imagePath,
             requestForVideo: false,
+            eggTossItemType: "photo"
           });
           if (source) {
             this.loadPicture(source)
@@ -1131,6 +1136,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           this.setState({
             videoSource: response.uri,
             requestForVideo: true,
+            eggTossItemType: "video"
           });
           console.log(1118, this.state.videoSource);
           if (response.uri) {
