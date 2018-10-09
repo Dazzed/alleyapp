@@ -32,7 +32,6 @@ import DaughterProfile from 'screens/daughterProfile';
 import NewTeam from 'screens/newTeam';
 import NewDaughter from 'screens/newDaughter';
 import Settings from 'screens/settings';
-import SwipeableExample from 'screens/SwipeableExample';
 
 import Home from 'screens/home';
 import ChuckNorris from 'screens/chucknorris';
@@ -154,7 +153,7 @@ export default class Main extends Component {
         },
         fifthTab: {
           screen: StackNavigator({
-            settings: { screen: SwipeableExample }
+            settings: { screen: Settings }
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {

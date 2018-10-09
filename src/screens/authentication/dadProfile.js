@@ -4,7 +4,7 @@ import { Mutation } from "react-apollo";
 import PhotoUpload from 'react-native-photo-upload';
 import axios from 'axios';
 import DatePicker from 'react-native-datepicker'
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Color from 'constants/colors';
 import style from 'styles/profile';
 
@@ -24,7 +24,7 @@ export default class DadProfile extends Component {
     var date = new Date().getDate();
     var month = new Date().getMonth() + 1;
     var year = new Date().getFullYear();
-    
+
     this.today = (month + '/' + date + '/' + year);
     this.state = {
       dad_name: '',
@@ -48,7 +48,7 @@ export default class DadProfile extends Component {
     },
     headerLeft: null
   });
-  
+
   loadPicture = async avatar => {
     let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
       base64String: avatar
@@ -102,8 +102,7 @@ export default class DadProfile extends Component {
     return (
       <Mutation mutation={EDIT_USER_MUTATION}>
         {(user_U) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
+          <KeyboardAwareScrollView>
             <ScrollView>
               <View style={style.subContainer}>
                 <View style={style.photoContainer}>
@@ -205,7 +204,7 @@ export default class DadProfile extends Component {
                 />
               </View>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         )}
       </Mutation>
     );

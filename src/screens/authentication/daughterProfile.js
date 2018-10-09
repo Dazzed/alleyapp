@@ -9,7 +9,7 @@ import DatePicker from 'react-native-datepicker'
 
 import Color from 'constants/colors';
 import style from 'styles/profile';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { FormLabel, FormInput, Button, Text } from 'react-native-elements';
 
 const DAUGHTER_NAME = 'Daughter\'s Name*';
@@ -85,6 +85,7 @@ export default class DaughterProfile extends Component {
         let name = daughter_name;
         let dateOfBirth = dob;
         const data = await targetMutation1({ variables: { phone, name, dateOfBirth, address, interests, affiliations, email, profilePictureUrl, isParent } });
+        console.log(88, data);
 
 
         let members =[];
@@ -94,7 +95,6 @@ export default class DaughterProfile extends Component {
         members.push(data.data.user_C);
 
         const data2 = await targetMutation2({ variables: { id, members } });
-
         this.props.navigation.navigate('signin');
       } else {
         this.setState({
@@ -117,8 +117,7 @@ export default class DaughterProfile extends Component {
         {(team_U) => (
           <Mutation mutation={DAUGHTER_CREATE_MUTATION}>
             {(user_C) => (
-              <KeyboardAvoidingView
-                behavior="padding" style={style.container}>
+              <KeyboardAwareScrollView>
                 <ScrollView>
                   <View style={style.subContainer}>
                     <View style={style.photoContainer}>
@@ -226,7 +225,7 @@ export default class DaughterProfile extends Component {
                     />
                   </View>
                 </ScrollView>
-              </KeyboardAvoidingView>
+              </KeyboardAwareScrollView>
             )}
           </Mutation>
         )}

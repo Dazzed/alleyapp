@@ -28,6 +28,7 @@ export default class Settings extends Component {
             this.props.screenProps.signOut();
           }}
         />
+        
       </View>
     );
   }

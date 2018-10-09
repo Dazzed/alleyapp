@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, Image, ScrollView, TextInput, KeyboardAvoidingView} from 'react-native';
+import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, WebView, Image, ScrollView, TextInput, KeyboardAvoidingView} from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
@@ -13,6 +13,8 @@ import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button'
 import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import Video from 'react-native-video';
+
 
 export default class Challenge extends Component {
   constructor() {
@@ -60,6 +62,7 @@ export default class Challenge extends Component {
       isRequestForImage: true,
       isSetDefaultImage: true,
       setImageFromServer: '',
+      requestForVideo: false,
       setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
@@ -376,7 +379,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                 :
                 <View>
                     <View style={style.bubbleQuestionView}>
-                      <Text style= {{color: "#0D0760",fontSize: 16}}>{this.state.setUpdatedArtBoard}</Text>
+                      <Text style= {{color: "#0D0760",fontSize: 16}}>{this.state.valueArtBoard}</Text>
                     </View>
                 </View>
               }
@@ -508,15 +511,26 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             return (
               <View style = {{backgroundColor: '#B7BABC', width: "100%", height: 150,marginTop: 15,flexDirection: 'row',}}>
                 <View style= {{width: 150,}}>
-                  <TouchableOpacity onPress={this.selectPhotoTapped.bind(this,index)}>
-                    <Image
-                        style={{
-                          width: 150,
-                          height: 150,
-                        }}
-                        source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
-                      />
-                    </TouchableOpacity>
+                    {!this.state.requestForVideo ?
+                        <Image
+                          style={{
+                            width: 150,
+                            height: 150,
+                          }}
+                          source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
+                        />
+                        :
+                        <Video source={{uri: this.state.videoSource}}
+                           ref={(ref) => {
+                             this.player = ref
+                           }}
+                           onBuffer={this.onBuffer}
+                           onError={this.videoError}
+                           style={{
+                             width: 150,
+                             height: 150,
+                           }}/>
+                    }
                 </View>
                 <View style= {{width: 200,height: 150, flex: 1,justifyContent: 'center',flexDirection: 'column',alignItems: 'center',backgroundColor: 'white'}}>
                     <TouchableOpacity onPress={() => this.selectPhotoTapped(index)} style = {{
@@ -779,20 +793,25 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   generateArtBoardText = (challenge,challengeResponse_C)=> {
       console.log(301, this.state.selectedFoodCrazyValues);
       console.log(768, challenge.artboardDetails);
-      let updatedAetBoardValue = challenge.artboardDetails.toString();
+      let updatedArtBoardValue = challenge.artboardDetails.toString();
+      let updatedArtBoardValue1 = "";
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedFoodCrazyValues.length;i++){
           if(this.state.selectedFoodCrazyValues[i] !== ""){
               var replacementString = '\\(Description #'+(i+1)+'\\)';
               var myRegExp = new RegExp(replacementString,'g');
-              updatedAetBoardValue = updatedAetBoardValue.replace(myRegExp, '<b>'+this.state.selectedFoodCrazyValues[i]+'</b>');
+              updatedArtBoardValue = updatedArtBoardValue.replace(myRegExp, this.state.selectedFoodCrazyValues[i]);
+              updatedArtBoardValue1 = updatedArtBoardValue.replace(myRegExp, "<Text style = {{fontWeight: 'bold'}} > "+ this.state.selectedFoodCrazyValues[i] + "</Text>");
           }else{
             allValueSet = false;
           }
       }
-      console.log(714, updatedAetBoardValue);
+      this.setState({valueArtBoard: updatedArtBoardValue1})
+      console.log(809, updatedArtBoardValue);
+      console.log(810, this.state.valueArtBoard);
+
       if(allValueSet){
-        this.setState({requestIDFoodCrazy: challenge.requests[0].id,setUpdatedArtBoard: updatedAetBoardValue, missionID: challenge.missionID});
+        this.setState({requestIDFoodCrazy: challenge.requests[0].id,setUpdatedArtBoard: updatedArtBoardValue, missionID: challenge.missionID});
         this.challengeFoodCrazy(challengeResponse_C);
       }else{
           alert("Please fill all values.")
@@ -864,18 +883,27 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }
   }
 
-  loadVideo = async avatar => {
-    console.log('VideoUploading iss: '+avatar);
-    // http://ec2-35-171-162-131.compute-1.amazonaws.com/uploadChallengeResponses
-    // 'Content-Type': 'multipart/form-data',
-    // keyName: file
-    let data = await axios.post('https://x5wrp2wop7.execute-api.us-east-1.amazonaws.com/production/', {
-      base64String: avatar
+  loadVideo = async video => {
+     console.log('video iss: '+video);
+     const formData = new FormData();
+
+     formData.append("file", {
+       name: video.fileName.split(".")[0],
+       type: video.fileName.split(".")[1],
+       uri: video.uri
     });
-    console.log(880,data.data.Location);
-    this.setState({
-      setImageAnswer: data.data.Location,
-    });
+
+    const response = await axios.post('http://54.234.174.200:3000/uploadChallengeResponses/', formData, {
+       headers: {
+         Accept: 'application/json',
+         'Content-Type': 'multipart/form-data;',
+       },
+     });
+
+     console.log(908,response.data.Location);
+     if(response.data.Location.length > 10){
+       this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
+     }
   }
 
   setFoodCrazyAnswerValue = a => {
@@ -1008,9 +1036,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                             })}
                           {
                             challenge_Team.description.map(desc => {
-                              if (desc.type === "text")
+                              if (desc.type === "textOverlay")
                                 return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'text')}>
+                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'textOverlay')}>
                                     <View style={style.challegeInfoIconsView}>
                                       <Image style={style.challegeInfoIcons} source={require('../assets/images/info.png')} />
                                     </View>
@@ -1092,17 +1120,25 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           let imagePath = { uri: 'data:image/jpeg;base64,' + response.data} ;
           this.setState({
             isSetDefaultImage: false,
-            setImageFromServer: imagePath
+            setImageFromServer: imagePath,
+            requestForVideo: false,
           });
           if (source) {
             this.loadPicture(source)
           }
         }else {
+          console.log(1115, response);
           this.setState({
-            videoSource: response.uri
+            videoSource: response.uri,
+            requestForVideo: true,
           });
+          console.log(1118, this.state.videoSource);
+          if (response.uri) {
+            this.loadVideo(response)
+          }
         }
       }
     });
   }
+
 }
