@@ -100,7 +100,7 @@ export default class TeamProfile extends Component {
           <View style={style.container}>
             <View style={style.subContainer}>
               <View style={style.photoContainer}>
-                <PhotoUpload containerStyle={{ height: 150 }}
+                <PhotoUpload
                   onPhotoSelect={avatar => {
                     if (avatar) {
                       this.loadPicture(avatar)
@@ -109,7 +109,7 @@ export default class TeamProfile extends Component {
                 >
                   <Image
                     style={{
-                      paddingVertical: 30,
+                      paddingVertical: 0,
                       width: 150,
                       height: 150,
                       borderRadius: 75

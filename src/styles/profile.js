@@ -16,10 +16,9 @@ module.exports = StyleSheet.create({
     backgroundColor: Color.white,
   },
   photoContainer: {
-    padding: 10,
-    flex: 1,
+    marginTop: 10,
     backgroundColor: Color.white,
-    height: 160,
+    height: 150,
     justifyContent: 'space-between'
   },
   back: {
@@ -68,7 +67,6 @@ module.exports = StyleSheet.create({
   },
   spaceFormContainer: {
     margin: 10,
-    marginTop: 160
   },
   formContainer: {
     margin: 10,
