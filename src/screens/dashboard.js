@@ -14,7 +14,8 @@ export default class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
-      teamId: ''
+      teamId: '',
+      loadChallenge: false,
     }
   }
   static navigationOptions = ({ navigation: { navigate } }) => ({
@@ -35,17 +36,24 @@ export default class Dashboard extends Component {
     })
   }
 
+
+
   loadChallenge = (id, activeMission) => {
     this.props.navigation.navigate('challenge', {
       id: id,
       teamId: this.state.teamId,
-      missionTitle: activeMission
+      missionTitle: activeMission,
+      onGoBack: () => this.refresh(),
     });
+  }
+
+  refresh() {
+      console.log('Rasasfaf');
   }
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={style.container}>
           <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only">
             {({ data: { team_Dashboard }, loading }) => {
@@ -110,6 +118,7 @@ export default class Dashboard extends Component {
               }
             }}
           </Query>
+        }
         </View>
       </ScrollView>
     );

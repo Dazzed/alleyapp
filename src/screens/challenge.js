@@ -64,6 +64,7 @@ export default class Challenge extends Component {
       setImageFromServer: '',
       requestForVideo: false,
       eggTossItemType: "photo",
+      isPhotoVideoUploading: false,
       setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
@@ -128,19 +129,28 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('Reqest ID iss: '+this.state.selectedEitherOrOptions)
         this.setState({selectedEitherOrOptions: "["+this.state.selectedEitherOrOptions+"]"})
         console.log('selectedEitherOrOptions After ID iss: '+this.state.selectedEitherOrOptions)
-
+        let objResponse = null;
         if(this.state.requestTypeChitChat === 'bubble') {
-            data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
+             data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
+             objResponse = {
+              "type": "text",
+              "data": this.state.setChitChatAnswer
+            }
         }else{
-            data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
+          objResponse = {
+           "type": "eitherOr",
+           "data": this.state.selectedEitherOrOptions
+         }
+         data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
         }
-
+        console.log(141, objResponse);
         console.log(123, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           const requestId = this.state.requestIDChitChat;
           const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
           let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
-          challengeResponseDetail.requests[targetIndex].response = true;
+
+          challengeResponseDetail.requests[targetIndex].response = objResponse;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests } });
           this.setState({showBubbleQuestion: false})
         }
@@ -178,6 +188,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
         console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
+          this.props.navigation.state.params.onGoBack();
           this.props.navigation.goBack();
         }
       } catch (e) {
@@ -454,7 +465,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                 </View>
             </View>
             <View style= {style.optionNextCancelView}>
-                <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                <TouchableOpacity onPress={() => this.onBackClick() } style = {style.touchableOpacityCancelOption}>
                     <Text style={style.textShowPrompt}>CANCEL</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.submitChallengeOneAnswers(challenge, challengeResponse_C)} style = {style.touchableOpacityNextActive}>
@@ -465,6 +476,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         )}
       </Mutation>
     )
+  }
+
+  onBackClick(){
+    this.props.navigation.state.params.onGoBack();
+    this.props.navigation.goBack();
   }
 
   renderFieldsOne = challenge => {
@@ -616,6 +632,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         placeholder="Please type answer here"
                         multiline = {true}
                         numberOfLines = {5}
+                        value={this.state.setChitChatAnswer}
                         onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
                       />
                       :
@@ -657,13 +674,17 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             return (
               <View style={style.chatItem} >
               {request.response == null ?
-                  <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID, request.dataObj)}>
+                  <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID, request.dataObj, request.response)}>
                     <View>
                       <Image style={style.chatIcons} source={this.chatIcons[requestIcon++].file} />
                     </View>
                   </TouchableHighlight>
                   :
-                  <Image style={style.chatIcons} source={this.chatIcons[7].file} increaseIconCounter={requestIcon++} />
+                  <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID, request.dataObj, request.response)}>
+                    <View>
+                      <Image style={style.chatIcons} source={this.chatIcons[7].file} increaseIconCounter={requestIcon++} />
+                    </View>
+                  </TouchableHighlight>
               }
               </View>
             )
@@ -674,9 +695,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   renderEitherOr = data => {
-
+    let values = null;
     if (this.pos === 0) {
-      let values = new Array(data.length)
+      values = new Array(data.length)
       for(let i = 0; i<values.length;i++){
           values[i] = -1;
       }
@@ -786,11 +807,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             break;
           }
       }
-      if(allValueSet){
-        this.setState({requestIDEggToss: challenge.requests[0].id,missionID: challenge.missionID});
-        this.challengeEggToss(challengeResponse_C);
+      if(this.state.isPhotoVideoUploading){
+          alert('Please wait while uploading image or video.');
       }else{
-          alert("Please fill all values & upload image or video for option.")
+        if(allValueSet){
+          this.setState({requestIDEggToss: challenge.requests[0].id,missionID: challenge.missionID});
+          this.challengeEggToss(challengeResponse_C);
+        }else{
+            alert("Please fill all values & upload image or video for option.")
+        }
       }
   };
 
@@ -829,10 +854,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   saveTimedHuntAnswer = (index,challengeResponse_C) => {
     if(this.state.stopwatchStart){
-      if(!this.state.isSetDefaultImage){
-          this.challengeTimedHunt(challengeResponse_C)
+      if(this.state.isPhotoVideoUploading){
+          alert('Please wait while uploading image.');
       }else{
-        alert('Please select image first.');
+        if(!this.state.isSetDefaultImage){
+            this.challengeTimedHunt(challengeResponse_C)
+        }else{
+          alert('Please select image first.');
+        }
       }
     }else{
       alert('Please start prompt first.');
@@ -840,11 +869,16 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   saveISpyAnswer = (challengeResponse_C) => {
-    if(this.state.setImageAnswer.trim().length > 10){
-        this.challengeISpy(challengeResponse_C)
+    if(this.state.isPhotoVideoUploading){
+        alert('Please wait while uploading image.');
     }else{
-      alert('Please select image first.');
+      if(this.state.setImageAnswer.trim().length > 10){
+          this.challengeISpy(challengeResponse_C)
+      }else{
+        alert('Please select image first.');
+      }
     }
+
   };
 
   saveChitChatAnswer = (challengeResponse_C) => {
@@ -878,10 +912,12 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     });
     console.log(192,data.data.Location);
     this.setState({
+      isPhotoVideoUploading: false,
       setImageAnswer: data.data.Location,
     });
 
     if(this.state.isLoadChallengeOne){
+
       console.log(860,this.state.challengeOneCurrentIndex)
       this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, this.state.setImageAnswer);
     }
@@ -906,6 +942,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
      console.log(908,response.data.Location);
      if(response.data.Location.length > 10){
+       this.setState({isPhotoVideoUploading: false})
        this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
      }
   }
@@ -917,8 +954,19 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       this.setState({foodCrazyAnswers: foodCrazyAnswers})
   }
 
-  showChatQuestion = (item, question,id,type,missionID,dataObj) => {
+  showChatQuestion = (item, question,id,type,missionID,dataObj,response) => {
     console.log("challenge.missionID iss: "+missionID)
+    console.log("935 response.data iss: "+JSON.stringify(response))
+    if(response !== null){
+        if(response.type === 'text'){
+          this.setState({setChitChatAnswer: response.data, selectedEitherOrOptions: null})
+        }else{
+            this.setState({setChitChatAnswer: '', selectedEitherOrOptions: "response.data"})
+        }
+        console.log(954, this.state.selectedEitherOrOptions);
+    }else{
+        this.setState({setChitChatAnswer: ''})
+    }
     this.setState({
       activeBubbleQuestion: question,
       showBubbleQuestion: true,
@@ -985,7 +1033,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     const id = this.props.navigation.state.params.id;
     return (
       <KeyboardAwareScrollView>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         <View>
           <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
             {({ data: { challenge_Team }, loading }) => {
@@ -1042,7 +1090,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                             challenge_Team.description.map(desc => {
                               if (desc.type === "textOverlay")
                                 return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'textOverlay')}>
+                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'text')}>
                                     <View style={style.challegeInfoIconsView}>
                                       <Image style={style.challegeInfoIcons} source={require('../assets/images/info.png')} />
                                     </View>
@@ -1126,7 +1174,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             isSetDefaultImage: false,
             setImageFromServer: imagePath,
             requestForVideo: false,
-            eggTossItemType: "photo"
+            eggTossItemType: "photo",
+            isPhotoVideoUploading: true,
           });
           if (source) {
             this.loadPicture(source)
@@ -1136,7 +1185,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           this.setState({
             videoSource: response.uri,
             requestForVideo: true,
-            eggTossItemType: "video"
+            eggTossItemType: "video",
+            isPhotoVideoUploading: true,
           });
           console.log(1118, this.state.videoSource);
           if (response.uri) {

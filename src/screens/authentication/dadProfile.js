@@ -103,7 +103,7 @@ export default class DadProfile extends Component {
       <Mutation mutation={EDIT_USER_MUTATION}>
         {(user_U) => (
           <KeyboardAwareScrollView>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
               <View style={style.subContainer}>
                 <View style={style.photoContainer}>
                   <PhotoUpload containerStyle={{ height: 150 }}
