@@ -47,8 +47,9 @@ export default class Register extends Component {
           console.log(47,JSON.stringify(data))
 
           setToken(data.data.user_C.token);
-          setUserInfo(JSON.stringify(data.data.user_C));
+          setUserInfo(JSON.stringify(data.data.user_C.user));
           setUser(data.data.user_C.user.id);
+          
           this.props.navigation.navigate('teamProfile');
         } else {
           this.setState({

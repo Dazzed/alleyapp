@@ -53,9 +53,7 @@ export default class TeamProfile extends Component {
         member.push(await AsyncStorage.getItem('USER'));
 
         const data = await targetMutation({ variables: { title, member, teamPictureUrl } });
-        console.log(56,data.data.team_C)
         AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
-        setActiveTeam(data.data.team_C);
         this.props.navigation.navigate('dadProfile');
       } else {
         this.setState({
