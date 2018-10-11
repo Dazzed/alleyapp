@@ -29,7 +29,7 @@ export default class Instructions extends Component {
     const type = this.props.navigation.state.params.type;
     return (
       <View style={style.container}>
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
           {type === "text" ? <View key={"text"}><Text>{data}</Text></View> : ''}
 
           {(type === "audio") ? <View style={style.backgroundVideo} key={"audio"}><Video source={{ uri: data }}

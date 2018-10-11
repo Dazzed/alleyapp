@@ -1105,7 +1105,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                           return (
                             <View key={desc.id} style={style.challengeDetailsView}>
                               <View style={style.challengeDescriptionView}>
-                                <ScrollView>
+                                <ScrollView keyboardShouldPersistTaps='handled'>
                                   <Text style={style.challengeDescription}>{desc.data}</Text>
                                 </ScrollView>
                               </View>

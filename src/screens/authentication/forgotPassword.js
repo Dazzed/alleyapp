@@ -7,7 +7,7 @@ import Color from 'constants/colors';
 import style from 'styles/signin';
 
 import { FormLabel, FormInput, Button, Text } from 'react-native-elements';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const EMAIL = 'Email';
 
 export default class ForgotPassword extends Component {
@@ -44,9 +44,8 @@ export default class ForgotPassword extends Component {
     return (
       <Mutation mutation={FORGOT_PASSWORD_MUTATION}>
         {(user_Forget_Password) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
-            <ScrollView>
+          <KeyboardAwareScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
                 <Image
@@ -80,7 +79,7 @@ export default class ForgotPassword extends Component {
               <TouchableHighlight onPress={() => this.props.navigation.goBack()}><Text style={style.forgotPassword}>Already have an account? Log In</Text></TouchableHighlight>
             </View>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         )}
       </Mutation>
     );

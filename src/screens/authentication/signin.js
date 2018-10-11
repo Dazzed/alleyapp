@@ -6,7 +6,7 @@ import Color from 'constants/colors';
 import style from 'styles/signin';
 
 import { FormLabel, FormInput, Button } from 'react-native-elements';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { LOGIN_MUTATION } from '../../graphql/mutation';
 import { setToken, setUserInfo, setUser, getUser, getActiveTeam, setActiveTeam } from '../../utils/util';
 const EMAIL = 'Email';
@@ -84,9 +84,8 @@ export default class SignIn extends Component {
     return (
       <Mutation mutation={LOGIN_MUTATION}>
         {(user_Login) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
-            <ScrollView>
+          <KeyboardAwareScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
                 <Image
@@ -139,7 +138,7 @@ export default class SignIn extends Component {
               </Text>
             </View>
           </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         )}
       </Mutation>
     );

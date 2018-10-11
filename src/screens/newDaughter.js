@@ -6,7 +6,7 @@ import DatePicker from 'react-native-datepicker'
 
 import { Mutation } from "react-apollo";
 import { DAUGHTER_CREATE_MUTATION, UPDATE_TEAM_MUTATION } from '../graphql/mutation';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Color from 'constants/colors';
 import style from 'styles/profile';
 
@@ -116,9 +116,8 @@ export default class NewDaughter extends Component {
         {(team_U) => (
           <Mutation mutation={DAUGHTER_CREATE_MUTATION}>
             {(user_C) => (
-              <KeyboardAvoidingView
-                behavior="padding" style={style.container}>
-                <ScrollView>
+              <KeyboardAwareScrollView>
+                <ScrollView keyboardShouldPersistTaps='handled'>
                   <View style={style.subContainer}>
                     <View style={style.photoContainer}>
                       <PhotoUpload containerStyle={{ height: 150 }}
@@ -225,7 +224,7 @@ export default class NewDaughter extends Component {
                     />
                   </View>
                 </ScrollView>
-              </KeyboardAvoidingView>
+              </KeyboardAwareScrollView>
             )}
           </Mutation>
         )}

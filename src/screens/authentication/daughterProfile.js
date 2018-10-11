@@ -120,7 +120,7 @@ export default class DaughterProfile extends Component {
           <Mutation mutation={DAUGHTER_CREATE_MUTATION}>
             {(user_C) => (
               <KeyboardAwareScrollView>
-                <ScrollView>
+                <ScrollView keyboardShouldPersistTaps='handled'>
                   <View style={style.subContainer}>
                     <View style={style.photoContainer}>
                       <PhotoUpload containerStyle={{ height: 150 }}

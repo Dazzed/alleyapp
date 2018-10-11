@@ -6,7 +6,7 @@ import Color from 'constants/colors';
 import style from 'styles/signin';
 
 import { FormLabel, FormInput, Button } from 'react-native-elements';
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { REGISTER_MUTATION } from '../../graphql/mutation';
 import { setToken, setUserInfo, setUser, getUser, getActiveTeam, setActiveTeam } from '../../utils/util';
 const EMAIL = 'Email';
@@ -49,7 +49,7 @@ export default class Register extends Component {
           setToken(data.data.user_C.token);
           setUserInfo(JSON.stringify(data.data.user_C.user));
           setUser(data.data.user_C.user.id);
-          
+
           this.props.navigation.navigate('teamProfile');
         } else {
           this.setState({
@@ -77,9 +77,8 @@ export default class Register extends Component {
     return (
       <Mutation mutation={REGISTER_MUTATION}>
         {(user_C) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
-            <ScrollView>
+          <KeyboardAwareScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
               <View style={style.subContainer}>
                 <View style={style.welcomeContainer}>
                   <Image
@@ -130,7 +129,7 @@ export default class Register extends Component {
                 </Text>
               </View>
             </ScrollView>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         )}
       </Mutation>
     );
