@@ -51,9 +51,9 @@ export default class NewTeam extends Component {
         member.push(await AsyncStorage.getItem('USER'));
 
         const data = await targetMutation({ variables: { title, member, teamPictureUrl } });
-
-        AsyncStorage.setItem('ACTIVE_TEAM', data.data.team_C);
-        this.props.navigation.navigate('newDaughter')
+        this.props.navigation.navigate('newDaughter', {
+          activeTeam: data.data.team_C
+        })
       } else {
         this.setState({
           error: true,
