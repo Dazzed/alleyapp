@@ -77,8 +77,7 @@ export default class Register extends Component {
     return (
       <Mutation mutation={REGISTER_MUTATION}>
         {(user_C) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
+          <KeyboardAwareScrollView>
             <ScrollView keyboardShouldPersistTaps='handled'>
               <View style={style.subContainer}>
                 <View style={style.welcomeContainer}>

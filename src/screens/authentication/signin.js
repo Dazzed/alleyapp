@@ -84,8 +84,7 @@ export default class SignIn extends Component {
     return (
       <Mutation mutation={LOGIN_MUTATION}>
         {(user_Login) => (
-          <KeyboardAvoidingView
-            behavior="padding" style={style.container}>
+          <KeyboardAwareScrollView>
             <ScrollView keyboardShouldPersistTaps='handled'>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
