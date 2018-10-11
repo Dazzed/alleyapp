@@ -90,7 +90,7 @@ export default class NewDaughter extends Component {
         members.push(await AsyncStorage.getItem('USER'));
         let id = await AsyncStorage.getItem('ACTIVE_TEAM');
 
-        members.push(data.data.user_C);
+        members.push(data.data.user_C.user.id);
 
         const data2 = await targetMutation2({ variables: { id, members } });
 

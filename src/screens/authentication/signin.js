@@ -86,7 +86,7 @@ export default class SignIn extends Component {
         {(user_Login) => (
           <KeyboardAvoidingView
             behavior="padding" style={style.container}>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
                 <Image

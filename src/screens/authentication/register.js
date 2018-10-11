@@ -79,7 +79,7 @@ export default class Register extends Component {
         {(user_C) => (
           <KeyboardAvoidingView
             behavior="padding" style={style.container}>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
               <View style={style.subContainer}>
                 <View style={style.welcomeContainer}>
                   <Image
