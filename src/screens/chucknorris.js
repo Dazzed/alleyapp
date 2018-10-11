@@ -76,7 +76,7 @@ export default class ChuckNorris extends Component {
 
   render() {
     return (
-      <ScrollView contentContainerStyle={[style.container]}>
+      <ScrollView contentContainerStyle={[style.container]} keyboardShouldPersistTaps='handled'>
         <StatusBar barStyle="light-content" />
         {/*this.renderLogo()}
     {this.renderJoke()*/}

@@ -127,7 +127,7 @@ export default class DaughterProfile extends Component {
       <Mutation mutation={EDIT_USER_MUTATION}>
         {(user_U) => (
           <KeyboardAwareScrollView>
-            <ScrollView>
+            <ScrollView keyboardShouldPersistTaps='handled'>
               <Query query={GET_USER} variables={{ id }} fetchPolicy="network-only">
                 {({ data: { user_R }, loading }) => {
                   if (loading || !user_R) {

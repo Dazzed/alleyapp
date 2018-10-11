@@ -135,7 +135,7 @@ export default class DadTeams extends Component {
 
 
     return (
-      <ScrollView style={style.containerScrollbar}>
+      <ScrollView keyboardShouldPersistTaps='handled' style={style.containerScrollbar}>
         <View style={style.container}>
           <View style={style.subContainer}>
             <View >
