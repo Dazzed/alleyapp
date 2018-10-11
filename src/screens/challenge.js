@@ -228,7 +228,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               "type": this.state.activeISpyQuestionType,
               "data": userAnswer
           }
-
           const requestId = this.state.activeISpyQuestionID;
           const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
           let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
@@ -303,7 +302,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showChallenge4Question === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBackClick() } style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
               </View>
@@ -414,7 +413,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               </View>
               :
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBackClick() } style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>EXIT</Text>
                   </TouchableOpacity>
               </View>
@@ -567,7 +566,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       margin: 10,
                       justifyContent: 'center',
                     }}>
-                        <Text style={style.textShowPrompt}>Upload Image</Text>
+                    <Text style={style.textShowPrompt}>Upload Image</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.selectVideoTapped(index)} style = {{
                       backgroundColor: 'blue',
@@ -653,7 +652,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showBubbleQuestion === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBackClick()} style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
               </View>

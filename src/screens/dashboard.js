@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
+import { View, TouchableOpacity, TouchableHighlight, AsyncStorage, Image, ScrollView } from 'react-native';
 import { GET_DASHBOARD_BY_TEAM } from '../graphql/queries';
 
 import { Query } from "react-apollo";
@@ -10,12 +10,14 @@ import style from 'styles/dashboard';
 import { Text, Icon } from 'react-native-elements';
 
 
+
 export default class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
       teamId: '',
       loadChallenge: false,
+      isRefetch: false
     }
   }
   static navigationOptions = ({ navigation: { navigate } }) => ({
@@ -32,7 +34,8 @@ export default class Dashboard extends Component {
     let team = await AsyncStorage.getItem('ACTIVE_TEAM');
     console.log(32, team);
     this.setState({
-      teamId: team
+      teamId: team,
+      isRefetch: false,
     })
   }
 
@@ -47,16 +50,11 @@ export default class Dashboard extends Component {
     });
   }
 
-  async refresh() {
-    console.log('Refressssss');
-    this.setState({setRefresh: true});
-    let team = await AsyncStorage.getItem('ACTIVE_TEAM');
-    console.log(544, team);
-    this.setState({
-      teamId: team
-    })
-
+  refresh() {
+    this.setState({isRefetch: true});
   }
+
+
 
   render() {
     return (
@@ -64,7 +62,10 @@ export default class Dashboard extends Component {
         <View style={style.container}>
           <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only" notifyOnNetworkStatusChange={true}>
             {({ data: { team_Dashboard }, loading, refetch }) => {
-              console.log('teamId hhh iss: '+this.state.teamId)
+              if(this.state.isRefetch){
+                this.state.isRefetch = false
+                refetch()
+              }
               if (loading || !team_Dashboard) {
                 return <Text>Loading ...</Text>;
               }
