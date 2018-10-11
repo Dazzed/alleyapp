@@ -223,10 +223,16 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.activeISpyQuestionID ,type:this.state.activeISpyQuestionType ,data: userAnswer }});
 
         if(data.data.challengeResponse_C.length > 10){
+
+          let responseObj = {
+              "type": this.state.activeISpyQuestionType,
+              "data": userAnswer
+          }
+
           const requestId = this.state.activeISpyQuestionID;
           const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
           let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
-          challengeResponseDetail.requests[targetIndex].response = true;
+          challengeResponseDetail.requests[targetIndex].response = responseObj;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests }});
           this.setState({showChallenge4Question: false})
         }
@@ -278,7 +284,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                                     height: 150,
                                     marginRight: 15,
                                   }}
-                                  source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
+                                  source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : {uri: this.state.setImageAnswer} }
                                 />
                               </TouchableOpacity>
                           </View>
@@ -287,6 +293,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     <TextInput
                       style={style.inputPhotoLabelISpy}
                       placeholder="Photo Label"
+                      value={this.state.setChitChatAnswer}
                       onChangeText={(setPhotoLable) => this.setState({setPhotoLable})}
                       />
                   </View>
@@ -391,7 +398,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                 :
                 <View>
                     <View style={style.bubbleQuestionView}>
-                      <Text style= {{color: "#0D0760",fontSize: 16}}>{this.state.valueArtBoard}</Text>
+                      <Text style= {{color: "#0D0760",fontSize: 16}}>{this.state.setUpdatedArtBoard}</Text>
                     </View>
                 </View>
               }
@@ -421,6 +428,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   renderFieldFifth = challenge => {
     if (this.pos === 0) {
       let values = new Array(challenge.requests.length)
+      console.log(431, challenge.requests.length);
       for(let i = 0; i<values.length;i++){
           values[i] = "";
       }
@@ -758,13 +766,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   </View>
                 </TouchableHighlight>
                 :
-                <View style = {{width: "100%",padding: 4,position: 'relative'}}>
-                    <Image
-                      style={style.iSpyInActiveImageIcon}
-                      source={{uri: this.state.challenge4Questions[index].url}}/>
-                    <View style={style.iSpyInActiveView}/>
-                    <Text numberOfLines = { 1 } ellipsizeMode = 'tail'  style={style.iSpyTitle} >{this.state.challenge4Questions[index].data}</Text>
-                </View>
+                <TouchableHighlight  onPress={() => this.showISpyQuestion(index, request.data, request.url,request.type,request.id,request.response)}>
+                  <View style = {{width: "100%",padding: 4,position: 'relative'}}>
+                      <Image
+                        style={style.iSpyInActiveImageIcon}
+                        source={{uri: this.state.challenge4Questions[index].url}}/>
+                      <View style={style.iSpyInActiveView}/>
+                      <Text numberOfLines = { 1 } ellipsizeMode = 'tail'  style={style.iSpyTitle} >{this.state.challenge4Questions[index].data}</Text>
+                  </View>
+                </TouchableHighlight>
             }
           </View>
           )
@@ -823,24 +833,21 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       console.log(301, this.state.selectedFoodCrazyValues);
       console.log(768, challenge.artboardDetails);
       let updatedArtBoardValue = challenge.artboardDetails.toString();
-      let updatedArtBoardValue1 = "";
+
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedFoodCrazyValues.length;i++){
           if(this.state.selectedFoodCrazyValues[i] !== ""){
-              var replacementString = '\\(Description #'+(i+1)+'\\)';
-              var myRegExp = new RegExp(replacementString,'g');
-              updatedArtBoardValue = updatedArtBoardValue.replace(myRegExp, this.state.selectedFoodCrazyValues[i]);
-              updatedArtBoardValue1 = updatedArtBoardValue.replace(myRegExp, "<Text style = {{fontWeight: 'bold'}} > "+ this.state.selectedFoodCrazyValues[i] + "</Text>");
+            var replacementString = '\\(Description #'+(i+1)+'\\)';
+            var myRegExp = new RegExp(replacementString,'g');
+            updatedArtBoardValue = updatedArtBoardValue.replace(myRegExp, this.state.selectedFoodCrazyValues[i]);
           }else{
             allValueSet = false;
           }
       }
-      this.setState({valueArtBoard: updatedArtBoardValue1})
       console.log(809, updatedArtBoardValue);
-      console.log(810, this.state.valueArtBoard);
 
       if(allValueSet){
-        this.setState({requestIDFoodCrazy: challenge.requests[0].id,setUpdatedArtBoard: updatedArtBoardValue, missionID: challenge.missionID});
+        this.setState({requestIDFoodCrazy: challenge.requests[0].id, setUpdatedArtBoard: updatedArtBoardValue, missionID: challenge.missionID});
         this.challengeFoodCrazy(challengeResponse_C);
       }else{
           alert("Please fill all values.")
@@ -979,21 +986,32 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   showISpyQuestion = (item, question, url,type, requestID,response) => {
-    console.log(907,url)
-    if(response == null){
+    console.log(907,url);
+    console.log(991,response);
+
+    if(response !== null){
+      let jsonObject = JSON.parse(response.data)
       this.setState({
-        activeISpyQuestionTitle: question,
-        showChallenge4Question: true,
-        activeISpyItemId: item,
-        activeISpyQuestionUrl: url,
-        activeISpyQuestionType:type,
-        activeISpyQuestionID: requestID,
-        isSetDefaultImage: true,
-        setImageAnswer: '',
-      })
+          isSetDefaultImage: false,
+          setImageAnswer: jsonObject.url,
+          setChitChatAnswer: jsonObject.label
+      });
     }else{
-      alert("You already answerd this question.")
+      this.setState({
+          isSetDefaultImage: true,
+          setImageAnswer: '',
+          setChitChatAnswer: '',
+      });
     }
+
+    this.setState({
+      activeISpyQuestionTitle: question,
+      showChallenge4Question: true,
+      activeISpyItemId: item,
+      activeISpyQuestionUrl: url,
+      activeISpyQuestionType:type,
+      activeISpyQuestionID: requestID,
+    })
 
   }
 

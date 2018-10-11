@@ -47,21 +47,29 @@ export default class Dashboard extends Component {
     });
   }
 
-  refresh() {
-      console.log('Rasasfaf');
+  async refresh() {
+    console.log('Refressssss');
+    this.setState({setRefresh: true});
+    let team = await AsyncStorage.getItem('ACTIVE_TEAM');
+    console.log(544, team);
+    this.setState({
+      teamId: team
+    })
+
   }
 
   render() {
     return (
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={style.container}>
-          <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only">
-            {({ data: { team_Dashboard }, loading }) => {
-              console.log('teamId iss: '+this.state.teamId)
+          <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only" notifyOnNetworkStatusChange={true}>
+            {({ data: { team_Dashboard }, loading, refetch }) => {
+              console.log('teamId hhh iss: '+this.state.teamId)
               if (loading || !team_Dashboard) {
                 return <Text>Loading ...</Text>;
               }
               {
+                console.log('teamId hhh trueue iss: '+JSON.stringify(team_Dashboard))
                 return (
                   <View style={style.dashboard}>
                     <View style={style.progressSummary}>
