@@ -22,7 +22,7 @@ export default class TeamProfile extends Component {
       teamPictureUrl: ''
     };
   }
-  
+
   updateTeam = async targetMutation => {
     try {
       this.setState({
@@ -40,13 +40,13 @@ export default class TeamProfile extends Component {
         members.push(await AsyncStorage.getItem('USER'));
         members.push(this.props.navigation.state.params.daughter)
 
-        const data = await targetMutation({ variables: { 
+        const data = await targetMutation({ variables: {
           id,
-          title, 
-          members, 
+          title,
+          members,
           teamPictureUrl
          } });
-        AsyncStorage.setItem('ACTIVE_TEAM', id);
+        //AsyncStorage.setItem('ACTIVE_TEAM', id);
         this.props.navigation.navigate('dadTeams');
       } else {
         this.setState({

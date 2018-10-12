@@ -89,11 +89,10 @@ export default class NewDaughter extends Component {
         let members = [];
         members.push(await AsyncStorage.getItem('USER'));
         let id = this.props.navigation.state.params.activeTeam
-        AsyncStorage.setItem('ACTIVE_TEAM', this.props.navigation.state.params.activeTeam);
+        //AsyncStorage.setItem('ACTIVE_TEAM', this.props.navigation.state.params.activeTeam);
         members.push(data.data.user_C.user.id);
 
         const data2 = await targetMutation2({ variables: { id, members } });
-
         this.props.navigation.navigate('dadTeams')
       } else {
         this.setState({

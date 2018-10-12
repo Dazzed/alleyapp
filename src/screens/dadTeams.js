@@ -25,18 +25,24 @@ export default class DadTeams extends Component {
       teamID: null,
       team_D: null,
       teamIDActivated: null,
-      currentlyOpenSwipeable: null
+      currentlyOpenSwipeable: null,
+      isRefetch: false,
+      totalTeams: 0,
+      isDeleteActiveTeam: false,
     };
     this.deleteTeam = this.deleteTeam.bind(this);
   }
 
   handleScroll = () => {
     const {currentlyOpenSwipeable} = this.state;
-
     if (currentlyOpenSwipeable) {
       currentlyOpenSwipeable.recenter();
     }
   };
+
+  refresh() {
+    this.setState({isRefetch: true});
+  }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
     title: 'TEAMS',
@@ -63,7 +69,6 @@ export default class DadTeams extends Component {
   componentDidMount(){
     AsyncStorage.getItem('ACTIVE_TEAM').then((value) => {
         this.setState({teamIDActivated: value})
-        console.log('teamId iss: '+this.state.teamIDActivated)
     });
   }
 
@@ -80,7 +85,13 @@ export default class DadTeams extends Component {
   }
 
   actionDeleteTeam = () => {
-    this.deleteTeam(this.state.team_D);
+    if(this.state.totalTeams > 1){
+        this.deleteTeam(this.state.team_D);
+    }else{
+        this.state.currentlyOpenSwipeable.recenter();
+        alert('Sorry! You need to atleast more than one team for delete team.')
+    }
+
   }
 
   clickAddTeam = () => {
@@ -89,12 +100,14 @@ export default class DadTeams extends Component {
 
   deleteTeam = async targetMutation => {
       try {
-        console.log('teamId iss: '+this.state.teamID)
-
         const data = await targetMutation({ variables: {teamID: this.state.teamID}});
         console.log(88, data.data.team_D);
         if(data.data.team_D === true){
+            if(this.state.teamID === this.state.teamIDActivated){
+              this.state.isDeleteActiveTeam = true;
+            }
             this.state.currentlyOpenSwipeable.recenter();
+            this.refresh();
         }else{
             alert('Team not deleted.')
         }
@@ -127,7 +140,6 @@ export default class DadTeams extends Component {
         if (currentlyOpenSwipeable && currentlyOpenSwipeable !== swipeable) {
           currentlyOpenSwipeable.recenter();
         }
-
         this.setState({currentlyOpenSwipeable: swipeable});
       },
       onClose: () => this.setState({currentlyOpenSwipeable: null})
@@ -141,7 +153,7 @@ export default class DadTeams extends Component {
             <View >
             {(this.state.member != '') ?
               <Query query={GET_USER} variables={{ id: this.state.member }} fetchPolicy="network-only">
-                {({ data: { user_R }, loading }) => {
+                {({ data: { user_R }, loading}) => {
                   if (loading || !user_R) {
                     return <Text>Loading ...</Text>;
                   }
@@ -169,7 +181,13 @@ export default class DadTeams extends Component {
               <View style={style.flexGrid}>
                 {this.state.member != '' ?
                   <Query query={GET_TEAMS} variables={{ memberId: this.state.member }} fetchPolicy="network-only">
-                    {({ data: { teamByMember }, loading }) => {
+                    {({ data: { teamByMember }, loading, refetch}) => {
+                      if(this.state.isRefetch){
+                        if(!this.state.isDeleteActiveTeam){
+                          this.state.isRefetch = false
+                        }
+                        refetch()
+                      }
                       if (loading || !teamByMember) {
                       return <Text>Loading ...</Text>;
                     }
@@ -178,6 +196,15 @@ export default class DadTeams extends Component {
                         let partners = team.members.filter(member_user => {
                           return member_user.id !== this.state.member
                         })
+                        this.state.totalTeams = teamByMember.length
+                        if(this.state.isDeleteActiveTeam && this.state.isRefetch){
+                          if(team.id !== this.state.teamIDActivated){
+                            this.state.isDeleteActiveTeam = false
+                            this.state.isRefetch = false
+                            this.state.teamIDActivated = team.id
+                            AsyncStorage.setItem('ACTIVE_TEAM', team.id)
+                          }
+                        }
                         return (
                           <Mutation mutation = {DELETE_TEAM}>
                             {(team_D) => (

@@ -36,11 +36,15 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>camera</string>
+	<string>Need camera access for uploading Images</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Need location access for updating nearby friends</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>This app will use your location to show cool stuffs near you.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Need microphone access for uploading videos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>photo</string>
+	<string>Need Library access for uploading Images</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

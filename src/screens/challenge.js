@@ -497,7 +497,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }else{
       this.props.navigation.goBack();
     }
-
   }
 
   renderFieldsOne = challenge => {
