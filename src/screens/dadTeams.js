@@ -81,7 +81,9 @@ export default class DadTeams extends Component {
   actionMakeTeamActive = () => {
     this.setState({teamIDActivated: this.state.teamID})
     AsyncStorage.setItem('ACTIVE_TEAM', this.state.teamID);
+    let team = AsyncStorage.getItem('ACTIVE_TEAM');
     this.state.currentlyOpenSwipeable.recenter();
+    console.log(86, team);
   }
 
   actionDeleteTeam = () => {

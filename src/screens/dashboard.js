@@ -19,6 +19,7 @@ export default class Dashboard extends Component {
       loadChallenge: false,
       isRefetch: false
     }
+
   }
   static navigationOptions = ({ navigation: { navigate } }) => ({
     title: 'DASHBOARD',
@@ -29,6 +30,23 @@ export default class Dashboard extends Component {
     },
     headerLeft: null
   });
+
+  componentWillReceiveProps(nextProps){
+    alert('Call everytime');
+  }
+  componentDidMount(){
+    this.props.navigation.addListener('willFocus', (playload)=>{
+      AsyncStorage.getItem('ACTIVE_TEAM').then((value) => {
+        if(value !== this.state.teamId){
+          this.setState({
+            teamId: value,
+            isRefetch: false,
+          })
+          this.refresh();
+        }
+      });
+   });
+  }
 
   async componentWillMount() {
     let team = await AsyncStorage.getItem('ACTIVE_TEAM');

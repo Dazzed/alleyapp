@@ -113,10 +113,9 @@ export default class Main extends Component {
         },
         thirdTab: {
           screen: StackNavigator({
-            dashboard: { screen: Dashboard },
+            dashboard: { screen: Dashboard},
             challenge: { screen: Challenge },
             instructions: { screen: Instructions }
-
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
@@ -147,7 +146,9 @@ export default class Main extends Component {
                   name="verified-user"
                   color={!focused ? Color.darkBlue : 'white'}
                 />
+
               )
+
             };
           }
         },
