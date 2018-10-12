@@ -65,6 +65,7 @@ export default class Challenge extends Component {
       requestForVideo: false,
       eggTossItemType: "photo",
       isPhotoVideoUploading: false,
+      isReloadDashboard: false,
       setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
@@ -152,7 +153,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
           challengeResponseDetail.requests[targetIndex].response = objResponse;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests } });
-          this.setState({showBubbleQuestion: false})
+          this.setState({showBubbleQuestion: false,isReloadDashboard: true})
+          onBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -164,7 +166,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         var userId = await AsyncStorage.getItem('USER');
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
         if(data.data.challengeResponse_C.length > 10){
-          this.setState({showChallengeArtboard: true})
+          this.setState({showChallengeArtboard: true,isReloadDashboard: true})
+          onBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -188,8 +191,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
         console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
-          this.props.navigation.state.params.onGoBack();
-          this.props.navigation.goBack();
+          this.setState({isReloadDashboard: true});
+          onBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -202,10 +205,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.challenge3Questions[this.state.challenge3CurrentIndex].id,type: "photo",data: this.state.setImageAnswer,duration: "121"}});
         if(data.data.challengeResponse_C.length > 10){
           if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
-              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true,setImageAnswer: '',});
+              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true,setImageAnswer: '',isReloadDashboard: true});
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
                   this.setState({btnTitle: "SUBMIT"});
               }
+              onBack();
           }
         }
       } catch (e) {
@@ -233,7 +237,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
           challengeResponseDetail.requests[targetIndex].response = responseObj;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests }});
-          this.setState({showChallenge4Question: false})
+          this.setState({showChallenge4Question: false,isReloadDashboard: true})
+          onBack();
         }
       } catch (e) {
         console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -302,7 +307,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showChallenge4Question === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.onBackClick() } style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBack() } style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
               </View>
@@ -368,7 +373,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   </View>
                 </View>
                 <View style= {style.optionNextCancelView}>
-                    <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                    <TouchableOpacity onPress={() => this.onBack()} style = {style.touchableOpacityCancelOption}>
                         <Text style={style.textShowPrompt}>CANCEL</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.saveTimedHuntAnswer(index,challengeResponse_C)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
@@ -404,7 +409,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showChallengeArtboard === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.props.navigation.goBack()} style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBack()} style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => this.generateArtBoardText(challenge, challengeResponse_C)} style = {style.touchableOpacityNextActive}>
@@ -413,7 +418,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               </View>
               :
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.onBackClick() } style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBack() } style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>EXIT</Text>
                   </TouchableOpacity>
               </View>
@@ -472,7 +477,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                 </View>
             </View>
             <View style= {style.optionNextCancelView}>
-                <TouchableOpacity onPress={() => this.onBackClick() } style = {style.touchableOpacityCancelOption}>
+                <TouchableOpacity onPress={() => this.onBack() } style = {style.touchableOpacityCancelOption}>
                     <Text style={style.textShowPrompt}>CANCEL</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.submitChallengeOneAnswers(challenge, challengeResponse_C)} style = {style.touchableOpacityNextActive}>
@@ -485,9 +490,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  onBackClick(){
-    this.props.navigation.state.params.onGoBack();
-    this.props.navigation.goBack();
+  onBack(){
+    if(this.state.isReloadDashboard){
+      this.props.navigation.state.params.onGoBack();
+      this.props.navigation.goBack();
+    }else{
+      this.props.navigation.goBack();
+    }
+
   }
 
   renderFieldsOne = challenge => {
@@ -652,7 +662,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showBubbleQuestion === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.onBackClick()} style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBack()} style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
               </View>
