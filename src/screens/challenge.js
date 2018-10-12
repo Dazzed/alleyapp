@@ -154,7 +154,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           challengeResponseDetail.requests[targetIndex].response = objResponse;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests } });
           this.setState({showBubbleQuestion: false,isReloadDashboard: true})
-          onBack();
+          this.onBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -167,7 +167,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
         if(data.data.challengeResponse_C.length > 10){
           this.setState({showChallengeArtboard: true,isReloadDashboard: true})
-          onBack();
+          this.onBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -192,7 +192,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           this.setState({isReloadDashboard: true});
-          onBack();
+          this.onBack();
         }
       } catch (e) {
         console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
@@ -209,7 +209,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
                   this.setState({btnTitle: "SUBMIT"});
               }
-              onBack();
+              this.onBack();
           }
         }
       } catch (e) {
@@ -238,7 +238,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           challengeResponseDetail.requests[targetIndex].response = responseObj;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests }});
           this.setState({showChallenge4Question: false,isReloadDashboard: true})
-          onBack();
+          this.onBack();
         }
       } catch (e) {
         console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
