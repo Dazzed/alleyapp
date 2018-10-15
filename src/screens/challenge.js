@@ -153,7 +153,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
           challengeResponseDetail.requests[targetIndex].response = objResponse;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests } });
-          this.setState({showBubbleQuestion: false,isReloadDashboard: true})
+          this.state.isReloadDashboard =  true
           this.onBack();
         }
       } catch (e) {
@@ -166,7 +166,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         var userId = await AsyncStorage.getItem('USER');
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
         if(data.data.challengeResponse_C.length > 10){
-          this.setState({showChallengeArtboard: true,isReloadDashboard: true})
+          this.state.isReloadDashboard = true
           this.onBack();
         }
       } catch (e) {
@@ -191,7 +191,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
         console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
-          this.setState({isReloadDashboard: true});
+          this.state.isReloadDashboard = true
+          this.setState({showBubbleQuestion: false,showChallengeArtboard: true})
           this.onBack();
         }
       } catch (e) {
@@ -205,7 +206,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.challenge3Questions[this.state.challenge3CurrentIndex].id,type: "photo",data: this.state.setImageAnswer,duration: "121"}});
         if(data.data.challengeResponse_C.length > 10){
           if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
-              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true,setImageAnswer: '',isReloadDashboard: true});
+              this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true,setImageAnswer: ''});
+              this.state.isReloadDashboard = true
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
                   this.setState({btnTitle: "SUBMIT"});
               }
@@ -237,7 +239,8 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
           challengeResponseDetail.requests[targetIndex].response = responseObj;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests }});
-          this.setState({showChallenge4Question: false,isReloadDashboard: true})
+          this.setState({showChallenge4Question: false,})
+          this.state.isReloadDashboard = true
           this.onBack();
         }
       } catch (e) {
@@ -490,10 +493,25 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     )
   }
 
-  onBack(){
+  onBackChitChat(){
     if(this.state.isReloadDashboard){
       this.props.navigation.state.params.onGoBack();
       this.props.navigation.goBack();
+    }else{
+      this.props.navigation.goBack();
+    }
+  }
+
+  onBack(){
+    if(this.state.isReloadDashboard){
+      if(this.state.showBubbleQuestion){
+        this.setState({showBubbleQuestion: false})
+      }else if(!this.state.showChallengeArtboard){
+        this.setState({showChallengeArtboard: true})
+      }else{
+        this.props.navigation.state.params.onGoBack();
+        this.props.navigation.goBack();
+      }
     }else{
       this.props.navigation.goBack();
     }
@@ -661,7 +679,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showBubbleQuestion === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.onBack()} style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBackChitChat() } style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
               </View>
@@ -932,7 +950,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     });
 
     if(this.state.isLoadChallengeOne){
-
       console.log(860,this.state.challengeOneCurrentIndex)
       this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, this.state.setImageAnswer);
     }
@@ -957,7 +974,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
      console.log(908,response.data.Location);
      if(response.data.Location.length > 10){
-       this.setState({isPhotoVideoUploading: false})
+       this.setState({isPhotoVideoUploading: false});
        this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
      }
   }
