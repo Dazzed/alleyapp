@@ -1109,9 +1109,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         <View style={style.challengeInfoView}>
                           {
                             challenge_Team.description.map(desc => {
-                              if (desc.type === "video")
+                              if (desc.type === "videoOverlay")
                                 return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'video')}>
+                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'videoOverlay')}>
                                     <View style={style.challegeInfoIconsView}>
                                       <Image style={style.challegeInfoIcons} source={require('../assets/images/video.png')} />
                                     </View>
@@ -1120,9 +1120,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                             })}
                           {
                             challenge_Team.description.map(desc => {
-                              if (desc.type === "audio")
+                              if (desc.type === "audioOverlay")
                                 return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'audio')}>
+                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'audioOverlay')}>
                                     <View style={style.challegeInfoIconsView}>
                                       <Image style={style.challegeInfoIcons} source={require('../assets/images/audio.png')} />
                                     </View>
@@ -1133,7 +1133,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                             challenge_Team.description.map(desc => {
                               if (desc.type === "textOverlay")
                                 return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'text')}>
+                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'textOverlay')}>
                                     <View style={style.challegeInfoIconsView}>
                                       <Image style={style.challegeInfoIcons} source={require('../assets/images/info.png')} />
                                     </View>

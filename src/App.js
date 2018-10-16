@@ -170,6 +170,7 @@ export default class Main extends Component {
         }
       },
       {
+        initialRouteName: 'thirdTab',
         tabBarOptions: {
           inactiveTintColor: Color.darkBlue,
           activeTintColor: 'white',
