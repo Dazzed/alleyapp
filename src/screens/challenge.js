@@ -211,10 +211,18 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
           if(this.state.challenge3CurrentIndex < (this.state.challenge3Questions.length - 1)){
               this.setState({challenge3CurrentIndex: this.state.challenge3CurrentIndex+1, isSetDefaultImage: true,setImageAnswer: ''});
               this.state.isReloadDashboard = true
-              if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 2)){
-                  this.setState({btnTitle: "SUBMIT"});
+              if(this.state.submitFinalAnswerForTimedHunt){
+                  this.onBackChitChat();
               }
-              this.onBack();
+              console.log(217,this.state.challenge3CurrentIndex);
+              console.log(217,this.state.challenge3Questions.length - 1);
+              if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 1)){
+                  this.state.submitFinalAnswerForTimedHunt = true
+                  this.setState({btnTitle: "SUBMIT"})
+              }else{
+                this.state.submitFinalAnswerForTimedHunt = false
+              }
+
           }
         }
       } catch (e) {
@@ -379,7 +387,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   </View>
                 </View>
                 <View style= {style.optionNextCancelView}>
-                    <TouchableOpacity onPress={() => this.onBack()} style = {style.touchableOpacityCancelOption}>
+                    <TouchableOpacity onPress={() => this.onBackChitChat()} style = {style.touchableOpacityCancelOption}>
                         <Text style={style.textShowPrompt}>CANCEL</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.saveTimedHuntAnswer(index,challengeResponse_C)} style = {[this.state.stopwatchStart? style.touchableOpacityNextActive : style.touchableOpacityNextInactive]}>
@@ -964,9 +972,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   loadVideo = async video => {
-     console.log('video iss: '+video);
      const formData = new FormData();
-
      formData.append("file", {
        name: video.fileName.split(".")[0],
        type: video.fileName.split(".")[1],
@@ -982,7 +988,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
      console.log(908,response.data.Location);
      if(response.data.Location.length > 10){
-       this.setState({isPhotoVideoUploading: false});
+       this.setState({isPhotoVideoUploading: false,});
        this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
      }
   }
