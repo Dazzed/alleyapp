@@ -98,6 +98,9 @@ export default class Challenge extends Component {
     { file: require('../assets/images/chat_question5.png') },
     { file: require('../assets/images/chat_question6.png') },
     { file: require('../assets/images/chat_question7.png') },
+    { file: require('../assets/images/chat_question8.png') },
+    { file: require('../assets/images/chat_question9.png') },
+    { file: require('../assets/images/chat_question10.png') },
     { file: require('../assets/images/chat_responded.png') },
   ]
 
@@ -310,7 +313,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             </View>
             {this.state.showChallenge4Question === false ?
               <View style= {style.optionNextCancelView}>
-                  <TouchableOpacity onPress={() => this.onBack() } style = {style.touchableOpacityCancelOption}>
+                  <TouchableOpacity onPress={() => this.onBackChitChat() } style = {style.touchableOpacityCancelOption}>
                       <Text style={style.textShowPrompt}>CANCEL</Text>
                   </TouchableOpacity>
               </View>
@@ -503,11 +506,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   onBack(){
+    console.log(509, this.state.showChallenge4Question);
     if(this.state.isReloadDashboard){
       if(this.state.showBubbleQuestion){
         this.setState({showBubbleQuestion: false})
       }else if(!this.state.showChallengeArtboard){
         this.setState({showChallengeArtboard: true})
+      }else if(!this.state.showChallenge4Question){
+        this.setState({showChallenge4Question: false})
       }else{
         this.props.navigation.state.params.onGoBack();
         this.props.navigation.goBack();
@@ -716,7 +722,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                   :
                   <TouchableHighlight key={"bubble_" + request.id} onPress={() => this.showChatQuestion(index, request.data,request.id,request.type,challenge.missionID, request.dataObj, request.response)}>
                     <View>
-                      <Image style={style.chatIcons} source={this.chatIcons[7].file} increaseIconCounter={requestIcon++} />
+                      <Image style={style.chatIcons} source={this.chatIcons[10].file} increaseIconCounter={requestIcon++} />
                     </View>
                   </TouchableHighlight>
               }

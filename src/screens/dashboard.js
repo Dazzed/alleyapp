@@ -19,7 +19,7 @@ export default class Dashboard extends Component {
       loadChallenge: false,
       isRefetch: false
     }
-
+    AsyncStorage.setItem('IS_LOGIN', 'true');
   }
   static navigationOptions = ({ navigation: { navigate } }) => ({
     title: 'DASHBOARD',
