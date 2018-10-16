@@ -195,7 +195,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           this.state.isReloadDashboard = true
-          this.setState({showBubbleQuestion: false,showChallengeArtboard: true})
+          this.setState({showBubbleQuestion: false,showChallengeArtboard: true,showChallenge4Question: true})
           this.onBack();
         }
       } catch (e) {
@@ -844,9 +844,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
           console.log(769, this.state.selectedEggTossValues[i].data)
-          if(this.state.selectedEggTossValues[i].data === ""){
-            allValueSet = false;
-            break;
+          if(this.state.selectedEggTossValues[i].type === "text"){
+            if(this.state.selectedEggTossValues[i].data === ""){
+              allValueSet = false;
+              break;
+            }
           }
       }
       if(this.state.isPhotoVideoUploading){
