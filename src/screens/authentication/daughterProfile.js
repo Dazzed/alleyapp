@@ -30,7 +30,7 @@ export default class DaughterProfile extends Component {
     this.today = (month + '/' + date + '/' + year);
     this.state = {
       daughter_name: '',
-      dob: this.today,
+      dob: '',
       email: '',
       phone: '',
       address: '',
@@ -79,7 +79,7 @@ export default class DaughterProfile extends Component {
         profilePictureUrl
       } = this.state;
 
-      if (daughter_name.trim() !== "") {
+      if (daughter_name.trim() !== "" && dob.trim() !== '') {
         let isParent = false;
 
         let name = daughter_name;
@@ -157,7 +157,7 @@ export default class DaughterProfile extends Component {
                         date={this.state.dob}
                         mode="date"
                         showIcon={false}
-                        placeholder=""
+                        placeholder=" "
                         format="MM/DD/YYYY"
                         minDate="01/01/1900"
                         maxDate={this.today}

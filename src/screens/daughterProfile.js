@@ -30,7 +30,7 @@ export default class DaughterProfile extends Component {
     this.today = (month + '/' + date + '/' + year);
     this.state = {
       daughter_name: '',
-      dob: this.today,
+      dob: '',
       phone: '',
       address: '',
       interests: '',
@@ -170,10 +170,10 @@ export default class DaughterProfile extends Component {
                           <FormLabel raised labelStyle={style.formLabel}>{DATE_OF_BIRTH}</FormLabel>
                           <DatePicker
                             style={{ width: '100%' }}
-                            date={user_R.dateOfBirth}
+                            date={this.state.dob}
                             mode="date"
                             showIcon={false}
-                            placeholder=""
+                            placeholder=" "
                             format="MM/DD/YYYY"
                             minDate="01/01/1900"
                             maxDate={this.today}

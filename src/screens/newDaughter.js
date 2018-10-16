@@ -30,7 +30,7 @@ export default class NewDaughter extends Component {
     this.today = (month + '/' + date + '/' + year);
     this.state = {
       daughter_name: '',
-      dob: this.today,
+      dob: '',
       email: '',
       phone: '',
       address: '',
@@ -153,7 +153,7 @@ export default class NewDaughter extends Component {
                         date={this.state.dob}
                         mode="date"
                         showIcon={false}
-                        placeholder=""
+                        placeholder=" "
                         format="MM/DD/YYYY"
                         minDate="01/01/1900"
                         maxDate={this.today}

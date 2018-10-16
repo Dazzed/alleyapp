@@ -75,7 +75,7 @@ export default class DadProfile extends Component {
         profilePictureUrl
       } = this.state;
 
-      if (dad_name.trim() !== "" && phone.trim() !== "" && address.trim() !== "") {
+      if (dad_name.trim() !== "" && phone.trim() !== "" && address.trim() !== "" && dob.trim() !== "") {
         let name = dad_name;
         let dateOfBirth = dob;
         let id = await AsyncStorage.getItem('USER');
@@ -140,7 +140,7 @@ export default class DadProfile extends Component {
                     date={this.state.dob}
                     mode="date"
                     showIcon={false}
-                    placeholder=""
+                    placeholder=" "
                     format="MM/DD/YYYY"
                     minDate="01/01/1900"
                     maxDate={this.today}
