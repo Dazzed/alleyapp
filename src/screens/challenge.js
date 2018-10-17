@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, TouchableHighlight, TouchableOpacity, AsyncStorage, WebView, Image, ScrollView, TextInput, KeyboardAvoidingView} from 'react-native';
+import { View, TouchableHighlight, TouchableOpacity, Modal, AsyncStorage, WebView, Image, ScrollView, TextInput, KeyboardAvoidingView} from 'react-native';
 import { GET_CHALLENGE } from '../graphql/queries';
 import { Mutation } from "react-apollo";
 import { Query } from "react-apollo";
@@ -14,7 +14,8 @@ import { Text, FormInput, Button, FormLabel } from 'react-native-elements';
 import ImagePicker from 'react-native-image-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import Video from 'react-native-video';
-
+import ProgressLoader from '../loader/ProgressLoader';
+import styleLoader from '../loader/progressbar_style';
 
 export default class Challenge extends Component {
   constructor() {
@@ -66,6 +67,7 @@ export default class Challenge extends Component {
       eggTossItemType: "photo",
       isPhotoVideoUploading: false,
       isReloadDashboard: false,
+      showChatLoader: false,
       setImageFromLocal: require('../assets/images/default_icon.png')//'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
     }
     this.challengeChitChat = this.challengeChitChat.bind(this);
@@ -217,12 +219,15 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               console.log(217,this.state.challenge3CurrentIndex);
               console.log(217,this.state.challenge3Questions.length - 1);
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 1)){
-                  this.state.submitFinalAnswerForTimedHunt = true
                   this.setState({btnTitle: "SUBMIT"})
               }else{
                 this.state.submitFinalAnswerForTimedHunt = false
               }
-
+          }else{
+            this.state.submitFinalAnswerForTimedHunt = true
+            if(this.state.submitFinalAnswerForTimedHunt){
+                this.onBackChitChat();
+            }
           }
         }
       } catch (e) {
@@ -973,7 +978,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   loadVideo = async video => {
      const formData = new FormData();
-     if (video.fileName) { 
+     if (video.fileName) {
        formData.append("file", {
          name: video.fileName.split(".")[0],
          type: video.fileName.split(".")[1],
@@ -996,8 +1001,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
      console.log(908,response.data.Location);
      if(response.data.Location.length > 10){
-       this.setState({isPhotoVideoUploading: false});
+       this.setState({isPhotoVideoUploading: false,showChatLoader: false});
        this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
+     }else{
+       alert("Error on uploading video file!Please try later.");
+       this.setState({showChatLoader: false});
      }
   }
 
@@ -1183,6 +1191,16 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                         this.renderChallengeResponseForm(challenge_Team)
                       }
                     </View>
+                    <Modal
+                      animationType="fade"
+                      transparent={true}
+                      visible={this.state.showChatLoader}
+                      onRequestClose = {() => {
+                         this.setState({showChatLoader: false});
+                      }}
+                      style = {styleLoader.loaderMoedl}>
+                          <ProgressLoader />
+                    </Modal>
                   </View>
                 );
               }
@@ -1254,8 +1272,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             isPhotoVideoUploading: true,
           });
           console.log(1118, this.state.videoSource);
-          
+
           if (response.uri) {
+            this.setState({showChatLoader: true})
             this.loadVideo(response)
           }
         }
