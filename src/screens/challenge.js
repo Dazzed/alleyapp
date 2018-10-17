@@ -973,11 +973,19 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   loadVideo = async video => {
      const formData = new FormData();
-     formData.append("file", {
-       name: video.fileName.split(".")[0],
-       type: video.fileName.split(".")[1],
-       uri: video.uri
-    });
+     if (video.fileName) { 
+       formData.append("file", {
+         name: video.fileName.split(".")[0],
+         type: video.fileName.split(".")[1],
+         uri: video.uri
+       });
+     } else {
+       formData.append("file", {
+         name: video.uri.split(".")[0],
+         type: video.uri.split(".")[1],
+         uri: video.uri
+       });
+     }
 
     const response = await axios.post('http://54.234.174.200:3000/uploadChallengeResponses/', formData, {
        headers: {
@@ -988,7 +996,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
      console.log(908,response.data.Location);
      if(response.data.Location.length > 10){
-       this.setState({isPhotoVideoUploading: false,});
+       this.setState({isPhotoVideoUploading: false});
        this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
      }
   }
@@ -1246,6 +1254,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             isPhotoVideoUploading: true,
           });
           console.log(1118, this.state.videoSource);
+          
           if (response.uri) {
             this.loadVideo(response)
           }
