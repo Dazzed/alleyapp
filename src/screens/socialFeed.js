@@ -28,12 +28,12 @@ export default class SocialFeed extends Component {
         <View style={style.subContainer}>
           <View style={style.welcomeContainer}>
             <Text style={style.subTitle}>Social Feed</Text>
-          </View>
-          <View style={style.formContainer}>
-            <Image
-              source={require('../assets/images/alley-oop-logo-big.png')}
+            <Image resizeMode="contain"
+              source={require('../assets/images/alley-oop-logo.png')}
               style={style.logoImg}
             />
+          </View>
+          <View style={style.formContainer}>
 
             <Text style={style.tosText}>Coming Soon!</Text>
           </View>

@@ -16,7 +16,9 @@ module.exports = StyleSheet.create({
     flexDirection: 'row',
   },
   welcomeContainer: {
-    margin: 25
+    margin: 25,
+    justifyContent: 'center',
+    alignItems:'center'
   },
   title: {
     fontSize: 20,
@@ -25,11 +27,10 @@ module.exports = StyleSheet.create({
     textAlign: 'center'
   },
   logoName: {
-    width: '100%',
+    width: '80%',
   },
   logoImg: {
-    width: '22%',
-    marginLeft: '39%'
+    width: '30%',
   },
   subTitle: {
     fontSize: 14,

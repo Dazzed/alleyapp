@@ -87,12 +87,12 @@ export default class SignIn extends Component {
             <ScrollView keyboardShouldPersistTaps='handled'>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
-                <Image
+                <Image resizeMode="contain"
                   source={require('../../assets/images/alley-oop.png')}
                   style={style.logoName}
                 />
                 <Text style={style.subTitle}>Deepening inter-generational relationships through play</Text>
-                <Image
+                <Image resizeMode="contain"
                   source={require('../../assets/images/alley-oop-logo.png')}
                   style={style.logoImg}
                 />

@@ -32,7 +32,7 @@ export default class Help extends Component {
           </TouchableHighlight>
           <TouchableHighlight style={[styles.box, styles.box2]} onPress={() => { this.props.navigation.navigate('resources') }}>
             <View>
-              <Text h4 style={styles.box_text}>RESOURCES</Text>
+              <Text style={styles.box_text}>RESOURCES</Text>
             </View>
           </TouchableHighlight>
         </View>

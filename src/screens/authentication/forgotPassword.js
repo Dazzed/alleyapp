@@ -19,6 +19,10 @@ export default class ForgotPassword extends Component {
       errorMessage: ''
     };
   }
+  static navigationOptions = {
+    header: null
+  };
+
   forgotPassword = async targetMutation => {
     try {
       this.setState({
@@ -48,12 +52,12 @@ export default class ForgotPassword extends Component {
             <ScrollView keyboardShouldPersistTaps='handled'>
             <View style={style.subContainer}>
               <View style={style.welcomeContainer}>
-                <Image
+                <Image resizeMode="contain"
                   source={require('../../assets/images/alley-oop.png')}
                   style={style.logoName}
                 />
-                <Text style={style.subTitle}>Deepending inter-gernerational relationships through play - Forgot</Text>
-                <Image
+                <Text style={style.subTitle}>Deepending inter-gernerational relationships through play</Text>
+                <Image resizeMode="contain"
                   source={require('../../assets/images/alley-oop-logo.png')}
                   style={style.logoImg}
                 />
