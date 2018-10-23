@@ -16,7 +16,8 @@ module.exports = StyleSheet.create({
     flexDirection: 'row',
   },
   welcomeContainer: {
-    margin: 25,
+    marginLeft: 25,
+    marginRight:25,
     justifyContent: 'center',
     alignItems:'center'
   },
@@ -47,8 +48,15 @@ module.exports = StyleSheet.create({
     fontWeight: 'bold'
   },
   button: {
-    margin: 10
+    margin: 10,
   },
+
+  buttonRegistration: {
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 100,
+  },
+
   footerText: {
     textAlign: 'center',
     margin: 25,
@@ -57,7 +65,8 @@ module.exports = StyleSheet.create({
     color: Color.darkBlue
   },
   formContainer: {
-    margin: 10
+    marginLeft: 10,
+    marginRight: 10,
   },
   formLabel: {
     color: Color.black
@@ -78,6 +87,6 @@ module.exports = StyleSheet.create({
   error: {
     color: 'red',
     fontWeight: 'bold',
-    margin: 20
+    margin: 15
   }
 });

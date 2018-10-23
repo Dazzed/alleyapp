@@ -603,6 +603,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     }
                 </View>
                 <View style= {{width: 200,height: 150, flex: 1,justifyContent: 'center',flexDirection: 'column',alignItems: 'center',backgroundColor: 'white'}}>
+                    <Text style={{color: 'black', fontSize: 14}}>{request.data}</Text>
                     <TouchableOpacity onPress={() => this.selectPhotoTapped(index)} style = {{
                       backgroundColor: 'blue',
                       width: "75%",
@@ -857,11 +858,9 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
           console.log(769, this.state.selectedEggTossValues[i].data)
-          if(this.state.selectedEggTossValues[i].type === "text"){
-            if(this.state.selectedEggTossValues[i].data === ""){
-              allValueSet = false;
-              break;
-            }
+          if(this.state.selectedEggTossValues[i].data === ""){
+            allValueSet = false;
+            break;
           }
       }
       if(this.state.isPhotoVideoUploading){
