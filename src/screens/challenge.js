@@ -603,14 +603,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                     }
                 </View>
                 <View style= {{width: 200,height: 150, flex: 1,justifyContent: 'center',flexDirection: 'column',alignItems: 'center',backgroundColor: 'white'}}>
-                    <Text style={{color: 'black', fontSize: 14}}>{request.data}</Text>
+                    <Text style={{color: 'black', fontSize: 14, paddingLeft: 3,paddingRight: 3}}>{request.data}</Text>
                     <TouchableOpacity onPress={() => this.selectPhotoTapped(index)} style = {{
                       backgroundColor: 'blue',
                       width: "75%",
                       height: 30,
                       borderRadius: 5,
                       alignItems: 'center',
-                      margin: 10,
+                      marginTop: 8,
                       justifyContent: 'center',
                     }}>
                     <Text style={style.textShowPrompt}>Upload Image</Text>
@@ -621,7 +621,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
                       height: 30,
                       borderRadius: 5,
                       alignItems: 'center',
-                      margin: 10,
+                      marginTop: 10,
                       justifyContent: 'center',
                     }}>
                         <Text style={style.textShowPrompt}>Upload Video</Text>
