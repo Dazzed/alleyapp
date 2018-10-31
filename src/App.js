@@ -4,6 +4,7 @@ import Color from 'constants/colors';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import SignIn from 'auth/signin';
+import DesignTest from 'auth/DesignTest';
 import Register from 'auth/register';
 import ForgotPassword from 'auth/forgotPassword';
 import Tos from 'auth/tos';
@@ -186,6 +187,7 @@ export default class Main extends Component {
     const Authentication = StackNavigator(
       {
         signin: { screen: SignIn },
+        designTest: { screen: DesignTest },
         register: { screen: Register },
         teamProfile: { screen: TeamProfileRegister },
         dadProfile: { screen: DadProfileRegister },
@@ -204,8 +206,8 @@ export default class Main extends Component {
 
   render() {
     return (
-        <View style={{ flex: 1 }}>
-          <StatusBar barStyle="dark-content" />
+        <View style={{flex: 1 }}>
+          <StatusBar barStyle="dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true} />
           {this.renderContent()}
         </View>
       );

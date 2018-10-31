@@ -9,8 +9,6 @@ import style from 'styles/dashboard';
 
 import { Text, Icon } from 'react-native-elements';
 
-
-
 export default class Dashboard extends Component {
   constructor() {
     super();
@@ -78,7 +76,7 @@ export default class Dashboard extends Component {
       <ScrollView keyboardShouldPersistTaps='handled'>
         <View style={style.container}>
           <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only" notifyOnNetworkStatusChange={true}>
-            {({ data: { team_Dashboard }, loading, refetch }) => {
+            {({ data: { team_Dashboard }, loading, refetch}) => {
               if(this.state.isRefetch){
                 this.state.isRefetch = false
                 refetch()
@@ -87,7 +85,6 @@ export default class Dashboard extends Component {
                 return <Text>Loading ...</Text>;
               }
               {
-                console.log('teamId hhh trueue iss: '+JSON.stringify(team_Dashboard))
                 return (
                   <View style={style.dashboard}>
                     <View style={style.progressSummary}>

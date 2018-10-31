@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Image, TouchableHighlight, Text, TextInput , ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from "react-apollo";
 
 import Color from 'constants/colors';
 import style from 'styles/signin';
 
-import { FormLabel, FormInput, Button } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { REGISTER_MUTATION } from '../../graphql/mutation';
 import { setToken, setUserInfo, setUser, getUser, getActiveTeam, setActiveTeam } from '../../utils/util';
@@ -70,6 +69,11 @@ export default class Register extends Component {
         errorMessage: e.message.replace("GraphQL error: ", "")
       });
     }
+
+    if(this.state.error){
+        alert(this.state.errorMessage);
+    }
+
   }
 
 
@@ -77,58 +81,69 @@ export default class Register extends Component {
     return (
       <Mutation mutation={REGISTER_MUTATION}>
         {(user_C) => (
-          <KeyboardAwareScrollView>
-            <ScrollView keyboardShouldPersistTaps='handled'>
-              <View style={style.subContainer}>
-                <View style={style.welcomeContainer}>
-                  <Image resizeMode="contain"
-                    source={require('../../assets/images/alley-oop.png')}
-                    style={style.logoName}
-                  />
-                  <Text style={style.subTitle}>Deepening inter-generational relationships through play</Text>
-                  <Image resizeMode="contain"
-                    source={require('../../assets/images/alley-oop-logo.png')}
-                    style={style.logoImg}
-                  />
-                </View>
-                <View style={style.formContainer}>
-                  <FormLabel raised labelStyle={style.formLabel}>{EMAIL}</FormLabel>
-                  <FormInput raised
-                    autoCapitalize="none"
-                    onChangeText={value => {
-                      this.setState({ email: value });
-                    }}
-                  />
-                  <FormLabel raised labelStyle={style.formLabel}>{PASSWORD}</FormLabel>
-                  <FormInput raised
-                    secureTextEntry={true}
-                    onChangeText={value => {
-                      this.setState({ password: value });
-                    }}
-                  />
-                  <FormLabel raised labelStyle={style.formLabel}>{CONFIRM_PASSWORD}</FormLabel>
-                  <FormInput raised
-                    secureTextEntry={true}
-                    onChangeText={value => {
-                      this.setState({ confirm_password: value });
-                    }}
-                  />
-                  {this.state.error ? <Text style={style.error}>{this.state.errorMessage}</Text> : ''}
-                </View>
-                <Button raised
-                  title={'Register'}
-                  borderRadius={5}
-                  backgroundColor={Color.blue}
-                  textStyle={{ fontWeight: 'bold' }}
-                  style={style.button}
-                  onPress={this.register.bind(this, user_C)}
-
+          <KeyboardAwareScrollView style={{backgroundColor: 'white'}}>
+          <View style={style.subContainer}>
+          <TouchableHighlight onPress={() => this.props.navigation.goBack()}>
+              <Image resizeMode="contain"
+                source={require('../../assets/images/back_icon.png')}
+                style={style.logoBackImg}
+              />
+          </TouchableHighlight>
+            <View style={style.welcomeContainer}>
+                <Image resizeMode="contain"
+                  source={require('../../assets/images/alley-oop-logo.png')}
+                  style={style.logoImg0}
                 />
-                <TouchableHighlight onPress={() => this.props.navigation.goBack()}><Text style={style.forgotPassword}>Already have an account? Log In</Text></TouchableHighlight>
-                <Text style={style.footerText}>By creating an account you agree to our{'\n'} <Text style={style.tos} onPress={() => this.props.navigation.navigate('tos')}>Terms of Service</Text> and <Text onPress={() => this.props.navigation.navigate('privacyPolicy')} style={style.tos}>Privacy Policy</Text>
-                </Text>
-              </View>
-            </ScrollView>
+                <Image resizeMode="contain"
+                  source={require('../../assets/images/alley-oop.png')}
+                  style={style.logoName}
+                />
+                <Text style={style.subTitle}>Welcome to alley-oop! Please sign up to continue</Text>
+            </View>
+            <TextInput style={style.inputEmail}
+              placeholder={"Email"}
+              underlineColorAndroid='transparent'
+              selectionColor={'#D5D5D5'}
+              returnKeyType = {'next'}
+              onSubmitEditing={() => { this.Password.focus();}}
+              keyboardType = {'email-address'}
+              autoCapitalize = 'none'
+              onChangeText={value => {
+                this.setState({ email: value });
+              }}/>
+
+            <TextInput style={style.inputPassword}
+              placeholder={"Password"}
+              underlineColorAndroid='transparent'
+              selectionColor={'#D5D5D5'}
+              returnKeyType = {'next'}
+              keyboardType = {'default'}
+              onSubmitEditing={() => { this.ConfirmPassword.focus();}}
+              ref={(input) => { this.Password = input; }}
+              autoCapitalize = 'none'
+              onChangeText={value => {
+                this.setState({ password: value });
+              }}
+              secureTextEntry={true}/>
+
+              <TextInput style={style.inputPassword}
+                placeholder={"Confirm Password"}
+                underlineColorAndroid='transparent'
+                selectionColor={'#D5D5D5'}
+                returnKeyType = {'done'}
+                keyboardType = {'default'}
+                ref={(input) => { this.ConfirmPassword = input; }}
+                autoCapitalize = 'none'
+                onChangeText={value => {
+                  this.setState({ confirm_password: value });
+                }}
+                secureTextEntry={true}/>
+
+            <TouchableHighlight style={style.touchableStyleSignup} onPress={this.register.bind(this, user_C)} >
+              <Text style={style.signupText1}>Sign up</Text>
+            </TouchableHighlight>
+          </View>
+          <Text style={style.footerText}>By creating an account you agree to our{'\n'} <Text style={style.tos} onPress={() => this.props.navigation.navigate('tos')}>Terms of Service</Text> and <Text onPress={() => this.props.navigation.navigate('privacyPolicy')} style={style.tos}>Privacy Policy</Text></Text>
           </KeyboardAwareScrollView>
         )}
       </Mutation>

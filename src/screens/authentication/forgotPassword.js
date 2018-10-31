@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { View, Image, TouchableHighlight, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Image, TouchableHighlight, TextInput, Text, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { Mutation } from "react-apollo";
 import { FORGOT_PASSWORD_MUTATION } from '../../graphql/mutation';
 
 import Color from 'constants/colors';
 import style from 'styles/signin';
 
-import { FormLabel, FormInput, Button, Text } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 const EMAIL = 'Email';
 
@@ -42,47 +41,51 @@ export default class ForgotPassword extends Component {
         errorMessage: e.message.replace("GraphQL error: ", "")
       });
     }
+
+    if(this.state.error){
+        alert(this.state.errorMessage);
+    }
+
   }
 
   render() {
     return (
       <Mutation mutation={FORGOT_PASSWORD_MUTATION}>
         {(user_Forget_Password) => (
-          <KeyboardAwareScrollView>
-            <ScrollView keyboardShouldPersistTaps='handled'>
-            <View style={style.subContainer}>
-              <View style={style.welcomeContainer}>
+          <KeyboardAwareScrollView style={{backgroundColor: 'white'}}>
+          <View style={style.subContainer}>
+          <TouchableHighlight onPress={() => this.props.navigation.goBack()}>
+              <Image resizeMode="contain"
+                source={require('../../assets/images/back_icon.png')}
+                style={style.logoBackImg}
+              />
+          </TouchableHighlight>
+            <View style={style.welcomeContainer}>
+                <Image resizeMode="contain"
+                  source={require('../../assets/images/alley-oop-logo.png')}
+                  style={style.logoImg0}
+                />
                 <Image resizeMode="contain"
                   source={require('../../assets/images/alley-oop.png')}
                   style={style.logoName}
                 />
-                <Text style={style.subTitle}>Deepending inter-gernerational relationships through play</Text>
-                <Image resizeMode="contain"
-                  source={require('../../assets/images/alley-oop-logo.png')}
-                  style={style.logoImg}
-                />
-              </View>
-              <View style={style.formContainer}>
-                <FormLabel raised labelStyle={style.formLabel}>{EMAIL}</FormLabel>
-                <FormInput raised
-                  autoCapitalize="none"
-                  onChangeText={value => {
-                    this.setState({ email: value });
-                  }}
-                />
-                {this.state.error ? <Text style={style.error}>{this.state.errorMessage}</Text> : ''}
-              </View>
-              <Button raised
-                title={'RESET PASSWORD'}
-                borderRadius={5}
-                backgroundColor={Color.blue}
-                textStyle={{ fontWeight: 'bold' }}
-                style={style.button}
-                onPress={this.forgotPassword.bind(this, user_Forget_Password) }
-              />
-              <TouchableHighlight onPress={() => this.props.navigation.goBack()}><Text style={style.forgotPassword}>Already have an account? Log In</Text></TouchableHighlight>
+                <Text style={style.subTitle}>Enter your email address to recover your password</Text>
             </View>
-            </ScrollView>
+            <TextInput style={style.inputEmail}
+              placeholder={"Email"}
+              underlineColorAndroid='transparent'
+              selectionColor={'#D5D5D5'}
+              returnKeyType = {'done'}
+              keyboardType = {'email-address'}
+              autoCapitalize = 'none'
+              onChangeText={value => {
+                this.setState({ email: value });
+              }}/>
+
+            <TouchableHighlight style={style.touchableStyleRecover} onPress={this.forgotPassword.bind(this, user_Forget_Password) }>
+              <Text style={style.signupText1}>Recover</Text>
+            </TouchableHighlight>
+          </View>
           </KeyboardAwareScrollView>
         )}
       </Mutation>
