@@ -34,8 +34,8 @@ module.exports = StyleSheet.create({
   challengeTitle: {
     width: '80%',
     fontWeight: 'bold',
-    fontSize: 16,
-    color: "#0D0760",
+    fontSize: 12,
+    color: "#FFFFFF",
   },
   challengePointsView: {
     width: '20%',

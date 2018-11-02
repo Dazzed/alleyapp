@@ -24,14 +24,31 @@ export default class PrivacyPolicy extends Component {
   render() {
     return (
       <View style={style.container}>
-        <View style={style.subContainer}>
-          <View style={style.welcomeContainer}>
-            <Text style={style.subTitle}>Privacy Policy</Text>
-          </View>
-          <View style={style.formContainer}>
-            <Text style={style.tosText}>Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt explicabo</Text>
-          </View>
-        </View>
+      // <TouchableHighlight key={challenge.title} onPress={() => this.loadChallenge(challenge.id, team_Dashboard.activeMission)}>
+      //   <View style={style.challengeItem}>
+      //     <View style={style.challengeTitleRow}>
+      //       <View style={style.challengeTitleView}>
+      //         <Text style={style.challengeTitle}>{challenge.title}</Text>
+      //       </View>
+      //       <Text style={style.challengePoints}>{challenge.maxPts} Pts</Text>
+      //     </View>
+      //     <View>
+      //       <Text style={style.challengeLabel}>
+      //         Estimated Time:
+      //         <Text style={style.challengeValue}>{challenge.estTime}</Text>
+      //       </Text>
+      //     </View>
+      //     <View>
+      //       <Text style={style.challengeLabel}>
+      //         Location:
+      //         <Text style={style.challengeValue}>{challenge.location}</Text>
+      //       </Text>
+      //     </View>
+      //     <View>
+      //       <Text style={style.challengeStatus}>{challenge.status}</Text>
+      //     </View>
+      //   </View>
+      // </TouchableHighlight>
       </View>
     );
   }

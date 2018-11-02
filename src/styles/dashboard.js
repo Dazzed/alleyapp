@@ -123,27 +123,25 @@ module.exports = StyleSheet.create({
   challengeTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: "#0D0760",
-    padding: 5
+    color: "#FFFFFF",
+    marginBottom:10,
   },
   challengePoints: {
     fontSize: 14,
-    color: "#0D0760",
+    color: "#FFFFFF",
     fontWeight: 'bold',
-    width: '25%',
-    padding: 5,
-    textAlign: 'right'
+    textAlign: 'center',
+    marginTop:10,
   },
   challengeLabel: {
-    fontSize: 14,
-    color: "#0D0760",
+    fontSize: 12,
+    color: "#FFFFFF",
     fontWeight: 'bold',
-    marginLeft: 10,
     marginTop: 1
   },
   challengeValue: {
-    color: "#0D0760",
-    fontSize: 14,
+    color: "#FFFFFF",
+    fontSize: 12,
     fontWeight: 'normal'
   },
   challengeStatus: {
