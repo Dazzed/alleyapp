@@ -30,7 +30,7 @@ module.exports = StyleSheet.create({
   },
 
   sectionTitle: {
-    color: "#464646",
+    color: "rgba(3,3,3,0.37)",
     fontWeight: 'normal',
     marginBottom: 10,
     marginTop: 10,
@@ -38,8 +38,17 @@ module.exports = StyleSheet.create({
     textAlign: 'center'
   },
 
+  sectionSubTitle: {
+    color: "rgba(3,3,3,0.37)",
+    fontWeight: 'normal',
+    marginBottom: 10,
+    marginTop: 20,
+    fontSize: 16,
+    textAlign: 'center'
+  },
+
   progressValue0: {
-    color: "#4B4747",
+    color: "rgb(75,71,71)",
     fontSize: 40,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -48,24 +57,29 @@ module.exports = StyleSheet.create({
 
   progressLabel0: {
     fontWeight: 'bold',
-    color: '#4B4747',
+    color: 'rgb(75,71,71)',
     fontSize:15,
     textAlign: 'center'
   },
 
   progressItems0: {
     backgroundColor: '#FFFFFF',
-    padding: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 25,
+    paddingBottom: 25,
     marginLeft: '2%',
     marginRight: '2%',
-    marginTop: 10,
+    marginTop: 15,
+    marginBottom: 15,
     width: '96%',
     flex: 1,
+    borderRadius:8,
     flexDirection: 'row',
     shadowColor: '#ccc',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.9,
-    shadowRadius: 1,
+    shadowOffset: {width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
   },
 
 
@@ -84,12 +98,12 @@ module.exports = StyleSheet.create({
 
   progressLabel: {
     fontWeight: 'bold',
-    color: '#4B4747',
+    color: 'rgb(75,71,71)',
     width: '50%',
     fontSize:15,
   },
   progressValue: {
-    color: "#7B7474",
+    color: 'rgb(123,116,116)',
     width: '50%',
     textAlign: 'right',
     fontSize:14,

@@ -78,7 +78,7 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <ScrollView keyboardShouldPersistTaps='handled'>
+      <ScrollView style={{backgroundColor: 'white'}} keyboardShouldPersistTaps='handled'>
         <View style={style.container}>
           <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only" notifyOnNetworkStatusChange={true}>
             {({ data: { team_Dashboard }, loading, refetch}) => {
@@ -110,7 +110,7 @@ export default class Dashboard extends Component {
                       </View>
                     </View>
                     <View style={style.challenges}>
-                      <Text style={style.sectionTitle}>Challenges in this Mission</Text> //{team_Dashboard.activeMission.toUpperCase()}
+                      <Text style={style.sectionSubTitle}>Challenges in this Mission</Text> //{team_Dashboard.activeMission.toUpperCase()}
                         {team_Dashboard.currentMissionChallenges.map(challenge => {
                           return (
                             <TouchableHighlight style={{marginTop: 5,}} key={challenge.title} onPress={() => this.loadChallenge(challenge.id, team_Dashboard.activeMission)}>
@@ -152,7 +152,7 @@ export default class Dashboard extends Component {
                                             source={require('../assets/images/challenge-bg_transparent.png')}
                                           />
                                           <View style= {{width: "100%",height: 120,paddingLeft: 15, alignSelf: 'center', alignItem: 'center',justifyContent: 'center',position:'absolute',top:0}}>
-                                                <Text style={style.challengeTitle} numberOfLines={1}>{challenge.title}</Text>
+                                                <Text style={style.challengeTitle} numberOfLines={2}>{challenge.title}</Text>
                                                 <Text style={style.challengeLabel}>
                                                   Estimated Time:
                                                   <Text style={style.challengeValue}>{challenge.estTime}</Text>

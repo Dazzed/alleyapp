@@ -111,8 +111,14 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
-    }
+      backgroundColor: Color.transparent
+    },
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75,}}
+        source={require('../assets/images/header_bg.png')}
+      />
+    ),
   });
 
   loadInstructions = (data, type) => {
@@ -126,15 +132,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   challengeChitChat = async targetMutation => {
       try {
         var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('setImageAnswer iss: '+this.state.setChitChatAnswer)
-        console.log('Reqest ID iss: '+this.state.requestIDChitChat)
-        console.log('Reqest ID iss: '+this.state.selectedEitherOrOptions)
         this.setState({selectedEitherOrOptions: "["+this.state.selectedEitherOrOptions+"]"})
-        console.log('selectedEitherOrOptions After ID iss: '+this.state.selectedEitherOrOptions)
         let objResponse = null;
         if(this.state.requestTypeChitChat === 'bubble') {
              data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "text",data: this.state.setChitChatAnswer,duration: "0"}});
@@ -149,13 +147,10 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
          }
          data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDChitChat,type: "eitherOr",data: this.state.selectedEitherOrOptions.toString(),duration: "0"}});
         }
-        console.log(141, objResponse);
-        console.log(123, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           const requestId = this.state.requestIDChitChat;
           const targetIndex = this.state.challengeResponseDetail.requests.findIndex(r => r.id === requestId);
           let challengeResponseDetail = JSON.parse(JSON.stringify(this.state.challengeResponseDetail));
-
           challengeResponseDetail.requests[targetIndex].response = objResponse;
           this.setState({ challengeResponseDetail: { ...challengeResponseDetail, requests: challengeResponseDetail.requests } });
           this.state.isReloadDashboard =  true
@@ -182,19 +177,10 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   challengeEggToss = async targetMutation => {
       try {
         var userId = await AsyncStorage.getItem('USER');
-        console.log('userId iss: '+userId)
-        console.log('Challenge ID iss: '+this.props.navigation.state.params.id)
-        console.log('teamId ID iss: '+this.props.navigation.state.params.teamId)
-        console.log('missionID ID iss: '+this.state.missionID)
-        console.log('Reqest ID iss: '+this.state.requestIDEggToss)
-        console.log(161,JSON.stringify(this.state.selectedEggTossValues))
         let answerObject = {
           data: this.state.selectedEggTossValues
         }
-        console.log(165,JSON.stringify(answerObject))
-
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
-        console.log(169, data.data.challengeResponse_C);
         if(data.data.challengeResponse_C.length > 10){
           this.state.isReloadDashboard = true
           this.setState({showBubbleQuestion: false,showChallengeArtboard: true,showChallenge4Question: true})
@@ -216,8 +202,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               if(this.state.submitFinalAnswerForTimedHunt){
                   this.onBackChitChat();
               }
-              console.log(217,this.state.challenge3CurrentIndex);
-              console.log(217,this.state.challenge3Questions.length - 1);
               if(this.state.challenge3CurrentIndex == (this.state.challenge3Questions.length - 1)){
                   this.setState({btnTitle: "SUBMIT"})
               }else{
@@ -263,7 +247,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         console.log('Error in signIn', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
       }
   }
-
 
   renderChallengeFour = challenge => {
     if (this.isChallengeTwoSetInState == false) {
@@ -876,10 +859,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   };
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {
-      console.log(301, this.state.selectedFoodCrazyValues);
-      console.log(768, challenge.artboardDetails);
       let updatedArtBoardValue = challenge.artboardDetails.toString();
-
       var allValueSet = true;
       for(let i = 0; i<this.state.selectedFoodCrazyValues.length;i++){
           if(this.state.selectedFoodCrazyValues[i] !== ""){
@@ -1016,8 +996,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   showChatQuestion = (item, question,id,type,missionID,dataObj,response) => {
-    console.log("challenge.missionID iss: "+missionID)
-    console.log("935 response.data iss: "+JSON.stringify(response))
     if(response !== null){
         if(response.type === 'text'){
           this.setState({setChitChatAnswer: response.data, selectedEitherOrOptions: null})
@@ -1040,9 +1018,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   }
 
   showISpyQuestion = (item, question, url,type, requestID,response) => {
-    console.log(907,url);
-    console.log(991,response);
-
     if(response !== null){
       let jsonObject = JSON.parse(response.data)
       this.setState({
@@ -1101,11 +1076,11 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       return this.renderChallengeFive(challenge)
     }
   }
+
   render() {
     const id = this.props.navigation.state.params.id;
     return (
-      <KeyboardAwareScrollView>
-      <ScrollView keyboardShouldPersistTaps='handled'>
+      <KeyboardAwareScrollView style={{backgroundColor: 'white'}}>
         <View>
           <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
             {({ data: { challenge_Team }, loading }) => {
@@ -1206,7 +1181,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
             }}
           </Query>
         </View>
-      </ScrollView>
       </KeyboardAwareScrollView>
     );
   }
