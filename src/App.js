@@ -82,11 +82,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Social Feed',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="store"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -102,11 +101,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Help',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="help"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -120,11 +118,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Dashboard',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="dashboard"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -141,11 +138,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Profile',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="verified-user"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
 
               )
@@ -155,15 +151,14 @@ export default class Main extends Component {
         },
         fifthTab: {
           screen: StackNavigator({
-            settings: { screen: Settings }
+            settings: { screen: Settings}
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Settings',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="settings"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -173,12 +168,13 @@ export default class Main extends Component {
       {
         initialRouteName: 'thirdTab',
         tabBarOptions: {
-          inactiveTintColor: Color.darkBlue,
-          activeTintColor: 'white',
+          inactiveTintColor: '#8D8F91',
+          activeTintColor: '#1365A7',
           showIcon: true,
+          showLabel: false,
           style: {
             height: 55,
-            backgroundColor: Color.main
+            backgroundColor: Color.white
           }
         }
       }
@@ -206,8 +202,8 @@ export default class Main extends Component {
 
   render() {
     return (
-        <View style={{flex: 1 }}>
-          <StatusBar barStyle="dark-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true} />
+        <View style={{flex: 1, backgroundColor: "#FFFFFF"}}>
+          <StatusBar barStyle="light-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true} />
           {this.renderContent()}
         </View>
       );

@@ -14,30 +14,39 @@ export default class SocialFeed extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'SOCIAL FEED',
+    title: 'Social Feed',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
-    }
+      backgroundColor: Color.transparent
+    },
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75}}
+        source={require('../assets/images/header_bg.png')}
+      />
+    ),
   });
 
   render() {
     return (
       <View style={style.container}>
-        <View style={style.subContainer}>
           <View style={style.welcomeContainer}>
-            <Text style={style.subTitle}>Social Feed</Text>
-            <Image resizeMode="contain"
-              source={require('../assets/images/alley-oop-logo.png')}
-              style={style.logoImg}
-            />
+              <Image resizeMode="contain"
+                source={require('../assets/images/alley-oop.png')}
+                style={style.logoName0}
+              />
+              <Text style={style.subTitle}>Deepening inter-generational relationships through play</Text>
           </View>
-          <View style={style.formContainer}>
-
-            <Text style={style.tosText}>Coming Soon!</Text>
+          <Image resizeMode="contain"
+            source={require('../assets/images/alley-oop-logo.png')}
+            style={style.logoImg1}
+          />
+          <View>
+            <Text style={style.text40}>SOCIAL</Text>
+            <Text style={style.text14}>Coming Soon...</Text>
           </View>
-        </View>
+          <View/>
       </View>
     );
   }

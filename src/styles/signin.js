@@ -10,6 +10,12 @@ module.exports = StyleSheet.create({
     backgroundColor: Color.white,
   },
 
+  container: {
+    flex: 1,
+    backgroundColor: Color.white,
+    justifyContent: 'space-between',
+  },
+
   welcomeContainer: {
     marginLeft: 25,
     marginRight:25,
@@ -34,6 +40,13 @@ module.exports = StyleSheet.create({
     marginTop: 40,
   },
 
+  logoImg1: {
+    width: 80,
+    height: 60,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+
   logoBackImg: {
     width: 15,
     height: 20,
@@ -46,6 +59,12 @@ module.exports = StyleSheet.create({
     width: 200,
     height: 50,
     marginTop: 20,
+  },
+
+  logoName0: {
+    width: "80%",
+    height: 75,
+    marginTop: 40,
   },
 
   subTitle: {
@@ -191,6 +210,21 @@ crossIconOpacity: {
   top:-15,
   backgroundColor: 'white',
   zIndex: 99,
+},
+
+text40: {
+  fontSize: 40,
+  fontWeight: 'normal',
+  color: '#310B3E',
+  textAlign: 'center',
+},
+
+text14: {
+  fontSize: 14,
+  fontWeight: 'normal',
+  color: '#0D0760',
+  textAlign: 'center',
+  marginTop: 15,
 },
 
 });

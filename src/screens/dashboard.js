@@ -19,19 +19,24 @@ export default class Dashboard extends Component {
     }
     AsyncStorage.setItem('IS_LOGIN', 'true');
   }
+
+
   static navigationOptions = ({ navigation: { navigate } }) => ({
     title: 'DASHBOARD',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
+      backgroundColor: Color.transparent
     },
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75,}}
+        source={require('../assets/images/header_bg.png')}
+      />
+    ),
     headerLeft: null
   });
 
-  componentWillReceiveProps(nextProps){
-    alert('Call everytime');
-  }
   componentDidMount(){
     this.props.navigation.addListener('willFocus', (playload)=>{
       AsyncStorage.getItem('ACTIVE_TEAM').then((value) => {
@@ -88,24 +93,24 @@ export default class Dashboard extends Component {
                 return (
                   <View style={style.dashboard}>
                     <View style={style.progressSummary}>
-                      <Text style={style.sectionTitle}>PROGRESS SUMMARY</Text>
+                      <Text style={style.sectionTitle}>Progress Summary</Text>
                       <View>
-                        <View style={style.progressItems}>
-                          <Text style={style.progressLabel}>Points to Date</Text>
-                          <Text style={style.progressValue}>{team_Dashboard.pointsToDate}</Text>
+                        <View>
+                          <Text style={style.progressValue0}>{team_Dashboard.pointsToDate}</Text>
+                          <Text style={style.progressLabel0}>Points to Date</Text>
                         </View>
-                        <View style={style.progressItems}>
+                        <View style={style.progressItems0}>
                           <Text style={style.progressLabel}>Active Mission</Text>
                           <Text style={style.progressValue}>{team_Dashboard.activeMission}</Text>
                         </View>
-                        <View style={style.progressItems}>
+                        <View style={style.progressItems0}>
                           <Text style={style.progressLabel}>Mission Deadline</Text>
                           <Text style={style.progressValue}>{team_Dashboard.missionDeadLine}</Text>
                         </View>
                       </View>
                     </View>
                     <View style={style.challenges}>
-                      <Text style={style.sectionTitle}>CHALLENGES IN {team_Dashboard.activeMission.toUpperCase()}</Text>
+                      <Text style={style.sectionTitle}>Challenges in this Mission</Text> //{team_Dashboard.activeMission.toUpperCase()}
                         {team_Dashboard.currentMissionChallenges.map(challenge => {
                           return (
                             <TouchableHighlight key={challenge.title} onPress={() => this.loadChallenge(challenge.id, team_Dashboard.activeMission)}>

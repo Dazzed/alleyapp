@@ -6,7 +6,6 @@ const { width } = Dimensions.get('window');
 
 module.exports = StyleSheet.create({
   container: {
-    padding: 10,
     flex: 1,
     flexDirection: 'column',
     backgroundColor: Color.white,
@@ -14,15 +13,62 @@ module.exports = StyleSheet.create({
     alignItems: 'center',
   },
   dashboard: {
-    width: '100%'
+    width: '100%',
+    backgroundColor: Color.white,
   },
+
+  progressSummary: {
+    width: '100%',
+    padding:10,
+    backgroundColor: Color.white,
+  },
+
+  challenges: {
+    width: '100%',
+    padding:10,
+    backgroundColor: '#FAFAFA',
+  },
+
   sectionTitle: {
-    color: "#61037C",
-    fontWeight: 'bold',
+    color: "#464646",
+    fontWeight: 'normal',
     marginBottom: 10,
     marginTop: 10,
-    marginLeft: '2%'
+    fontSize: 16,
+    textAlign: 'center'
   },
+
+  progressValue0: {
+    color: "#4B4747",
+    fontSize: 40,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop:15,
+  },
+
+  progressLabel0: {
+    fontWeight: 'bold',
+    color: '#4B4747',
+    fontSize:15,
+    textAlign: 'center'
+  },
+
+  progressItems0: {
+    backgroundColor: '#FFFFFF',
+    padding: 15,
+    marginLeft: '2%',
+    marginRight: '2%',
+    marginTop: 10,
+    width: '96%',
+    flex: 1,
+    flexDirection: 'row',
+    shadowColor: '#ccc',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.9,
+    shadowRadius: 1,
+  },
+
+
   progressItems: {
     backgroundColor: '#0D0760',
     padding: 15,
@@ -32,17 +78,22 @@ module.exports = StyleSheet.create({
     marginBottom: 5,
     width: '96%',
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
+
+
   progressLabel: {
     fontWeight: 'bold',
-    color: '#ffffff',
-    width: '50%'
+    color: '#4B4747',
+    width: '50%',
+    fontSize:15,
   },
   progressValue: {
-    color: "#ffffff88",
+    color: "#7B7474",
     width: '50%',
-    textAlign: 'right'
+    textAlign: 'right',
+    fontSize:14,
+    fontWeight: 'normal',
   },
   challenge: {
     width: '70%',

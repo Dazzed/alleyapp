@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text,AsyncStorage} from 'react-native';
+import { View, Text,AsyncStorage,Image} from 'react-native';
 
 import style from 'styles/settings';
 import Color from 'constants/colors';
@@ -7,12 +7,18 @@ import { Button } from 'react-native-elements';
 
 export default class Settings extends Component {
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'SETTINGS',
+    title: 'Settings',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
-    }
+      backgroundColor: Color.transparent
+    },
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75}}
+        source={require('../assets/images/header_bg.png')}
+      />
+    ),
   });
 
   render() {
@@ -28,7 +34,7 @@ export default class Settings extends Component {
             this.props.screenProps.signOut();
           }}
         />
-        
+
       </View>
     );
   }

@@ -45,26 +45,34 @@ export default class DadTeams extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'TEAMS',
+    title: 'Teams',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
+      backgroundColor: Color.transparent
     },
-    headerLeft: null,
-    headerRight: (
-      <TouchableHighlight onPress={() =>  {navigate('newTeam')}}>
-        <View style={{width: 40,height:40,alignItems: 'center',marginRight: 5}}>
-          <Image style={{
-            width: 36,
-            height: 39,
-            borderRadius: 18
-          }}
-          source={require('../assets/images/add_icon_white.png')} />
-        </View>
-      </TouchableHighlight>
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75}}
+        source={require('../assets/images/header_bg.png')}
+      />
     ),
+    headerLeft: null,
+    headerRight: null,
   });
+
+  // headerRight: (
+  //   <TouchableHighlight onPress={() =>  {navigate('newTeam')}}>
+  //     <View style={{width: 40,height:40,alignItems: 'center',marginRight: 5}}>
+  //       <Image style={{
+  //         width: 36,
+  //         height: 39,
+  //         borderRadius: 18
+  //       }}
+  //       source={require('../assets/images/add_icon_white.png')} />
+  //     </View>
+  //   </TouchableHighlight>
+  // ),
 
   componentDidMount(){
     AsyncStorage.getItem('ACTIVE_TEAM').then((value) => {

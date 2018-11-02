@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Linking, TouchableHighlight } from 'react-native';
+import { View, Linking, TouchableHighlight,Image } from 'react-native';
 
 import Color from 'constants/colors';
 import styles from 'styles/help';
@@ -13,12 +13,18 @@ export default class Help extends Component {
   }
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'HELP',
+    title: 'Settings',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
-    }
+      backgroundColor: Color.transparent
+    },
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75}}
+        source={require('../assets/images/header_bg.png')}
+      />
+    ),
   });
 
   render() {
