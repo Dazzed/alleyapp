@@ -13,17 +13,29 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
+
+  scrollStyleChallenge: {
+    width: '100%',
+    backgroundColor: 'white',
+    marginTop: 10,
+    paddingTop: 10
+  },
+
   challenge: {
     width: '100%',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  challengeInfo: {
-    width: '100%',
+
+  challengeSpaceView: {
+    width: '92%'
   },
+
   challengeStrip: {
-    width: '96%',
-    marginTop: 5,
-    marginLeft: '2%',
-    marginRight: '2%',
+    width: '100%',
+    position:'relative'
   },
   challengeTitleView: {
     flex: 1,

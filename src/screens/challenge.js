@@ -978,7 +978,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
        },
      });
 
-     console.log(908,response.data.Location);
      if(response.data.Location.length > 10){
        this.setState({isPhotoVideoUploading: false,showChatLoader: false});
        this.setEggTossOptionsValue(this.state.challengeOneCurrentIndex, response.data.Location);
@@ -1080,7 +1079,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
   render() {
     const id = this.props.navigation.state.params.id;
     return (
-      <KeyboardAwareScrollView style={{backgroundColor: 'white'}}>
+      <KeyboardAwareScrollView style={style.scrollStyleChallenge}>
         <View>
           <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
             {({ data: { challenge_Team }, loading }) => {
@@ -1090,91 +1089,55 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
               {
                 return (
                   <View style={style.challenge}>
-                    <View style={style.challengeInfo}>
-                      <View style={style.challengeStrip}>
-                        <View style={style.challengeTitleView}>
-                          <Text style={style.challengeTitle}>{challenge_Team.title}</Text>
-                          <View style={style.challengePointsView}>
-                            <Text style={style.challengePoints}>{challenge_Team.pctDone} Pts</Text>
-                          </View>
-                        </View>
-                      </View>
-                      <View style={style.challengeDetailsView}>
-                        <View style={style.challengeBasicInfo}>
-                          <Text style={style.challengeDetailsLabel}>
-                            Available Points:
-                            <Text style={style.challengeDetailsValue}> {challenge_Team.maxPts}</Text>
-                          </Text>
-                          <Text style={style.challengeDetailsLabel}>
-                            Materials:
-                            <Text style={style.challengeDetailsValue}> {challenge_Team.materials}</Text>
-                          </Text>
-                        </View>
-                        <View style={style.challengeInfoView}>
-                          {
-                            challenge_Team.description.map(desc => {
-                              if (desc.type === "videoOverlay")
-                                return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'videoOverlay')}>
-                                    <View style={style.challegeInfoIconsView}>
-                                      <Image style={style.challegeInfoIcons} source={require('../assets/images/video.png')} />
-                                    </View>
-                                  </TouchableHighlight>
-                                )
-                            })}
-                          {
-                            challenge_Team.description.map(desc => {
-                              if (desc.type === "audioOverlay")
-                                return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'audioOverlay')}>
-                                    <View style={style.challegeInfoIconsView}>
-                                      <Image style={style.challegeInfoIcons} source={require('../assets/images/audio.png')} />
-                                    </View>
-                                  </TouchableHighlight>
-                                )
-                            })}
-                          {
-                            challenge_Team.description.map(desc => {
-                              if (desc.type === "textOverlay")
-                                return (
-                                  <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'textOverlay')}>
-                                    <View style={style.challegeInfoIconsView}>
-                                      <Image style={style.challegeInfoIcons} source={require('../assets/images/info.png')} />
-                                    </View>
-                                  </TouchableHighlight>
-                                )
-                            })}
-                        </View>
-                      </View>
-                      {
-                        challenge_Team.description.map(desc => {
-                          if (desc.type === "text")
-                          return (
-                            <View key={desc.id} style={style.challengeDetailsView}>
-                              <View style={style.challengeDescriptionView}>
-                                <ScrollView keyboardShouldPersistTaps='handled'>
-                                  <Text style={style.challengeDescription}>{desc.data}</Text>
-                                </ScrollView>
+                    <View style={style.challengeSpaceView}>
+                          <View style={style.challengeStrip}>
+                            <Image
+                              style={{width: "100%",height: 60,borderRadius: 10,resizeMode: 'stretch'}}
+                              source={require('../assets/images/challenge_details_heading_bg.png')}
+                            />
+                            <View style={{width: "100%",height: 60 ,flexDirection: 'row',position:'absolute',top:0,}}>
+                              <View style={{width: "70%",alignItem: 'center',justifyContent: 'center',flexDirection: 'row',position:'relative'}}>
+                                  <Image
+                                    style={{width: "100%",height: 60,borderRadius: 10,resizeMode: 'stretch',position:'absolute',top:0,}}
+                                    source={require('../assets/images/transparent_strip_bg.png')}
+                                  />
+                                  <Text style={{width: "70%",fontSize: 14, alignSelf: 'center',ontWeight: 'bold', color: 'white',marginLeft: 20}}>{challenge_Team.title} Pts</Text>
+                                  <View style = {{width: "30%",alignItem: 'center',justifyContent: 'flex-end',flexDirection: 'row'}}>
+                                      <Image
+                                        style={{width: 20,height: 20,resizeMode: 'center',alignSelf: 'center',marginLeft: 10}}
+                                        source={require('../assets/images/video_icon.png')}
+                                      />
+                                      <Image
+                                        style={{width: 20,height: 20,resizeMode: 'center',alignSelf: 'center',marginLeft: 10}}
+                                        source={require('../assets/images/audio_icon.png')}
+                                      />
+                                      <Image
+                                        style={{width: 20,height: 20,resizeMode: 'center',alignSelf: 'center',marginLeft: 10}}
+                                        source={require('../assets/images/info_icon.png')}
+                                      />
+                                  </View>
+                              </View>
+                              <View style={{width: "30%",alignItem: 'center',justifyContent: 'center'}}>
+                                  <Text style={{fontSize: 12, fontWeight: 'bold', color: 'white',alignSelf: 'center',textAlign: 'right'}}>{challenge_Team.pctDone} Pts</Text>
                               </View>
                             </View>
-                          )
-                      })}
+                          </View>
+                        <View style={style.challengeResponse}>
+                          {
+                            this.renderChallengeResponseForm(challenge_Team)
+                          }
+                        </View>
+                        <Modal
+                          animationType="fade"
+                          transparent={true}
+                          visible={this.state.showChatLoader}
+                          onRequestClose = {() => {
+                             this.setState({showChatLoader: false});
+                          }}
+                          style = {styleLoader.loaderMoedl}>
+                              <ProgressLoader />
+                        </Modal>
                     </View>
-                    <View style={style.challengeResponse}>
-                      {
-                        this.renderChallengeResponseForm(challenge_Team)
-                      }
-                    </View>
-                    <Modal
-                      animationType="fade"
-                      transparent={true}
-                      visible={this.state.showChatLoader}
-                      onRequestClose = {() => {
-                         this.setState({showChatLoader: false});
-                      }}
-                      style = {styleLoader.loaderMoedl}>
-                          <ProgressLoader />
-                    </Modal>
                   </View>
                 );
               }
