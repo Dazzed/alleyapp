@@ -22,17 +22,19 @@ export default class Dashboard extends Component {
 
 
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'DASHBOARD',
+    title: 'Dashboard',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
       backgroundColor: Color.transparent
     },
     headerBackground: (
-      <Image
-        style={{width: "100%",height: 75,}}
-        source={require('../assets/images/header_bg.png')}
-      />
+      <View style= {{flexDirection: 'column'}}>
+        <Image
+          style={{width: "100%",height: 115,}}
+          source={require('../assets/images/rounded_header.jpg')}
+        />
+      </View>
     ),
     headerLeft: null
   });

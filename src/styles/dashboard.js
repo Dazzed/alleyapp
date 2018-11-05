@@ -20,6 +20,7 @@ module.exports = StyleSheet.create({
   progressSummary: {
     width: '100%',
     padding:10,
+    marginTop:50,
     backgroundColor: Color.white,
   },
 

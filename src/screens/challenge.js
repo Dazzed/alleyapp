@@ -129,6 +129,358 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     })
   }
 
+  //Comman this
+
+  renderChallengeResponseForm = challenge =>  {
+    if (challenge.type == "1" ) {
+      return this.renderChallengeOne(challenge)
+    }
+    if (challenge.type == "2") {
+      return this.renderChallengeTwo(challenge)
+    }
+    if (challenge.type == "3") {
+      if (this.state.challenge3Questions != null) {
+        return this.renderChallengeThree(challenge)
+      } else {
+        this.setState({
+          missionID: challenge.missionID,
+          challenge3Questions: challenge.requests
+        })
+      }
+    }
+
+    if (challenge.type == "4") {
+      if (this.state.challenge4Questions != null) {
+        return this.renderChallengeFour(challenge)
+      } else {
+        this.setState({
+          missionID: challenge.missionID,
+          challenge4Questions: challenge.requests
+        })
+      }
+    }
+
+    if (challenge.type == "5") {
+      return this.renderChallengeFive(challenge)
+    }
+  }
+
+  render() {
+    const id = this.props.navigation.state.params.id;
+    return (
+      <KeyboardAwareScrollView style={style.scrollStyleChallenge}>
+        <View>
+          <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
+            {({ data: { challenge_Team }, loading }) => {
+              if (loading || !challenge_Team) {
+                return <Text>Loading ...</Text>;
+              }
+              {
+                return (
+                  <View style={style.challenge}>
+                    <View style={style.challengeSpaceView}>
+                        <View style={style.challengeStrip}>
+                          <Image
+                            style={{width: "100%",height: 60,borderRadius: 10,resizeMode: 'stretch'}}
+                            source={require('../assets/images/challenge_details_heading_bg.png')}
+                          />
+                          <View style={{width: "100%",height: 60 ,flexDirection: 'row',position:'absolute',top:0,}}>
+                            <View style={{width: "75%",justifyContent: 'center',flexDirection: 'row',position:'relative'}}>
+                                <Image
+                                  style={{width: "100%",height: 60,borderRadius: 10,resizeMode: 'stretch',position:'absolute',top:0,}}
+                                  source={require('../assets/images/trasparent_strip_challenge_details.png')}
+                                />
+
+                                <Text style={{width: "60%",fontSize: 14, alignSelf: 'center',fontWeight: 'bold', color: 'white',marginLeft: 20}}>{challenge_Team.title} Pts</Text>
+                                <View style = {{width: "40%",justifyContent: 'flex-end',flexDirection: 'row',padding: 10}}>
+                                  {
+                                   challenge_Team.description.map(desc => {
+                                     if (desc.type === "videoOverlay")
+                                       return (
+                                         <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'videoOverlay')}>
+                                             <Image
+                                               style={{width: 15,height: 15,resizeMode: 'contain',alignSelf: 'center'}}
+                                               source={require('../assets/images/video_icon.png')}
+                                             />
+                                         </TouchableHighlight>
+                                       )
+                                   })}
+                                   {
+                                     challenge_Team.description.map(desc => {
+                                       if (desc.type === "audioOverlay")
+                                         return (
+                                           <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'audioOverlay')}>
+                                               <Image
+                                                 style={{width: 15,height: 15,resizeMode: 'contain',alignSelf: 'center',marginLeft: 5}}
+                                                 source={require('../assets/images/audio_icon.png')}
+                                               />
+                                           </TouchableHighlight>
+                                         )
+                                     })}
+                                     {
+                                       challenge_Team.description.map(desc => {
+                                         if (desc.type === "textOverlay")
+                                           return (
+                                             <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'textOverlay')}>
+                                             <Image
+                                               style={{width: 15,height: 15,resizeMode: 'contain',alignSelf: 'center',marginLeft: 5}}
+                                               source={require('../assets/images/info_icon.png')}
+                                             />
+                                             </TouchableHighlight>
+                                           )
+                                       })}
+                                </View>
+                            </View>
+                            <View style={{width: "25%",justifyContent: 'center'}}>
+                                <Text style={{fontSize: 12, fontWeight: 'bold', color: 'white',alignSelf: 'center',textAlign: 'right'}}>{challenge_Team.pctDone} Pts</Text>
+                            </View>
+                          </View>
+                        </View>
+                        {
+                          challenge_Team.description.map(desc => {
+                            if (desc.type === "text")
+                            return (
+                              <View key={desc.id} style={style.challengeDetailsView}>
+                                <View style={style.challengeDescriptionView}>
+                                  <ScrollView keyboardShouldPersistTaps='handled'>
+                                    <Text style={style.challengeDetailsLabel}>
+                                      Available Points:
+                                      <Text style={style.challengeDetailsValue}> {challenge_Team.maxPts}</Text>
+                                    </Text>
+                                    <Text style={style.challengeDetailsLabel}>
+                                      Materials:
+                                      <Text style={style.challengeDetailsValue}> {challenge_Team.materials}</Text>
+                                    </Text>
+                                    <Text style={style.challengeDetailsLabel}>
+                                      Details:
+                                      <Text style={style.challengeDescription}>{desc.data}</Text>
+                                    </Text>
+                                  </ScrollView>
+                                </View>
+                              </View>
+                            )
+                        })}
+                        <View style={style.challengeResponse}>
+                          {
+                            this.renderChallengeResponseForm(challenge_Team)
+                          }
+                        </View>
+                        <Modal
+                          animationType="fade"
+                          transparent={true}
+                          visible={this.state.showChatLoader}
+                          onRequestClose = {() => {
+                             this.setState({showChatLoader: false});
+                          }}
+                          style = {styleLoader.loaderMoedl}>
+                              <ProgressLoader />
+                        </Modal>
+                    </View>
+                  </View>
+                );
+              }
+            }}
+          </Query>
+        </View>
+      </KeyboardAwareScrollView>
+    );
+  }
+
+
+  //END Comman Details
+
+
+  //Challenge One Details Start
+
+  renderChallengeOne = challenge => {
+    return (
+      <Mutation mutation={ANSWER_CHALLENGE_EGG_TOSS_MUTATION}>
+        {(challengeResponse_C) => (
+          <View  style={style.requestItemParent}>
+            <View style={style.requestItemBg1}>
+                <View style={style.eggTossParentView}>
+                  {this.renderFieldsOne(challenge)}
+                </View>
+            </View>
+            <View style= {style.optionNextCancelCenterView}>
+                <TouchableHighlight style={style.submitStyle} onPress={() => this.submitChallengeOneAnswers(challenge, challengeResponse_C)}>
+                  <Text style={style.submitText}>Submit</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={style.cancelStyle} onPress={() => this.onBack() }>
+                  <Text style={style.cancelText}>Cancel</Text>
+                </TouchableHighlight>
+            </View>
+          </View>
+        )}
+      </Mutation>
+    )
+  }
+
+  renderFieldsOne = challenge => {
+    if (this.pos === 0) {
+      let answerObject = [];
+      for(let i = 0; i < challenge.requests.length;i++){
+        var eggTossAnswer = {
+            "requestId":challenge.requests[i].id,
+            "type" : challenge.requests[i].type,
+            "data": ""
+          }
+          answerObject.push(eggTossAnswer);
+      }
+      this.setState({selectedEggTossValues: answerObject,isLoadChallengeOne: true});
+      this.pos = 1;
+    }
+    return (
+      challenge.requests.map((request,index) => {
+        {
+          if(request.type === 'text'){
+              if(request.requestType === "none"){
+                  return (
+                    <View key={request.id} style={style.eggTossChildRowView100}>
+                        <TextInput
+                          key={request.id}
+                          style={style.inputEggToss}
+                          placeholder = {request.data}
+                          onChangeText={(setChitChatAnswer) => this.setEggTossOptionsValue(index,setChitChatAnswer)}
+                        />
+                    </View>
+                  )
+              }else{
+                return (
+                  <View key={request.id} style={style.eggTossChildRowView50Left}>
+                      <TextInput
+                        key={request.id}
+                        style={style.inputEggToss}
+                        onChangeText={(setChitChatAnswer) => this.setEggTossOptionsValue(index,setChitChatAnswer)}
+                      />
+                  </View>
+                )
+              }
+          }else{
+            return (
+              <View style = {{backgroundColor: '#FFFFFF', width: "100%", height: 150,marginTop: 15,flexDirection: 'row',}}>
+                <View style= {{width: 150,position:'relative'}}>
+
+                    {!this.state.requestForVideo ?
+                        <Image
+                          style={{
+                            width: 150,
+                            height: 150,
+                          }}
+                          source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
+                        />
+                        :
+                        <Video source={{uri: this.state.videoSource}}
+                           ref={(ref) => {
+                             this.player = ref
+                           }}
+                           onBuffer={this.onBuffer}
+                           onError={this.videoError}
+                           style={{
+                             width: 150,
+                             height: 150,
+                           }}/>
+                    }
+                    <Text style={{color: 'rgb(112,112,112)', fontSize: 12,marginTop: 70, alignSelf: 'center',position:'absolute',top:0}}>Preview</Text>
+                </View>
+                <View style= {{width: 250,height: 150, flex: 1,justifyContent: 'center',flexDirection: 'column',alignItems: 'center'}}>
+                    <View style = {{width: '90%',paddingLeft:5,paddingRight:5, paddingTop: 15,paddingBottom: 15,backgroundColor: '#fff',borderWidth: 1,borderRadius: 1,borderColor: 'rgb(112,112,112)',}}>
+                      <Text style={{color: 'rgb(137,137,137)', fontSize: 12, paddingLeft: 3,paddingRight: 3}}>Photo Description</Text>//{request.data}
+                    </View>
+                    <View style = {{width: '95%',flexDirection: 'row', alignItems: 'center',marginTop:20}}>
+                      <TouchableOpacity onPress={() => this.selectPhotoTapped(index)} style = {{
+                        backgroundColor: 'white',
+                        width: "50%",
+                        height: 30,
+                        borderRadius: 50,
+                        borderColor: '#1365A7',
+                        borderWidth:1,
+                        padding:5,
+                        justifyContent: 'center',
+                      }}>
+                      <Text style={{color: '#1365A7',fontWeight: 'bold',fontSize: 12}}>+ Add photo</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => this.selectVideoTapped(index)} style = {{
+                        backgroundColor: 'white',
+                        width: "50%",
+                        height: 30,
+                        marginLeft:5,
+                        borderRadius: 50,
+                        borderColor: '#1365A7',
+                        borderWidth:1,
+                        padding:5,
+                        justifyContent: 'center',
+                      }}>
+                      <Text style={{color: '#1365A7',fontWeight: 'bold',fontSize: 12}}>+ Add video</Text>
+                      </TouchableOpacity>
+                    </View>
+                </View>
+              </View>
+            )
+          }
+        }
+      })
+    )
+  }
+
+  setEggTossOptionsValue(index, value){
+      console.log(562, this.state.selectedEggTossValues);
+      console.log(563, this.state.selectedEggTossValues.length);
+      let selectedEggTossValues = this.state.selectedEggTossValues;
+      this.state.selectedEggTossValues[index].data = value;
+      if(this.state.selectedEggTossValues[index].type !== 'text'){
+          this.state.selectedEggTossValues[index].type = this.state.eggTossItemType;
+      }
+      this.setState({ selectedEggTossValues: [...selectedEggTossValues]});
+      console.log(565, this.state.selectedEggTossValues);
+  }
+
+  submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
+      let ar = [];
+      ar.push(this.state.selectedEggTossValues)
+      console.log(764, this.state.selectedEggTossValues);
+      console.log(765, ar);
+      var allValueSet = true;
+      for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
+          console.log(769, this.state.selectedEggTossValues[i].data)
+          if(this.state.selectedEggTossValues[i].data === ""){
+            allValueSet = false;
+            break;
+          }
+      }
+      if(this.state.isPhotoVideoUploading){
+          alert('Please wait while uploading image or video.');
+      }else{
+        if(allValueSet){
+          this.setState({requestIDEggToss: challenge.requests[0].id,missionID: challenge.missionID});
+          this.challengeEggToss(challengeResponse_C);
+        }else{
+            alert("Please fill all values & upload image or video for option.")
+        }
+      }
+  };
+
+  challengeEggToss = async targetMutation => {
+      try {
+        var userId = await AsyncStorage.getItem('USER');
+        let answerObject = {
+          data: this.state.selectedEggTossValues
+        }
+        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
+        if(data.data.challengeResponse_C.length > 10){
+          this.state.isReloadDashboard = true
+          this.setState({showBubbleQuestion: false,showChallengeArtboard: true,showChallenge4Question: true})
+          this.onBack();
+        }
+      } catch (e) {
+        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
+      }
+  }
+
+ //End Challenge One Details
+
+
+
   challengeChitChat = async targetMutation => {
       try {
         var userId = await AsyncStorage.getItem('USER');
@@ -167,23 +519,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
         const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDFoodCrazy ,type: "wordFit",data: this.state.setUpdatedArtBoard,duration: "0"}});
         if(data.data.challengeResponse_C.length > 10){
           this.state.isReloadDashboard = true
-          this.onBack();
-        }
-      } catch (e) {
-        console.log('Error in Challenge', { graphQLErrors: e.graphQLErrors, networkError: e.networkError, message: e.message, extraInfo: e.extraInfo });
-      }
-  }
-
-  challengeEggToss = async targetMutation => {
-      try {
-        var userId = await AsyncStorage.getItem('USER');
-        let answerObject = {
-          data: this.state.selectedEggTossValues
-        }
-        const data = await targetMutation({ variables: {userID: userId ,missionID: this.state.missionID ,challengeID: this.props.navigation.state.params.id , teamId: this.props.navigation.state.params.teamId, requestID: this.state.requestIDEggToss ,data: JSON.stringify(answerObject)}});
-        if(data.data.challengeResponse_C.length > 10){
-          this.state.isReloadDashboard = true
-          this.setState({showBubbleQuestion: false,showChallengeArtboard: true,showChallenge4Question: true})
           this.onBack();
         }
       } catch (e) {
@@ -468,29 +803,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       })
   }
 
-  renderChallengeOne = challenge => {
-    return (
-      <Mutation mutation={ANSWER_CHALLENGE_EGG_TOSS_MUTATION}>
-        {(challengeResponse_C) => (
-          <View  style={style.requestItemParent}>
-            <View style={style.requestItemBg1}>
-                <View style={style.eggTossParentView}>
-                  {this.renderFieldsOne(challenge)}
-                </View>
-            </View>
-            <View style= {style.optionNextCancelView}>
-                <TouchableOpacity onPress={() => this.onBack() } style = {style.touchableOpacityCancelOption}>
-                    <Text style={style.textShowPrompt}>CANCEL</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.submitChallengeOneAnswers(challenge, challengeResponse_C)} style = {style.touchableOpacityNextActive}>
-                    <Text style={style.textShowPrompt}>SUBMIT</Text>
-                </TouchableOpacity>
-            </View>
-          </View>
-        )}
-      </Mutation>
-    )
-  }
+
 
   onBackChitChat(){
     if(this.state.isReloadDashboard){
@@ -519,116 +832,7 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
     }
   }
 
-  renderFieldsOne = challenge => {
-    if (this.pos === 0) {
-      let answerObject = [];
-      for(let i = 0; i < challenge.requests.length;i++){
-        var eggTossAnswer = {
-            "requestId":challenge.requests[i].id,
-            "type" : challenge.requests[i].type,
-            "data": ""
-          }
-          answerObject.push(eggTossAnswer);
-      }
-      this.setState({selectedEggTossValues: answerObject,isLoadChallengeOne: true});
-      this.pos = 1;
-    }
-    return (
-      challenge.requests.map((request,index) => {
-        {
-          if(request.type === 'text'){
-              if(request.requestType === "none"){
-                  return (
-                    <View key={request.id} style={style.eggTossChildRowView100}>
-                        <Text style={style.eggTossLabel}>{request.data}</Text>
-                        <TextInput
-                          key={request.id}
-                          style={style.inputEggToss}
-                          onChangeText={(setChitChatAnswer) => this.setEggTossOptionsValue(index,setChitChatAnswer)}
-                        />
-                    </View>
-                  )
-              }else{
-                return (
-                  <View key={request.id} style={style.eggTossChildRowView50Left}>
-                      <Text numberOfLines={2} style={style.eggTossLabel}>{request.data}</Text>
-                      <TextInput
-                        key={request.id}
-                        style={style.inputEggToss}
-                        onChangeText={(setChitChatAnswer) => this.setEggTossOptionsValue(index,setChitChatAnswer)}
-                      />
-                  </View>
-                )
-              }
-          }else{
-            return (
-              <View style = {{backgroundColor: '#B7BABC', width: "100%", height: 150,marginTop: 15,flexDirection: 'row',}}>
-                <View style= {{width: 150,}}>
-                    {!this.state.requestForVideo ?
-                        <Image
-                          style={{
-                            width: 150,
-                            height: 150,
-                          }}
-                          source={this.state.isSetDefaultImage ? this.state.setImageFromLocal : this.state.setImageFromServer}
-                        />
-                        :
-                        <Video source={{uri: this.state.videoSource}}
-                           ref={(ref) => {
-                             this.player = ref
-                           }}
-                           onBuffer={this.onBuffer}
-                           onError={this.videoError}
-                           style={{
-                             width: 150,
-                             height: 150,
-                           }}/>
-                    }
-                </View>
-                <View style= {{width: 200,height: 150, flex: 1,justifyContent: 'center',flexDirection: 'column',alignItems: 'center',backgroundColor: 'white'}}>
-                    <Text style={{color: 'black', fontSize: 14, paddingLeft: 3,paddingRight: 3}}>{request.data}</Text>
-                    <TouchableOpacity onPress={() => this.selectPhotoTapped(index)} style = {{
-                      backgroundColor: 'blue',
-                      width: "75%",
-                      height: 30,
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      marginTop: 8,
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={style.textShowPrompt}>Upload Image</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.selectVideoTapped(index)} style = {{
-                      backgroundColor: 'blue',
-                      width: "75%",
-                      height: 30,
-                      borderRadius: 5,
-                      alignItems: 'center',
-                      marginTop: 10,
-                      justifyContent: 'center',
-                    }}>
-                        <Text style={style.textShowPrompt}>Upload Video</Text>
-                    </TouchableOpacity>
-                </View>
-              </View>
-            )
-          }
-        }
-      })
-    )
-  }
 
-  setEggTossOptionsValue(index, value){
-      console.log(562, this.state.selectedEggTossValues);
-      console.log(563, this.state.selectedEggTossValues.length);
-      let selectedEggTossValues = this.state.selectedEggTossValues;
-      this.state.selectedEggTossValues[index].data = value;
-      if(this.state.selectedEggTossValues[index].type !== 'text'){
-          this.state.selectedEggTossValues[index].type = this.state.eggTossItemType;
-      }
-      this.setState({ selectedEggTossValues: [...selectedEggTossValues]});
-      console.log(565, this.state.selectedEggTossValues);
-  }
 
   isChallengeTwoSetInState = false;
   renderChallengeTwo = challenge => {
@@ -833,30 +1037,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
 
   };
 
-  submitChallengeOneAnswers = (challenge,challengeResponse_C)=> {
-      let ar = [];
-      ar.push(this.state.selectedEggTossValues)
-      console.log(764, this.state.selectedEggTossValues);
-      console.log(765, ar);
-      var allValueSet = true;
-      for(let i = 0; i<this.state.selectedEggTossValues.length;i++){
-          console.log(769, this.state.selectedEggTossValues[i].data)
-          if(this.state.selectedEggTossValues[i].data === ""){
-            allValueSet = false;
-            break;
-          }
-      }
-      if(this.state.isPhotoVideoUploading){
-          alert('Please wait while uploading image or video.');
-      }else{
-        if(allValueSet){
-          this.setState({requestIDEggToss: challenge.requests[0].id,missionID: challenge.missionID});
-          this.challengeEggToss(challengeResponse_C);
-        }else{
-            alert("Please fill all values & upload image or video for option.")
-        }
-      }
-  };
 
   generateArtBoardText = (challenge,challengeResponse_C)=> {
       let updatedArtBoardValue = challenge.artboardDetails.toString();
@@ -1041,111 +1221,6 @@ static navigationOptions = ({ navigation: { navigate, state } }) => ({
       activeISpyQuestionID: requestID,
     })
 
-  }
-
-  renderChallengeResponseForm = challenge =>  {
-    if (challenge.type == "1" ) {
-      return this.renderChallengeOne(challenge)
-    }
-    if (challenge.type == "2") {
-      return this.renderChallengeTwo(challenge)
-    }
-    if (challenge.type == "3") {
-      if (this.state.challenge3Questions != null) {
-        return this.renderChallengeThree(challenge)
-      } else {
-        this.setState({
-          missionID: challenge.missionID,
-          challenge3Questions: challenge.requests
-        })
-      }
-    }
-
-    if (challenge.type == "4") {
-      if (this.state.challenge4Questions != null) {
-        return this.renderChallengeFour(challenge)
-      } else {
-        this.setState({
-          missionID: challenge.missionID,
-          challenge4Questions: challenge.requests
-        })
-      }
-    }
-    if (challenge.type == "5") {
-      return this.renderChallengeFive(challenge)
-    }
-  }
-
-  render() {
-    const id = this.props.navigation.state.params.id;
-    return (
-      <KeyboardAwareScrollView style={style.scrollStyleChallenge}>
-        <View>
-          <Query query={GET_CHALLENGE} variables={{ challengeId: id,teamId: this.props.navigation.state.params.teamId }} fetchPolicy="network-only">
-            {({ data: { challenge_Team }, loading }) => {
-              if (loading || !challenge_Team) {
-                return <Text>Loading ...</Text>;
-              }
-              {
-                return (
-                  <View style={style.challenge}>
-                    <View style={style.challengeSpaceView}>
-                          <View style={style.challengeStrip}>
-                            <Image
-                              style={{width: "100%",height: 60,borderRadius: 10,resizeMode: 'stretch'}}
-                              source={require('../assets/images/challenge_details_heading_bg.png')}
-                            />
-                            <View style={{width: "100%",height: 60 ,flexDirection: 'row',position:'absolute',top:0,}}>
-                              <View style={{width: "70%",alignItem: 'center',justifyContent: 'center',flexDirection: 'row',position:'relative'}}>
-                                  <Image
-                                    style={{width: "100%",height: 60,borderRadius: 10,resizeMode: 'stretch',position:'absolute',top:0,}}
-                                    source={require('../assets/images/transparent_strip_bg.png')}
-                                  />
-                                  <Text style={{width: "70%",fontSize: 14, alignSelf: 'center',ontWeight: 'bold', color: 'white',marginLeft: 20}}>{challenge_Team.title} Pts</Text>
-                                  <View style = {{width: "30%",alignItem: 'center',justifyContent: 'flex-end',flexDirection: 'row'}}>
-                                      <Image
-                                        style={{width: 20,height: 20,resizeMode: 'center',alignSelf: 'center',marginLeft: 10}}
-                                        source={require('../assets/images/video_icon.png')}
-                                      />
-                                      <Image
-                                        style={{width: 20,height: 20,resizeMode: 'center',alignSelf: 'center',marginLeft: 10}}
-                                        source={require('../assets/images/audio_icon.png')}
-                                      />
-                                      <Image
-                                        style={{width: 20,height: 20,resizeMode: 'center',alignSelf: 'center',marginLeft: 10}}
-                                        source={require('../assets/images/info_icon.png')}
-                                      />
-                                  </View>
-                              </View>
-                              <View style={{width: "30%",alignItem: 'center',justifyContent: 'center'}}>
-                                  <Text style={{fontSize: 12, fontWeight: 'bold', color: 'white',alignSelf: 'center',textAlign: 'right'}}>{challenge_Team.pctDone} Pts</Text>
-                              </View>
-                            </View>
-                          </View>
-                        <View style={style.challengeResponse}>
-                          {
-                            this.renderChallengeResponseForm(challenge_Team)
-                          }
-                        </View>
-                        <Modal
-                          animationType="fade"
-                          transparent={true}
-                          visible={this.state.showChatLoader}
-                          onRequestClose = {() => {
-                             this.setState({showChatLoader: false});
-                          }}
-                          style = {styleLoader.loaderMoedl}>
-                              <ProgressLoader />
-                        </Modal>
-                    </View>
-                  </View>
-                );
-              }
-            }}
-          </Query>
-        </View>
-      </KeyboardAwareScrollView>
-    );
   }
 
   selectPhotoTapped(index) {

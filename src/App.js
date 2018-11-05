@@ -15,6 +15,7 @@ import DaughterProfileRegister from 'auth/daughterProfile';
 
 
 import SocialFeed from 'screens/socialFeed';
+import Store from 'screens/store';
 
 import Help from 'screens/help';
 import Faq from 'screens/faq';
@@ -84,7 +85,7 @@ export default class Main extends Component {
             return {
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="store"
+                  name="dashboard"
                   color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
@@ -103,7 +104,7 @@ export default class Main extends Component {
             return {
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="help"
+                  name="help-outline"
                   color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
@@ -151,13 +152,13 @@ export default class Main extends Component {
         },
         fifthTab: {
           screen: StackNavigator({
-            settings: { screen: Settings}
+            store: { screen: Store }
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="settings"
+                  name="local-grocery-store"
                   color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
