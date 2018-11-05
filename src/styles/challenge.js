@@ -13,17 +13,29 @@ module.exports = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+
+
+  scrollStyleChallenge: {
+    width: '100%',
+    backgroundColor: 'white',
+    marginTop: 10,
+    paddingTop: 10
+  },
+
   challenge: {
     width: '100%',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  challengeInfo: {
-    width: '100%',
+
+  challengeSpaceView: {
+    width: '92%'
   },
+
   challengeStrip: {
-    width: '96%',
-    marginTop: 5,
-    marginLeft: '2%',
-    marginRight: '2%',
+    width: '100%',
+    position:'relative'
   },
   challengeTitleView: {
     flex: 1,
@@ -34,8 +46,8 @@ module.exports = StyleSheet.create({
   challengeTitle: {
     width: '80%',
     fontWeight: 'bold',
-    fontSize: 16,
-    color: "#0D0760",
+    fontSize: 12,
+    color: "#FFFFFF",
   },
   challengePointsView: {
     width: '20%',
@@ -47,24 +59,60 @@ module.exports = StyleSheet.create({
   },
 
   challengeDetailsView: {
-    backgroundColor: "#EFF1F2",
-    width: '96%',
-    marginLeft: '2%',
-    marginRight: '2%',
-    padding: 10,
+    backgroundColor: "#FFFFFF",
+    width: '100%',
     flex: 1,
+    padding: 5,
     flexDirection: 'row',
   },
-  challengeBasicInfo: {
-    width: '70%',
+
+  challengeDescriptionView: {
+    width: '100%',
+    backgroundColor: "#fff",
+    height: 200,
+    borderRadius:8,
+    padding: 5,
+    shadowColor: '#ccc',
+    shadowOffset: {width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+
   },
+
+  challengeDetailsLabel: {
+    fontWeight: 'bold',
+    fontSize: 12,
+    padding: 5,
+    color: "rgb(74,74,74)",
+  },
+
+  challengeDetailsValue: {
+    fontWeight: 'normal',
+    fontSize: 12,
+    padding: 5,
+    color: "rgb(74,74,74)",
+  },
+
+  challengeDescription: {
+    fontWeight: 'normal',
+    fontSize: 12,
+    padding: 5,
+    color: "rgb(112,112,112)",
+  },
+
   challengeInfoView: {
     width: '30%',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end'
   },
-  challegeInfoIconsView: {  borderRadius: 3, marginRight: '5%', padding: 5, backgroundColor: '#0D0760', height: 26},
+  challegeInfoIconsView: {
+    borderRadius: 3,
+    marginRight: '5%',
+    padding: 5,
+    backgroundColor: '#0D0760',
+    height: 26
+  },
   challegeInfoIcons: {
     width: 16, height: 16,
   },
@@ -99,27 +147,7 @@ module.exports = StyleSheet.create({
     margin: 30,
 
   },
-  challengeDetailsLabel: {
-    fontWeight: 'bold',
-    fontSize: 14,
-    color: "#0D0760",
-  },
-  challengeDetailsValue: {
-    fontWeight: 'normal'
-  },
-  challengeDescriptionView: {
-    width: '100%',
-    borderWidth: 2,
-    borderColor: '#0D0760',
-    padding: 5,
-    backgroundColor: "#fff",
-    height: 130
 
-  },
-  challengeDescription: {
-    fontSize: 14,
-    color: "#0D0760",
-  },
   backgroundVideo: {
     flex: 1,
     flexDirection: 'row',
@@ -159,16 +187,14 @@ module.exports = StyleSheet.create({
   //Style for TimedHunt
 
   requestItemParent: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#FFFFFF',
+    width: "100%",
   },
 
   requestItemBg: {
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: '#8D8F91',
-    padding: 10,
+    backgroundColor: '#FFF',
   },
 
   equestItemBg2: {
@@ -181,12 +207,9 @@ module.exports = StyleSheet.create({
   },
 
   requestItemBg1: {
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 5,
-    marginRight: 5,
-    backgroundColor: '#EFF1F2',
-    padding: 10,
+    backgroundColor: '#FFFFFF',
+    paddingLeft:7,
+    paddingRight: 7,
   },
 
   promptViewParent: {
@@ -283,6 +306,14 @@ optionNextCancelView: {
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'flex-end',
+},
+
+optionNextCancelCenterView: {
+  width: "100%",
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center',
+  marginTop:20,
 },
 
 touchableOpacityCancelOption: {
@@ -439,6 +470,8 @@ eggTossParentView: {
   flex: 1,
   flexDirection: 'row',
   flexWrap: 'wrap',
+  backgroundColor: 'white',
+  width: '100%'
 },
 
 chitChatEitherOrParentView: {
@@ -493,27 +526,26 @@ iSpyInActiveView: {
   top:4,
 },
 
-eggTossLabel: {
-  fontSize: 15,
-  color: '#0D0760',
-  textAlign: 'left',
-  marginTop: 15,
-  height: 40,
-},
-
 inputEggToss:{
   width: "100%",
   alignSelf: 'center',
-  padding: 10,
-  height: 40,
+  padding: 7,
+  height: 45,
   backgroundColor: '#ffffff',
-  borderColor: '#0D0760',
+  borderColor: 'rgb(112,112,112)',
   borderWidth:1,
+  borderRadius:5,
+  shadowColor: '#ccc',
+  shadowOffset: {width: 1, height: 1 },
+  shadowOpacity: 0.5,
+  shadowRadius: 5,
 },
 
 eggTossChildRowView100: {
   width: "100%",
   justifyContent: 'center',
+  marginTop: 20,
+  backgroundColor: 'white'
 },
 
 eggTossChildRowView50Left: {
@@ -526,6 +558,45 @@ eggTossChildRowView50Right: {
   width: "50%",
   justifyContent: 'flex-end',
   alignSelf: 'flex-end'
+},
+
+submitStyle: {
+  width: "40%",
+  backgroundColor: '#4A035E',
+  alignSelf: 'center',
+  borderRadius: 50,
+  padding:8,
+},
+
+cancelStyle: {
+  width: "40%",
+  backgroundColor: 'white',
+  alignSelf: 'center',
+  borderRadius: 50,
+  padding:8,
+  marginLeft:10,
+  borderColor: '#4A035E',
+  borderWidth: 1
+},
+
+submitText: {
+  textAlign: 'center',
+  fontSize: 14,
+  lineHeight: 16,
+  color: '#FFFFFF',
+  fontWeight: 'bold',
+  padding:5,
+},
+
+
+
+cancelText: {
+  textAlign: 'center',
+  fontSize: 14,
+  lineHeight: 16,
+  color: '#4A035E',
+  fontWeight: 'bold',
+  padding:5,
 },
 
 });

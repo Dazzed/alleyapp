@@ -9,8 +9,6 @@ import style from 'styles/dashboard';
 
 import { Text, Icon } from 'react-native-elements';
 
-
-
 export default class Dashboard extends Component {
   constructor() {
     super();
@@ -21,19 +19,26 @@ export default class Dashboard extends Component {
     }
     AsyncStorage.setItem('IS_LOGIN', 'true');
   }
+
+
   static navigationOptions = ({ navigation: { navigate } }) => ({
-    title: 'DASHBOARD',
+    title: 'Dashboard',
     headerMode: 'screen',
     headerTintColor: Color.white,
     headerStyle: {
-      backgroundColor: Color.main
+      backgroundColor: Color.transparent
     },
+    headerBackground: (
+      <View style= {{flexDirection: 'column'}}>
+        <Image
+          style={{width: "100%",height: 115,}}
+          source={require('../assets/images/rounded_header.jpg')}
+        />
+      </View>
+    ),
     headerLeft: null
   });
 
-  componentWillReceiveProps(nextProps){
-    alert('Call everytime');
-  }
   componentDidMount(){
     this.props.navigation.addListener('willFocus', (playload)=>{
       AsyncStorage.getItem('ACTIVE_TEAM').then((value) => {
@@ -75,10 +80,10 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <ScrollView keyboardShouldPersistTaps='handled'>
+      <ScrollView style={{backgroundColor: 'white'}} keyboardShouldPersistTaps='handled'>
         <View style={style.container}>
           <Query query={GET_DASHBOARD_BY_TEAM} variables={{ teamId: this.state.teamId }} fetchPolicy="network-only" notifyOnNetworkStatusChange={true}>
-            {({ data: { team_Dashboard }, loading, refetch }) => {
+            {({ data: { team_Dashboard }, loading, refetch}) => {
               if(this.state.isRefetch){
                 this.state.isRefetch = false
                 refetch()
@@ -87,54 +92,81 @@ export default class Dashboard extends Component {
                 return <Text>Loading ...</Text>;
               }
               {
-                console.log('teamId hhh trueue iss: '+JSON.stringify(team_Dashboard))
                 return (
                   <View style={style.dashboard}>
                     <View style={style.progressSummary}>
-                      <Text style={style.sectionTitle}>PROGRESS SUMMARY</Text>
+                      <Text style={style.sectionTitle}>Progress Summary</Text>
                       <View>
-                        <View style={style.progressItems}>
-                          <Text style={style.progressLabel}>Points to Date</Text>
-                          <Text style={style.progressValue}>{team_Dashboard.pointsToDate}</Text>
+                        <View>
+                          <Text style={style.progressValue0}>{team_Dashboard.pointsToDate}</Text>
+                          <Text style={style.progressLabel0}>Points to Date</Text>
                         </View>
-                        <View style={style.progressItems}>
+                        <View style={style.progressItems0}>
                           <Text style={style.progressLabel}>Active Mission</Text>
                           <Text style={style.progressValue}>{team_Dashboard.activeMission}</Text>
                         </View>
-                        <View style={style.progressItems}>
+                        <View style={style.progressItems0}>
                           <Text style={style.progressLabel}>Mission Deadline</Text>
                           <Text style={style.progressValue}>{team_Dashboard.missionDeadLine}</Text>
                         </View>
                       </View>
                     </View>
                     <View style={style.challenges}>
-                      <Text style={style.sectionTitle}>CHALLENGES IN {team_Dashboard.activeMission.toUpperCase()}</Text>
+                      <Text style={style.sectionSubTitle}>Challenges in this Mission</Text> //{team_Dashboard.activeMission.toUpperCase()}
                         {team_Dashboard.currentMissionChallenges.map(challenge => {
                           return (
-                            <TouchableHighlight key={challenge.title} onPress={() => this.loadChallenge(challenge.id, team_Dashboard.activeMission)}>
-                              <View style={style.challengeItem}>
-                                <View style={style.challengeTitleRow}>
-                                  <View style={style.challengeTitleView}>
-                                    <Text style={style.challengeTitle}>{challenge.title}</Text>
+                            <TouchableHighlight style={{marginTop: 5,}} key={challenge.title} onPress={() => this.loadChallenge(challenge.id, team_Dashboard.activeMission)}>
+                                <View style={{width: "100%",height: 120,position:'relative'}}>
+                                  {challenge.status === 'COMPLETED'?
+                                      <Image
+                                        style={{width: "100%",height: 120,borderRadius: 20,resizeMode: 'stretch'}}
+                                        source={require('../assets/images/challenge_purple_bg.png')}
+                                      />
+                                      :
+                                      <Image
+                                        style={{width: "100%",height: 120,borderRadius: 20,resizeMode: 'stretch'}}
+                                        source={require('../assets/images/sky_blue_bg.png')}
+                                      />
+                                  }
+                                  <View style={{width: "100%",height: 120 ,flexDirection: 'row',position:'absolute',top:0}}>
+                                      <View style= {{width: "30%",height: 120,alignItem: 'center',justifyContent: 'center'}}>
+                                          {challenge.status === 'Not yet started'?
+                                              <Image
+                                                style={{width: 35,height: 35,marginLeft: 'auto',marginRight: 'auto'}}
+                                                source={require('../assets/images/pending_status.png')}
+                                              />
+                                              : challenge.status === 'STARTED'?
+                                                  <Image
+                                                    style={{width: 35,height: 35,marginLeft: 'auto',marginRight: 'auto'}}
+                                                    source={require('../assets/images/started_status.png')}
+                                                  />
+                                                  :
+                                                  <Image
+                                                    style={{width: 35,height: 35,marginLeft: 'auto',marginRight: 'auto'}}
+                                                    source={require('../assets/images/done_status.png')}
+                                                  />
+                                          }
+                                          <Text style={style.challengePoints}>{challenge.score}/{challenge.maxPts} Pts</Text>
+                                      </View>
+                                      <View style= {{width: "70%",height: 120,position:'relative'}}>
+                                          <Image
+                                            style={{width: "100%",height: 120}}
+                                            source={require('../assets/images/challenge-bg_transparent.png')}
+                                          />
+                                          <View style= {{width: "100%",height: 120,paddingLeft: 15, alignSelf: 'center', alignItem: 'center',justifyContent: 'center',position:'absolute',top:0}}>
+                                                <Text style={style.challengeTitle} numberOfLines={2}>{challenge.title}</Text>
+                                                <Text style={style.challengeLabel}>
+                                                  Estimated Time:
+                                                  <Text style={style.challengeValue}>{challenge.estTime}</Text>
+                                                </Text>
+                                                <Text style={style.challengeLabel}>
+                                                  Location:
+                                                  <Text style={style.challengeValue}>{challenge.location}</Text>
+                                                </Text>
+                                          </View>
+                                      </View>
                                   </View>
-                                  <Text style={style.challengePoints}>{challenge.maxPts} Pts</Text>
                                 </View>
-                                <View>
-                                  <Text style={style.challengeLabel}>
-                                    Estimated Time:
-                                    <Text style={style.challengeValue}>{challenge.estTime}</Text>
-                                  </Text>
-                                </View>
-                                <View>
-                                  <Text style={style.challengeLabel}>
-                                    Location:
-                                    <Text style={style.challengeValue}>{challenge.location}</Text>
-                                  </Text>
-                                </View>
-                                <View>
-                                  <Text style={style.challengeStatus}>{challenge.status}</Text>
-                                </View>
-                              </View>
                             </TouchableHighlight>
                           );
                         })}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Image,AsyncStorage} from 'react-native';
 
 import Color from 'constants/colors';
 import style from 'styles/signin';
@@ -7,27 +7,49 @@ import style from 'styles/signin';
 import { Text, Icon } from 'react-native-elements';
 
 
+
 export default class Store extends Component {
   constructor() {
     super();
   }
 
-  render() {
-    return (
-      <View style={style.container}>
-        <View style={style.subContainer}>
-          <View style={style.back}>
-            <Icon onPress={() => this.props.navigation.goBack()}
-              name='arrow-back' />
-          </View>
-          <View style={style.welcomeContainer}>
-            <Text style={style.subTitle}>Store</Text>
-          </View>
-          <View style={style.formContainer}>
-            <Text style={style.tosText}>Culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptartem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi ropeior architecto beatae vitae dicta sunt explicabo</Text>
-          </View>
+  static navigationOptions = ({ navigation: { navigate } }) => ({
+    title: 'Store',
+    headerMode: 'screen',
+    headerTintColor: Color.white,
+    headerStyle: {
+      backgroundColor: Color.transparent
+    },
+    headerBackground: (
+      <Image
+        style={{width: "100%",height: 75}}
+        source={require('../assets/images/header_bg.png')}
+      />
+    ),
+  });
+
+
+    render() {
+      return (
+        <View style={style.container}>
+            <View style={style.welcomeContainer}>
+                <Image resizeMode="contain"
+                  source={require('../assets/images/alley-oop.png')}
+                  style={style.logoName0}
+                />
+                <Text style={style.subTitle}>Deepening inter-generational relationships through play</Text>
+            </View>
+            <Image resizeMode="contain"
+              source={require('../assets/images/alley-oop-logo.png')}
+              style={style.logoImg1}
+            />
+            <View>
+              <Text style={style.text40}>STORE</Text>
+              <Text style={style.text14}>Coming Soon...</Text>
+            </View>
+            <View/>
         </View>
-      </View>
-    );
-  }
+      );
+    }
+
 }

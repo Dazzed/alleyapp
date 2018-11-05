@@ -6,7 +6,6 @@ const { width } = Dimensions.get('window');
 
 module.exports = StyleSheet.create({
   container: {
-    padding: 10,
     flex: 1,
     flexDirection: 'column',
     backgroundColor: Color.white,
@@ -14,15 +13,77 @@ module.exports = StyleSheet.create({
     alignItems: 'center',
   },
   dashboard: {
-    width: '100%'
+    width: '100%',
+    backgroundColor: Color.white,
   },
+
+  progressSummary: {
+    width: '100%',
+    padding:10,
+    marginTop:50,
+    backgroundColor: Color.white,
+  },
+
+  challenges: {
+    width: '100%',
+    padding:10,
+    backgroundColor: '#FAFAFA',
+  },
+
   sectionTitle: {
-    color: "#61037C",
-    fontWeight: 'bold',
+    color: "rgba(3,3,3,0.37)",
+    fontWeight: 'normal',
     marginBottom: 10,
     marginTop: 10,
-    marginLeft: '2%'
+    fontSize: 16,
+    textAlign: 'center'
   },
+
+  sectionSubTitle: {
+    color: "rgba(3,3,3,0.37)",
+    fontWeight: 'normal',
+    marginBottom: 10,
+    marginTop: 20,
+    fontSize: 16,
+    textAlign: 'center'
+  },
+
+  progressValue0: {
+    color: "rgb(75,71,71)",
+    fontSize: 40,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop:15,
+  },
+
+  progressLabel0: {
+    fontWeight: 'bold',
+    color: 'rgb(75,71,71)',
+    fontSize:15,
+    textAlign: 'center'
+  },
+
+  progressItems0: {
+    backgroundColor: '#FFFFFF',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 25,
+    paddingBottom: 25,
+    marginLeft: '2%',
+    marginRight: '2%',
+    marginTop: 15,
+    marginBottom: 15,
+    width: '96%',
+    flex: 1,
+    borderRadius:8,
+    flexDirection: 'row',
+    shadowColor: '#ccc',
+    shadowOffset: {width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+  },
+
+
   progressItems: {
     backgroundColor: '#0D0760',
     padding: 15,
@@ -32,17 +93,22 @@ module.exports = StyleSheet.create({
     marginBottom: 5,
     width: '96%',
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
+
+
   progressLabel: {
     fontWeight: 'bold',
-    color: '#ffffff',
-    width: '50%'
+    color: 'rgb(75,71,71)',
+    width: '50%',
+    fontSize:15,
   },
   progressValue: {
-    color: "#ffffff88",
+    color: 'rgb(123,116,116)',
     width: '50%',
-    textAlign: 'right'
+    textAlign: 'right',
+    fontSize:14,
+    fontWeight: 'normal',
   },
   challenge: {
     width: '70%',
@@ -72,27 +138,25 @@ module.exports = StyleSheet.create({
   challengeTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: "#0D0760",
-    padding: 5
+    color: "#FFFFFF",
+    marginBottom:10,
   },
   challengePoints: {
     fontSize: 14,
-    color: "#0D0760",
+    color: "#FFFFFF",
     fontWeight: 'bold',
-    width: '25%',
-    padding: 5,
-    textAlign: 'right'
+    textAlign: 'center',
+    marginTop:10,
   },
   challengeLabel: {
-    fontSize: 14,
-    color: "#0D0760",
+    fontSize: 12,
+    color: "#FFFFFF",
     fontWeight: 'bold',
-    marginLeft: 10,
     marginTop: 1
   },
   challengeValue: {
-    color: "#0D0760",
-    fontSize: 14,
+    color: "#FFFFFF",
+    fontSize: 12,
     fontWeight: 'normal'
   },
   challengeStatus: {

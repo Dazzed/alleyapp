@@ -4,6 +4,7 @@ import Color from 'constants/colors';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import SignIn from 'auth/signin';
+import DesignTest from 'auth/DesignTest';
 import Register from 'auth/register';
 import ForgotPassword from 'auth/forgotPassword';
 import Tos from 'auth/tos';
@@ -14,6 +15,7 @@ import DaughterProfileRegister from 'auth/daughterProfile';
 
 
 import SocialFeed from 'screens/socialFeed';
+import Store from 'screens/store';
 
 import Help from 'screens/help';
 import Faq from 'screens/faq';
@@ -81,11 +83,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Social Feed',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="store"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  name="dashboard"
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -101,11 +102,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Help',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="help"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  name="help-outline"
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -119,11 +119,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Dashboard',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="dashboard"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -140,11 +139,10 @@ export default class Main extends Component {
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Profile',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
                   name="verified-user"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
 
               )
@@ -154,15 +152,14 @@ export default class Main extends Component {
         },
         fifthTab: {
           screen: StackNavigator({
-            settings: { screen: Settings }
+            store: { screen: Store }
           }),
           navigationOptions: ({ navigation, screenProps }) => {
             return {
-              tabBarLabel: 'Settings',
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon
-                  name="settings"
-                  color={!focused ? Color.darkBlue : 'white'}
+                  name="local-grocery-store"
+                  color={!focused ? '#8D8F91' : '#1365A7'}
                 />
               )
             };
@@ -172,12 +169,13 @@ export default class Main extends Component {
       {
         initialRouteName: 'thirdTab',
         tabBarOptions: {
-          inactiveTintColor: Color.darkBlue,
-          activeTintColor: 'white',
+          inactiveTintColor: '#8D8F91',
+          activeTintColor: '#1365A7',
           showIcon: true,
+          showLabel: false,
           style: {
             height: 55,
-            backgroundColor: Color.main
+            backgroundColor: Color.white
           }
         }
       }
@@ -186,6 +184,7 @@ export default class Main extends Component {
     const Authentication = StackNavigator(
       {
         signin: { screen: SignIn },
+        designTest: { screen: DesignTest },
         register: { screen: Register },
         teamProfile: { screen: TeamProfileRegister },
         dadProfile: { screen: DadProfileRegister },
@@ -204,8 +203,8 @@ export default class Main extends Component {
 
   render() {
     return (
-        <View style={{ flex: 1 }}>
-          <StatusBar barStyle="dark-content" />
+        <View style={{flex: 1, backgroundColor: "#FFFFFF"}}>
+          <StatusBar barStyle="light-content" hidden = {false} backgroundColor = "#FFFFFF" translucent = {true} />
           {this.renderContent()}
         </View>
       );
