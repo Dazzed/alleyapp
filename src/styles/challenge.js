@@ -22,11 +22,18 @@ module.exports = StyleSheet.create({
     paddingTop: 10
   },
 
+  scrollStyleChallengeBlue: {
+    width: '100%',
+    backgroundColor: 'white',
+    paddingTop: 15
+  },
+
   challenge: {
     width: '100%',
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    position:'absolute'
   },
 
   challengeSpaceView: {
@@ -62,7 +69,6 @@ module.exports = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     width: '100%',
     flex: 1,
-    padding: 5,
     flexDirection: 'row',
   },
 
@@ -71,7 +77,6 @@ module.exports = StyleSheet.create({
     backgroundColor: "#fff",
     height: 200,
     borderRadius:8,
-    padding: 5,
     shadowColor: '#ccc',
     shadowOffset: {width: 2, height: 2 },
     shadowOpacity: 0.5,
@@ -117,8 +122,19 @@ module.exports = StyleSheet.create({
     width: 16, height: 16,
   },
   chatIcons: {
-    width: 48, height: 48,
+    width: 48,
+    height: 48,
+    alignSelf: 'center'
   },
+
+  chatIconsRight: {
+    width: 15,
+    height: 15,
+    alignSelf: 'center',
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+
   chatIconText: {
     width: '75%',
     marginLeft: 10
@@ -355,11 +371,15 @@ headingTextChallenge4:{
 },
 
 headingTextChallenge2:{
-  fontSize: 18,
+  width: "60%",
+  fontSize: 12,
+  fontWeight: 'bold',
   color: '#0D0760',
   alignItems: 'center',
   justifyContent: 'center',
   alignSelf: 'center',
+  marginTop:15,
+  textAlign: 'center',
 },
 
 questionChallenge2Text: {
@@ -561,20 +581,20 @@ eggTossChildRowView50Right: {
 },
 
 submitStyle: {
-  width: "40%",
+  width: "45%",
   backgroundColor: '#4A035E',
   alignSelf: 'center',
   borderRadius: 50,
-  padding:8,
+  padding:12,
 },
 
 cancelStyle: {
-  width: "40%",
+  width: "45%",
   backgroundColor: 'white',
   alignSelf: 'center',
   borderRadius: 50,
-  padding:8,
-  marginLeft:10,
+  padding:12,
+  marginLeft:20,
   borderColor: '#4A035E',
   borderWidth: 1
 },

@@ -29,9 +29,9 @@ module.exports = StyleSheet.create({
   },
 
   logoImg: {
-    width: 60,
-    height: 50,
-    marginTop: 75,
+    width: 50,
+    height: 40,
+    marginTop: 65,
   },
 
   logoImg0: {
@@ -56,8 +56,8 @@ module.exports = StyleSheet.create({
   },
 
   logoName: {
-    width: 200,
-    height: 50,
+    width: 150,
+    height: 40,
     marginTop: 20,
   },
 
@@ -87,7 +87,8 @@ module.exports = StyleSheet.create({
     marginRight: 25,
     marginTop:25,
     borderBottomWidth: 1,
-    borderBottomColor: '#D5D5D5',
+    color: 'rgba(72,65,65,0.18)',
+    borderBottomColor: 'rgba(213,213,213,0.27)',
   },
 
   inputPassword: {
@@ -100,7 +101,8 @@ module.exports = StyleSheet.create({
     marginRight: 25,
     marginTop:15,
     borderBottomWidth: 1,
-    borderBottomColor: '#D5D5D5',
+    color: 'rgba(72,65,65,0.18)',
+    borderBottomColor: 'rgba(213,213,213,0.27)',
   },
 
   touchableStyleFP: {
@@ -112,7 +114,7 @@ module.exports = StyleSheet.create({
     textAlign: 'center',
     margin: 8,
     fontSize: 13,
-    color: '#9B9B9B',
+    color: 'rgba(155,155,155,0.33)',
     fontWeight: 'normal'
   },
 
@@ -128,6 +130,8 @@ module.exports = StyleSheet.create({
   signup: {
     fontSize: 16,
     textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    color: '#C1C1C1'
   },
 
   footerText: {

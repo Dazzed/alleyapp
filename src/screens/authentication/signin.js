@@ -100,6 +100,7 @@ export default class SignIn extends Component {
             </View>
             <TextInput style={style.inputEmail}
               placeholder={"Email"}
+              placeholderTextColor='rgba(72,65,65,0.18)'
               underlineColorAndroid='transparent'
               selectionColor={'#D5D5D5'}
               returnKeyType = {'next'}
@@ -112,6 +113,7 @@ export default class SignIn extends Component {
 
             <TextInput style={style.inputPassword}
               placeholder={"Password"}
+              placeholderTextColor='rgba(72,65,65,0.18)'
               underlineColorAndroid='transparent'
               selectionColor={'#D5D5D5'}
               returnKeyType = {'done'}

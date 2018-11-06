@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		000B5E48891E40748805202D /* (null) in Resources */ = {isa = PBXBuildFile; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
@@ -53,6 +52,16 @@
 		AF555D51300848D7B18BF9B3 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 778DBB11B8BF4B808F0D9E7F /* Zocial.ttf */; };
 		C515D3B0237D4438B5B7AA9C /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0C38BE99F4341E6999F9576 /* FontAwesome.ttf */; };
 		E42C4C7F2162AEEF0004986D /* libfishhook.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4182E70D1FC9E05F00FF3122 /* libfishhook.a */; };
+		1E61E7678447468595F6538D /* libAIBHTMLWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 435B32C4E2074A75810BDD42 /* libAIBHTMLWebView.a */; };
+		6AA49F0FC5D948F4B825229A /* AIBHTMLWebViewTests.xctest in Resources */ = {isa = PBXBuildFile; fileRef = 8B3613792FAB458DAB64C14B /* AIBHTMLWebViewTests.xctest */; };
+		738115633C1740BCA7CB0E9C /* Product_Sans_Bold_Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF061C85F4634EDF95121EC2 /* Product_Sans_Bold_Italic.ttf */; };
+		411724FD7B1D4517810142DA /* Product_Sans_Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E6AB0A1AD4EC45BCA145E178 /* Product_Sans_Bold.ttf */; };
+		03E9E29C7F074EA6B70BF991 /* Product_Sans_Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2BBD52D84E2F4433BB93A5E0 /* Product_Sans_Italic.ttf */; };
+		2A4826FD1E9E4F549558BED5 /* Product_Sans_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 319250D853E6431FA2361F06 /* Product_Sans_Regular.ttf */; };
+		AA002267E17B4F51B743ABE5 /* Product Sans Bold Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3A365B35656B4688AFB54AF8 /* Product Sans Bold Italic.ttf */; };
+		52D5B433156649E39ABAAEED /* Product Sans Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6EA0810910E24713A92A3BBD /* Product Sans Bold.ttf */; };
+		14F57C585E104B3B9B4664E7 /* Product Sans Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60FB3E7C0B7E47CBA96FACCA /* Product Sans Italic.ttf */; };
+		FE12C1FE50D94DE3834C528E /* Product Sans Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6CAED1E12BA549B78F775AC8 /* Product Sans Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -427,6 +436,17 @@
 		E80B338BDD9D4999BBFFF83F /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
 		F0C38BE99F4341E6999F9576 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		FB0E22135EE04A809458F9D3 /* libRCTVideo.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTVideo.a; sourceTree = "<group>"; };
+		B2331FD25BB4420BB7D4FA2C /* AIBHTMLWebView.xcodeproj */ = {isa = PBXFileReference; name = "AIBHTMLWebView.xcodeproj"; path = "../node_modules/react-native-html-webview/AIBHTMLWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		435B32C4E2074A75810BDD42 /* libAIBHTMLWebView.a */ = {isa = PBXFileReference; name = "libAIBHTMLWebView.a"; path = "libAIBHTMLWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		8B3613792FAB458DAB64C14B /* AIBHTMLWebViewTests.xctest */ = {isa = PBXFileReference; name = "AIBHTMLWebViewTests.xctest"; path = "AIBHTMLWebViewTests.xctest"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.cfbundle; explicitFileType = undefined; includeInIndex = 0; };
+		DF061C85F4634EDF95121EC2 /* Product_Sans_Bold_Italic.ttf */ = {isa = PBXFileReference; name = "Product_Sans_Bold_Italic.ttf"; path = "../assets/fonts/Product_Sans_Bold_Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		E6AB0A1AD4EC45BCA145E178 /* Product_Sans_Bold.ttf */ = {isa = PBXFileReference; name = "Product_Sans_Bold.ttf"; path = "../assets/fonts/Product_Sans_Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2BBD52D84E2F4433BB93A5E0 /* Product_Sans_Italic.ttf */ = {isa = PBXFileReference; name = "Product_Sans_Italic.ttf"; path = "../assets/fonts/Product_Sans_Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		319250D853E6431FA2361F06 /* Product_Sans_Regular.ttf */ = {isa = PBXFileReference; name = "Product_Sans_Regular.ttf"; path = "../assets/fonts/Product_Sans_Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3A365B35656B4688AFB54AF8 /* Product Sans Bold Italic.ttf */ = {isa = PBXFileReference; name = "Product Sans Bold Italic.ttf"; path = "../assets/fonts/Product Sans Bold Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6EA0810910E24713A92A3BBD /* Product Sans Bold.ttf */ = {isa = PBXFileReference; name = "Product Sans Bold.ttf"; path = "../assets/fonts/Product Sans Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		60FB3E7C0B7E47CBA96FACCA /* Product Sans Italic.ttf */ = {isa = PBXFileReference; name = "Product Sans Italic.ttf"; path = "../assets/fonts/Product Sans Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6CAED1E12BA549B78F775AC8 /* Product Sans Regular.ttf */ = {isa = PBXFileReference; name = "Product Sans Regular.ttf"; path = "../assets/fonts/Product Sans Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,6 +481,8 @@
 				6B4A90D4A5004CDCAD792829 /* libRCTImageResizer.a in Frameworks */,
 				49BD32A789F54F2192211525 /* libRNFS.a in Frameworks */,
 				3B672EB038AF4B7A86938961 /* libRCTVideo.a in Frameworks */,
+				1E61E7678447468595F6538D /* libAIBHTMLWebView.a in Frameworks */,
+				6AA49F0FC5D948F4B825229A /* AIBHTMLWebViewTests.xctest in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +670,14 @@
 				39807B5B95FC4C538A6F1CB3 /* Foundation.ttf */,
 				E80B338BDD9D4999BBFFF83F /* MaterialCommunityIcons.ttf */,
 				778DBB11B8BF4B808F0D9E7F /* Zocial.ttf */,
+				DF061C85F4634EDF95121EC2 /* Product_Sans_Bold_Italic.ttf */,
+				E6AB0A1AD4EC45BCA145E178 /* Product_Sans_Bold.ttf */,
+				2BBD52D84E2F4433BB93A5E0 /* Product_Sans_Italic.ttf */,
+				319250D853E6431FA2361F06 /* Product_Sans_Regular.ttf */,
+				3A365B35656B4688AFB54AF8 /* Product Sans Bold Italic.ttf */,
+				6EA0810910E24713A92A3BBD /* Product Sans Bold.ttf */,
+				60FB3E7C0B7E47CBA96FACCA /* Product Sans Italic.ttf */,
+				6CAED1E12BA549B78F775AC8 /* Product Sans Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -681,6 +711,7 @@
 				439FF91544CC4219B21A03FB /* RCTImageResizer.xcodeproj */,
 				2A1A6E6CF6214D53BB040F64 /* RNFS.xcodeproj */,
 				522DB36DEF3442A28818F014 /* RCTVideo.xcodeproj */,
+				B2331FD25BB4420BB7D4FA2C /* AIBHTMLWebView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1304,6 +1335,14 @@
 				6A17ED91900F457599597AE3 /* Foundation.ttf in Resources */,
 				7AA0C845AC2942A19316B980 /* MaterialCommunityIcons.ttf in Resources */,
 				AF555D51300848D7B18BF9B3 /* Zocial.ttf in Resources */,
+				738115633C1740BCA7CB0E9C /* Product_Sans_Bold_Italic.ttf in Resources */,
+				411724FD7B1D4517810142DA /* Product_Sans_Bold.ttf in Resources */,
+				03E9E29C7F074EA6B70BF991 /* Product_Sans_Italic.ttf in Resources */,
+				2A4826FD1E9E4F549558BED5 /* Product_Sans_Regular.ttf in Resources */,
+				AA002267E17B4F51B743ABE5 /* Product Sans Bold Italic.ttf in Resources */,
+				52D5B433156649E39ABAAEED /* Product Sans Bold.ttf in Resources */,
+				14F57C585E104B3B9B4664E7 /* Product Sans Italic.ttf in Resources */,
+				FE12C1FE50D94DE3834C528E /* Product Sans Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1435,12 +1474,15 @@
 					"$(SRCROOT)/../node_modules/react-native-image-resizer/ios/RCTImageResizer",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+					"$(SRCROOT)/../node_modules/react-native-html-webview/iOS",
 				);
 				INFOPLIST_FILE = alleyoopTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1473,12 +1515,15 @@
 					"$(SRCROOT)/../node_modules/react-native-image-resizer/ios/RCTImageResizer",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+					"$(SRCROOT)/../node_modules/react-native-html-webview/iOS",
 				);
 				INFOPLIST_FILE = alleyoopTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1512,6 +1557,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-resizer/ios/RCTImageResizer",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+					"$(SRCROOT)/../node_modules/react-native-html-webview/iOS",
 				);
 				INFOPLIST_FILE = alleyoop/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1544,6 +1590,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-resizer/ios/RCTImageResizer",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+					"$(SRCROOT)/../node_modules/react-native-html-webview/iOS",
 				);
 				INFOPLIST_FILE = alleyoop/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1581,11 +1628,14 @@
 					"$(SRCROOT)/../node_modules/react-native-image-resizer/ios/RCTImageResizer",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+					"$(SRCROOT)/../node_modules/react-native-html-webview/iOS",
 				);
 				INFOPLIST_FILE = "alleyoop-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1624,11 +1674,14 @@
 					"$(SRCROOT)/../node_modules/react-native-image-resizer/ios/RCTImageResizer",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-video/ios",
+					"$(SRCROOT)/../node_modules/react-native-html-webview/iOS",
 				);
 				INFOPLIST_FILE = "alleyoop-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
@@ -1668,6 +1721,8 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.alleyoop-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1693,6 +1748,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",

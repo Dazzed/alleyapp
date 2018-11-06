@@ -24,93 +24,44 @@ export default class PrivacyPolicy extends Component {
   render() {
     return (
       <View style={style.container}>
-      // <View style={style.challenge}>
-      //   <View style={style.challengeInfo}>
-      //     <View style={style.challengeStrip}>
-      //       <View style={style.challengeTitleView}>
-      //         <Text style={style.challengeTitle}>{challenge_Team.title}</Text>
-      //         <View style={style.challengePointsView}>
-      //           <Text style={style.challengePoints}>{challenge_Team.pctDone} Pts</Text>
+      // {this.state.showBubbleQuestion === false ?
+      //   <View style={style.bubblesView}>
+      //     {this.renderBubbles(this.state.challengeResponseDetail)}
+      //   </View>
+      //   :
+      //   <View>
+      //     <View style={style.bubbleQuestionView}>
+      //       <View style = {style.viewQuestionIconChallenge2}>
+      //         <Image style={style.iconImageQuestionChallenge2} source={this.chatIcons[0].file} />
+      //       </View>
+      //       <View style = {style.viewQuestionTextChallenge2}>
+      //         <Text style={style.questionChallenge2Text}>{this.state.activeBubbleQuestion}</Text>
+      //       </View>
+      //     </View>
+      //     {this.state.requestTypeChitChat === 'bubble' ?
+      //         <TextInput
+      //           style={style.inputChitChatAnswer}
+      //           placeholder="Please type answer here"
+      //           multiline = {true}
+      //           numberOfLines = {5}
+      //           value={this.state.setChitChatAnswer}
+      //           onChangeText={(setChitChatAnswer) => this.setState({setChitChatAnswer})}
+      //         />
+      //         :
+      //         <View style={style.chitChatEitherOrParentView}>
+      //           {this.renderEitherOr(this.state.activeBubbledataObj.data)}
       //         </View>
-      //       </View>
-      //     </View>
-      //     <View style={style.challengeDetailsView}>
-      //       <View style={style.challengeBasicInfo}>
-      //         <Text style={style.challengeDetailsLabel}>
-      //           Available Points:
-      //           <Text style={style.challengeDetailsValue}> {challenge_Team.maxPts}</Text>
-      //         </Text>
-      //         <Text style={style.challengeDetailsLabel}>
-      //           Materials:
-      //           <Text style={style.challengeDetailsValue}> {challenge_Team.materials}</Text>
-      //         </Text>
-      //       </View>
-      //       <View style={style.challengeInfoView}>
-      //         {
-      //           challenge_Team.description.map(desc => {
-      //             if (desc.type === "videoOverlay")
-      //               return (
-      //                 <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'videoOverlay')}>
-      //                   <View style={style.challegeInfoIconsView}>
-      //                     <Image style={style.challegeInfoIcons} source={require('../assets/images/video.png')} />
-      //                   </View>
-      //                 </TouchableHighlight>
-      //               )
-      //           })}
-      //         {
-      //           challenge_Team.description.map(desc => {
-      //             if (desc.type === "audioOverlay")
-      //               return (
-      //                 <TouchableHighlight onPress={() => this.loadInstructions(desc.url, 'audioOverlay')}>
-      //                   <View style={style.challegeInfoIconsView}>
-      //                     <Image style={style.challegeInfoIcons} source={require('../assets/images/audio.png')} />
-      //                   </View>
-      //                 </TouchableHighlight>
-      //               )
-      //           })}
-      //         {
-      //           challenge_Team.description.map(desc => {
-      //             if (desc.type === "textOverlay")
-      //               return (
-      //                 <TouchableHighlight onPress={() => this.loadInstructions(desc.data, 'textOverlay')}>
-      //                   <View style={style.challegeInfoIconsView}>
-      //                     <Image style={style.challegeInfoIcons} source={require('../assets/images/info.png')} />
-      //                   </View>
-      //                 </TouchableHighlight>
-      //               )
-      //           })}
-      //       </View>
-      //     </View>
-      //     {
-      //       challenge_Team.description.map(desc => {
-      //         if (desc.type === "text")
-      //         return (
-      //           <View key={desc.id} style={style.challengeDetailsView}>
-      //             <View style={style.challengeDescriptionView}>
-      //               <ScrollView keyboardShouldPersistTaps='handled'>
-      //                 <Text style={style.challengeDescription}>{desc.data}</Text>
-      //               </ScrollView>
-      //             </View>
-      //           </View>
-      //         )
-      //     })}
+      //       }
       //   </View>
-      //   <View style={style.challengeResponse}>
-      //     {
-      //       this.renderChallengeResponseForm(challenge_Team)
-      //     }
+      // }
+
+      // {this.state.showBubbleQuestion === false ?
+      //   <
+      //   :
+      //   <View style = {{width: "100%",height: 1000,backgroundColor: "#4A035E",}}>
+      //       <StatusBar barStyle = "light-content" hidden = {false} backgroundColor = "#4A035E" translucent = {true}/>
       //   </View>
-      //   <Modal
-      //     animationType="fade"
-      //     transparent={true}
-      //     visible={this.state.showChatLoader}
-      //     onRequestClose = {() => {
-      //        this.setState({showChatLoader: false});
-      //     }}
-      //     style = {styleLoader.loaderMoedl}>
-      //         <ProgressLoader />
-      //   </Modal>
-      // </View>
+      // }
       </View>
     );
   }

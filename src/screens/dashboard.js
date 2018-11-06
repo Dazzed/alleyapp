@@ -32,7 +32,7 @@ export default class Dashboard extends Component {
       <View style= {{flexDirection: 'column'}}>
         <Image
           style={{width: "100%",height: 115,}}
-          source={require('../assets/images/rounded_header.jpg')}
+          source={require('../assets/images/rounded_dashboard_header.png')}
         />
       </View>
     ),
@@ -129,7 +129,7 @@ export default class Dashboard extends Component {
                                       />
                                   }
                                   <View style={{width: "100%",height: 120 ,flexDirection: 'row',position:'absolute',top:0}}>
-                                      <View style= {{width: "30%",height: 120,alignItem: 'center',justifyContent: 'center'}}>
+                                      <View style= {{width: "30%",height: 120,alignItems: 'center',justifyContent: 'center'}}>
                                           {challenge.status === 'Not yet started'?
                                               <Image
                                                 style={{width: 35,height: 35,marginLeft: 'auto',marginRight: 'auto'}}
@@ -153,7 +153,7 @@ export default class Dashboard extends Component {
                                             style={{width: "100%",height: 120}}
                                             source={require('../assets/images/challenge-bg_transparent.png')}
                                           />
-                                          <View style= {{width: "100%",height: 120,paddingLeft: 15, alignSelf: 'center', alignItem: 'center',justifyContent: 'center',position:'absolute',top:0}}>
+                                          <View style= {{width: "100%",height: 120,paddingLeft: 15, alignSelf: 'center', alignItems: 'center',justifyContent: 'center',position:'absolute',top:0}}>
                                                 <Text style={style.challengeTitle} numberOfLines={2}>{challenge.title}</Text>
                                                 <Text style={style.challengeLabel}>
                                                   Estimated Time:

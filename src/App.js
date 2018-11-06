@@ -117,7 +117,7 @@ export default class Main extends Component {
             challenge: { screen: Challenge },
             instructions: { screen: Instructions }
           }),
-          navigationOptions: ({ navigation, screenProps }) => {
+          navigationOptions: ({ navigation, screenProps}) => {
             return {
               tabBarIcon: ({ focused, tintColor }) => (
                 <Icon

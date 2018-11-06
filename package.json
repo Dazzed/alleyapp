@@ -6,6 +6,12 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
+  "rnpm": {
+    "assets": [
+	     "./assets/fonts/"
+    ]
+  },
+
   "dependencies": {
     "apollo-boost": "^0.1.14",
     "axios": "^0.18.0",
