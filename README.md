@@ -17,7 +17,7 @@ react-native-rename YourNewApp
 ```
 
 ## Authors
-* **Ali Ayyad**
+* **Sameep Sheth**
 
 
 ## Acknowledgments
